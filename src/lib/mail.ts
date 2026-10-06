@@ -71,11 +71,13 @@ export async function sendMail(mail: Mail): Promise<void> {
 }
 
 /** Sans SMTP (développement) : enregistre le mail en page web dans data/apercus-mails/ pour le relire. */
+export const PREVIEW_DIR = () => path.join(process.env.DATA_DIR || path.join(process.cwd(), "data"), "apercus-mails");
+
 async function savePreview(mail: Mail): Promise<void> {
   try {
-    const dir = path.join(process.env.DATA_DIR || path.join(process.cwd(), "data"), "apercus-mails");
+    const dir = PREVIEW_DIR();
     await mkdir(dir, { recursive: true });
-    const slug = mail.subject.normalize("NFD").replace(/[^\w]+/g, "-").replace(/^-|-$/g, "").toLowerCase().slice(0, 60);
+    const slug = mail.subject.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^\w]+/g, "-").replace(/^-|-$/g, "").toLowerCase().slice(0, 60);
     const file = path.join(dir, `${new Date().toISOString().replace(/[:.]/g, "-")}-${slug}.html`);
     await writeFile(file, `<!doctype html><meta charset="utf-8"><title>${esc(mail.subject)}</title><p style="font:13px Arial;color:#6b7a90">À : ${esc(mail.to)} · Objet : ${esc(mail.subject)}</p><hr>${mail.html}`, "utf8");
   } catch {
