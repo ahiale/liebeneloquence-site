@@ -28,6 +28,9 @@ const HEART = (c) => svg(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2
 const MIC = svg(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 70 90" fill="none"><rect x="20" y="4" width="30" height="44" rx="15" fill="#fff" stroke="#001636" stroke-width="2.5"/><path d="M24 18h22M24 26h22M24 34h22" stroke="#001636" stroke-width="2" stroke-linecap="round"/><path d="M12 36c0 14 10 24 23 24s23-10 23-24M35 60v18M24 84h22" stroke="#FF5E01" stroke-width="3" stroke-linecap="round"/></svg>`);
 const BUBBLE = svg(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 70 56" fill="none"><path d="M10 6h50a8 8 0 0 1 8 8v16a8 8 0 0 1-8 8H32l-12 12V38H10a8 8 0 0 1-8-8V14a8 8 0 0 1 8-8z" fill="#fff" stroke="#001636" stroke-width="2.4" stroke-linejoin="round"/><path d="M20 20h30M20 27h20" stroke="#FF5E01" stroke-width="2.6" stroke-linecap="round"/></svg>`);
 
+const UNDERLINE = svg(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 250 26" fill="none"><path d="M4 17c34-10 72-12 112-9s82 5 128-7" stroke="#FFBD59" stroke-width="4" stroke-linecap="round"/><path d="M48 22c46-6 98-7 150-3" stroke="#fff" stroke-width="3" stroke-linecap="round"/></svg>`);
+const ARROW = svg(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 90 50" fill="none"><path d="M4 30c16-20 34-22 44-10 6 8-2 16-8 10s4-20 22-20c8 0 16 4 22 10" stroke="#FFBD59" stroke-width="3" stroke-linecap="round"/><path d="m78 12 8 8-11 2" stroke="#FFBD59" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>`);
+
 // Mini « JSX » : h("div", style, ...enfants)
 const h = (type, style = {}, ...children) => {
   const kids = children.flat().filter((c) => c !== null && c !== undefined && c !== false);
@@ -71,19 +74,36 @@ const { packs, grandOral, leqfam } = pricing;
 const euro = (v) => `${String(v).replace(".", ",")} €`;
 
 const slides = [
-  // 1. Le site est en ligne
+  // 1. Le site est en ligne (version festive)
   frame(1, total, BG.hero, h("div", { flexDirection: "column", position: "relative" },
-    img(SPARKLE(GOLD), 80, 80, { position: "absolute", top: -30, right: 40 }),
-    img(HEART(ORANGE), 54, 54, { position: "absolute", top: 520, left: 0 }),
-    h("div", { fontSize: 26, fontWeight: 600, letterSpacing: 8, color: GOLD }, "C'EST OFFICIEL"),
-    h("div", { fontSize: 110, fontWeight: 700, letterSpacing: -4, lineHeight: 1, marginTop: 20 }, "Le site est"),
-    serif("en ligne !", { fontSize: 150, lineHeight: 1.05 }),
-    h("div", { alignItems: "flex-end", marginTop: 36 },
-      h("div", { width: 360, height: 430, borderRadius: "200px 200px 36px 36px", overflow: "hidden", border: "6px solid #fff", background: GOLD, boxShadow: "0 30px 60px -20px rgba(0,22,54,.6)" },
-        img(photo, 360, 480, { objectFit: "cover", objectPosition: "50% 20%" })),
-      h("div", { flexDirection: "column", marginLeft: 44, flex: 1 },
-        img(MIC, 90, 116, { marginBottom: 20 }),
-        h("div", { fontSize: 34, lineHeight: 1.4, color: "rgba(255,255,255,.92)" }, "Formations, Grand Oral, quiz d'orateur, communauté : tout Lieben Éloquence au même endroit."),
+    // confettis et petits dessins
+    img(SPARKLE(GOLD), 96, 96, { position: "absolute", top: -50, right: 10 }),
+    img(SPARKLE("#fff"), 52, 52, { position: "absolute", top: 120, right: 170 }),
+    img(MIC, 100, 128, { position: "absolute", top: 250, right: 30, transform: "rotate(10deg)" }),
+    img(HEART(ORANGE), 58, 58, { position: "absolute", top: 470, left: -14, transform: "rotate(-14deg)" }),
+    img(HEART(GOLD), 40, 40, { position: "absolute", bottom: 40, right: 20, transform: "rotate(12deg)" }),
+    ...[[30, 760, GOLD, 18], [120, 900, ORANGE, 12], [-40, 640, "#fff", 10], [60, 300, "#fff", 14], [200, 40, ORANGE, 14], [350, 820, GOLD, 12]].map(([top, left, c, r]) =>
+      h("div", { position: "absolute", top, left, width: r, height: r, borderRadius: r, background: c })),
+    ...[[90, 520, GOLD, 30, 8, -25], [260, 880, ORANGE, 34, 8, 30], [430, 860, "#fff", 26, 7, -40]].map(([top, left, c, w, hh, rot]) =>
+      h("div", { position: "absolute", top, left, width: w, height: hh, borderRadius: 4, background: c, transform: `rotate(${rot}deg)` })),
+
+    h("div", { alignSelf: "flex-start", padding: "10px 22px", borderRadius: 999, background: ORANGE, color: "#fff", fontSize: 24, fontWeight: 700, letterSpacing: 6, transform: "rotate(-3deg)" }, "C'EST OFFICIEL"),
+    h("div", { fontSize: 112, fontWeight: 700, letterSpacing: -4, lineHeight: 1, marginTop: 26 }, "Le site est"),
+    serif("en ligne !", { fontSize: 156, lineHeight: 1.05 }),
+    img(UNDERLINE, 430, 40, { marginTop: -6, marginLeft: 10 }),
+
+    h("div", { alignItems: "flex-end", marginTop: 34, position: "relative" },
+      h("div", { width: 340, height: 410, borderRadius: "190px 190px 34px 34px", overflow: "hidden", border: "6px solid #fff", background: GOLD, boxShadow: "0 30px 60px -20px rgba(0,22,54,.6)", transform: "rotate(-2deg)" },
+        img(photo, 340, 460, { objectFit: "cover", objectPosition: "50% 20%" })),
+      // bulle « Prends la parole ! » comme sur le site
+      h("div", { position: "absolute", top: -10, left: 230, padding: "14px 22px", borderRadius: 22, background: "#fff", color: NAVY, fontSize: 28, fontWeight: 700, border: `3px solid ${NAVY}`, boxShadow: `6px 6px 0 ${ORANGE}`, transform: "rotate(4deg)" }, "Prends la parole !"),
+      h("div", { flexDirection: "column", marginLeft: 46, flex: 1 },
+        h("div", { fontSize: 32, lineHeight: 1.4, color: "rgba(255,255,255,.92)" }, "Formations, Grand Oral, quiz d'orateur, communauté : tout Lieben Éloquence au même endroit."),
+        // adresse façon barre de navigateur, avec flèche gribouillée
+        h("div", { alignItems: "center", marginTop: 26 },
+          h("div", { alignItems: "center", padding: "14px 22px", borderRadius: 999, background: "#fff", color: NAVY, fontSize: 28, fontWeight: 700, boxShadow: `5px 5px 0 ${GOLD}` },
+            h("div", { width: 14, height: 14, borderRadius: 7, background: "#2fbd6e", marginRight: 12 }), "liebeneloquence.com"),
+        ),
       ),
     ),
   )),
