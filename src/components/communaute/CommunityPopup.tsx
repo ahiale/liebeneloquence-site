@@ -83,7 +83,7 @@ export function CommunityPopup({ price, availability }: { price: string; availab
           type="button"
           onClick={() => setView("open")}
           className="flex cursor-pointer items-center gap-2 rounded-full border-0 py-2 pr-4 pl-2.5 text-[14px] font-bold text-white"
-          style={{ background: "linear-gradient(165deg,#0B3070,#114DA8)", boxShadow: "0 14px 30px -12px rgba(0,22,54,.7)" }}
+          style={{ background: "linear-gradient(165deg,rgba(11,48,112,.6),rgba(17,77,168,.5))", backdropFilter: "blur(14px) saturate(140%)", WebkitBackdropFilter: "blur(14px) saturate(140%)", border: "1px solid rgba(255,255,255,.3)", boxShadow: "0 14px 30px -12px rgba(0,22,54,.6)" }}
         >
           <MicDoodle width={22} height={28} body="#FF5E01" stand="#FF5E01" />
           Rejoindre la <span className="serif font-normal text-orange">LEQ&apos;FAM</span>
@@ -109,7 +109,7 @@ export function CommunityPopup({ price, availability }: { price: string; availab
       onClick={(e) => e.target === e.currentTarget && dialog.current?.close()}
       className="community-popup m-auto w-[min(420px,calc(100vw-40px))] overflow-visible border-0 bg-transparent p-0"
     >
-      <div className="relative rounded-[28px] px-7 pt-10 pb-7 text-center text-white" style={{ background: "linear-gradient(165deg,#0B3070 0%,#114DA8 100%)", boxShadow: "0 40px 80px -30px rgba(0,0,0,.6)", border: "1px solid rgba(255,255,255,.18)" }}>
+      <div className="relative rounded-[28px] px-7 pt-10 pb-7 text-center text-white" style={{ background: "linear-gradient(165deg,rgba(11,48,112,.55) 0%,rgba(17,77,168,.45) 100%)", backdropFilter: "blur(18px) saturate(140%)", WebkitBackdropFilter: "blur(18px) saturate(140%)", boxShadow: "0 40px 80px -30px rgba(0,0,0,.55), inset 0 1px 0 rgba(255,255,255,.25)", border: "1px solid rgba(255,255,255,.28)" }}>
         <MicDoodle className="absolute" width={58} height={74} body="#FF5E01" stand="#FF5E01" style={{ top: -46, left: "50%", marginLeft: -29 }} />
         <button type="button" onClick={() => dialog.current?.close()} aria-label="Fermer" className="absolute top-3.5 right-3.5 grid h-9 w-9 cursor-pointer place-items-center rounded-full border-0 bg-white/12 text-white hover:bg-white/25 focus-visible:outline-white">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" aria-hidden="true">
