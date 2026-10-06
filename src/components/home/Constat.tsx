@@ -1,5 +1,4 @@
 import { Heart, Sparkle, SpeechBubble, Squiggle } from "@/components/ui/Doodles";
-import { CountUp } from "@/components/ui/CountUp";
 
 /* 5 situations phares (la phrase d'introduction se termine par « et bien plus encore »). */
 const DOMAINES = ["Grand Oral BAC", "Soutenance", "Entretien d'embauche", "Pitch d'un projet", "Concours d'éloquence"];
@@ -45,7 +44,7 @@ export function Constat() {
                   <path d="M30 58C34 22 150 12 178 40s-30 60-96 60S10 86 16 56 96 14 150 22" stroke={c.circle} strokeWidth="3" strokeLinecap="round" />
                 </svg>
                 <p className="relative m-0">
-                  <span className="serif text-gold" style={{ fontSize: 76, lineHeight: 1 }}><CountUp value={c.value} /></span>
+                  <span className="serif text-gold" style={{ fontSize: 76, lineHeight: 1 }}>{c.value}</span>
                   <span className="serif text-white" style={{ fontSize: 38 }}>{c.unit}</span>
                 </p>
                 <p className="mx-auto mt-[22px] max-w-[240px] text-[15.5px] leading-[1.4] text-white">{c.text}</p>
