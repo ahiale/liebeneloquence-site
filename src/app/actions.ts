@@ -29,7 +29,14 @@ const FAILURE: FormState = {
    Demande de devis (écoles)
    ------------------------------------------------------------------------- */
 
+/** Type de structure → brochure envoyée en pièce jointe. */
+const STRUCTURES = {
+  scolaire: { label: "Établissement scolaire / université", brochure: "brochures/LEQ-brochure-etudiants.pdf" },
+  culturelle: { label: "Structure culturelle / association", brochure: "brochures/LEQ-brochure-acteurs-culturels.pdf" },
+} as const;
+
 const DevisSchema = z.object({
+  structure: z.enum(["scolaire", "culturelle"], { message: "Choisissez le type de structure" }),
   nom: required("Nom et établissement"),
   email,
   message: z.string().trim().max(4000).optional().default(""),
@@ -40,13 +47,17 @@ export async function demanderDevis(_: FormState, data: FormData): Promise<FormS
   const parsed = DevisSchema.safeParse(Object.fromEntries(data));
   if (!parsed.success) return invalid(parsed.error);
   const d = parsed.data;
+  const structure = STRUCTURES[d.structure];
 
   try {
     await sendMail({
       to: ADMIN_EMAIL,
       replyTo: d.email,
       subject: `Demande de devis : ${d.nom}`,
-      html: layout("Nouvelle demande de devis", fieldsTable([["Nom & établissement", d.nom], ["Email", d.email], ["Message", d.message]])),
+      html: layout(
+        "Nouvelle demande de devis",
+        fieldsTable([["Structure", structure.label], ["Nom & établissement", d.nom], ["Email", d.email], ["Message", d.message]]),
+      ),
     });
     await sendMail({
       to: d.email,
@@ -56,7 +67,7 @@ export async function demanderDevis(_: FormState, data: FormData): Promise<FormS
         "Merci pour votre demande",
         `<p>Bonjour,</p><p>Nous avons bien reçu votre demande de devis pour <strong>${esc(d.nom)}</strong>. Vous trouverez ci-joint notre document de présentation avec toutes les informations détaillées sur les parcours.</p><p>Nous revenons vers vous très vite.</p><p>Rebecca Lieben Ahiale<br>Lieben Éloquence</p>`,
       ),
-      attachments: [{ name: "Lieben-Eloquence-presentation.pdf", file: "brochures/LEQ-brochure-etudiants.pdf" }],
+      attachments: [{ name: "Lieben-Eloquence-presentation.pdf", file: structure.brochure }],
     });
     return { status: "success" };
   } catch (e) {

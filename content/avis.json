@@ -1,1 +1,11 @@
-[]
+[
+  {
+    "id": "modele-avis",
+    "status": "draft",
+    "author": "Prénom N.",
+    "role": "Profil, ville",
+    "rating": 5,
+    "text": "Texte de l'avis, tel que la personne l'a écrit.",
+    "date": "2026-10-06"
+  }
+]

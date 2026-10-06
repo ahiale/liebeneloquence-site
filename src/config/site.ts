@@ -15,8 +15,8 @@ export const SITE = {
   stripeGrandOral: "[LIEN STRIPE GRAND ORAL]",
   stripeLeqfam: "[LIEN STRIPE LEQ'FAM]",
 
-  instagram: "https://www.instagram.com/",
-  linkedin: "https://www.linkedin.com/",
+  instagram: "https://www.instagram.com/becca_lieben/",
+  linkedin: "https://www.linkedin.com/in/rebecca-lieben-ahiale/",
 } as const;
 
 export const NAV = [

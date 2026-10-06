@@ -1,17 +1,19 @@
 import "server-only";
-import { readFile } from "node:fs/promises";
 import path from "node:path";
+import nodemailer, { type Transporter } from "nodemailer";
 import { SITE } from "@/config/site";
 
 /**
- * Envoi d'emails via l'API transactionnelle de Brevo.
+ * Envoi d'emails depuis la boîte Google Workspace (SMTP de Gmail).
  *
  * Variables d'environnement (jamais dans le code) :
- *   BREVO_API_KEY       clé API Brevo
- *   MAIL_FROM           adresse d'expédition validée dans Brevo (défaut : SITE.email)
- *   MAIL_TO_ADMIN       destinataire des notifications (défaut : SITE.email)
+ *   SMTP_USER       adresse Google Workspace qui envoie (ex. formationn@liebeneloquence.com)
+ *   SMTP_PASSWORD   « mot de passe d'application » Google (16 caractères), pas le mot de passe du compte
+ *   SMTP_HOST       facultatif, défaut smtp.gmail.com
+ *   SMTP_PORT       facultatif, défaut 465
+ *   MAIL_TO_ADMIN   destinataire des notifications (défaut : SITE.email)
  *
- * Sans BREVO_API_KEY (développement), le mail est affiché dans la console.
+ * Sans SMTP_PASSWORD (développement), le mail est affiché dans la console.
  */
 
 type Attachment = { name: string; file: string };
@@ -27,39 +29,43 @@ export type Mail = {
 
 export const ADMIN_EMAIL = process.env.MAIL_TO_ADMIN || SITE.email;
 
-export async function sendMail(mail: Mail): Promise<void> {
-  const apiKey = process.env.BREVO_API_KEY;
+let transport: Transporter | null = null;
 
-  if (!apiKey) {
+function getTransport(): Transporter | null {
+  const user = process.env.SMTP_USER || SITE.email;
+  const pass = process.env.SMTP_PASSWORD;
+  if (!pass) return null;
+  const port = Number(process.env.SMTP_PORT || 465);
+  transport ??= nodemailer.createTransport({
+    host: process.env.SMTP_HOST || "smtp.gmail.com",
+    port,
+    secure: port === 465,
+    auth: { user, pass },
+  });
+  return transport;
+}
+
+export async function sendMail(mail: Mail): Promise<void> {
+  const smtp = getTransport();
+
+  if (!smtp) {
     console.info(
-      `[mail non envoyé : BREVO_API_KEY absente]\nÀ : ${mail.to}\nObjet : ${mail.subject}\nPièces jointes : ${(mail.attachments ?? []).map((a) => a.name).join(", ") || "aucune"}\n${mail.html.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim()}`,
+      `[mail non envoyé : SMTP_PASSWORD absent]\nÀ : ${mail.to}\nObjet : ${mail.subject}\nPièces jointes : ${(mail.attachments ?? []).map((a) => a.name).join(", ") || "aucune"}\n${mail.html.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim()}`,
     );
     return;
   }
 
-  const attachment = await Promise.all(
-    (mail.attachments ?? []).map(async (a) => ({
-      name: a.name,
-      content: (await readFile(path.join(process.cwd(), "assets", a.file))).toString("base64"),
+  await smtp.sendMail({
+    from: { name: SITE.name, address: process.env.SMTP_USER || SITE.email },
+    to: mail.to,
+    replyTo: mail.replyTo,
+    subject: mail.subject,
+    html: mail.html,
+    attachments: (mail.attachments ?? []).map((a) => ({
+      filename: a.name,
+      path: path.join(process.cwd(), "assets", a.file),
     })),
-  );
-
-  const res = await fetch("https://api.brevo.com/v3/smtp/email", {
-    method: "POST",
-    headers: { "api-key": apiKey, "content-type": "application/json", accept: "application/json" },
-    body: JSON.stringify({
-      sender: { name: SITE.name, email: process.env.MAIL_FROM || SITE.email },
-      to: [{ email: mail.to }],
-      replyTo: mail.replyTo ? { email: mail.replyTo } : undefined,
-      subject: mail.subject,
-      htmlContent: mail.html,
-      attachment: attachment.length ? attachment : undefined,
-    }),
   });
-
-  if (!res.ok) {
-    throw new Error(`Brevo a refusé l'envoi (${res.status}) : ${await res.text()}`);
-  }
 }
 
 /** Échappe le texte saisi par l'utilisateur avant de l'insérer dans un mail HTML. */

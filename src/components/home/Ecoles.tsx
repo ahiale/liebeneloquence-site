@@ -56,6 +56,21 @@ export function Ecoles() {
             ) : (
               <form action={action} className="relative flex flex-col gap-4" noValidate>
                 <Honeypot />
+                <fieldset className="m-0 border-0 p-0" aria-describedby={state.status === "error" && state.fields?.structure ? "structure-error" : undefined}>
+                  <legend className="flabel mb-2">Vous êtes</legend>
+                  <div className="flex flex-wrap gap-2">
+                    {[
+                      { value: "scolaire", label: "Établissement scolaire / université" },
+                      { value: "culturelle", label: "Structure culturelle / association" },
+                    ].map((o) => (
+                      <label key={o.value} className="cursor-pointer">
+                        <input type="radio" name="structure" value={o.value} required className="sr-only" defaultChecked={o.value === "scolaire"} />
+                        <span className="chip">{o.label}</span>
+                      </label>
+                    ))}
+                  </div>
+                  <FieldError state={state} name="structure" />
+                </fieldset>
                 <label className="flabel">
                   Votre nom &amp; établissement
                   <input className="field" placeholder="Ex : Marie Dupont, Lycée Victor Hugo" required autoComplete="organization" {...fieldProps(state, "nom")} />
