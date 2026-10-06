@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Communauté LEQ'FAM</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+@font-face{font-family:"SF Pro Display";src:url(/_blob/845874c44fc904d95e1b73cab9889614) format("opentype");font-weight:400;font-display:swap}
+@font-face{font-family:"SF Pro Display";src:url(/_blob/e88f99c3de79b60db121ff3f1ea011a9) format("opentype");font-weight:500;font-display:swap}
+@font-face{font-family:"SF Pro Display";src:url(/_blob/34623fcee1e3efb85299ce5595edfa01) format("opentype");font-weight:600;font-display:swap}
+@font-face{font-family:"SF Pro Display";src:url(/_blob/b76f70c5aeaa0f2ee1f7e1a4168bff59) format("opentype");font-weight:700;font-display:swap}
+@font-face{font-family:"Melodrame";src:url(/_blob/81430d426b15e68c75e7839188f02fb4) format("truetype");font-display:swap}
+body{margin:0;background:#001636}
+a{color:#FFBD59}a:hover{color:#FF5E01}
+.wrap{max-width:1152px;margin:0 auto;padding:0 32px;box-sizing:border-box}
+.serif{font-family:"Melodrame","Bodoni Moda",Didot,Georgia,serif;font-style:italic;font-weight:400}
+.eyebrow{margin:0;font-size:11px;line-height:1;letter-spacing:.3em;text-transform:uppercase;font-weight:600;color:#FFBD59}
+.h2{margin:16px 0 0;font-size:52px;font-weight:700;letter-spacing:-.035em;line-height:1.02}
+.warm{background:linear-gradient(96deg,#FFBD59,#FF5E01);-webkit-background-clip:text;background-clip:text;color:transparent}
+.bg-hero{background:radial-gradient(700px 520px at 78% 42%,rgba(255,255,255,.3),transparent 65%),radial-gradient(900px 520px at 90% 0%,rgba(61,116,205,.6),transparent 62%),linear-gradient(160deg,#0B3070 0%,#114DA8 55%,#2A64C4 100%)}
+.bg-night{background:radial-gradient(1100px 620px at 82% -8%,rgba(17,77,168,.5),transparent 62%),radial-gradient(760px 520px at 2% 4%,rgba(77,29,9,.4),transparent 58%),#001636}
+.bg-violet{background:radial-gradient(900px 560px at 96% 34%,rgba(112,38,138,.5),transparent 62%),radial-gradient(800px 520px at 4% 76%,rgba(17,77,168,.45),transparent 60%),linear-gradient(168deg,#041229 0%,#06183a 52%,#170a2c 100%)}
+.bg-light{background:radial-gradient(680px 420px at 92% 6%,rgba(17,77,168,.14),transparent 64%),radial-gradient(560px 400px at 4% 96%,rgba(17,77,168,.1),transparent 62%),linear-gradient(180deg,#FFFFFF 0%,#F6F8FC 50%,#E8EFFA 100%)}
+.bg-steel{background:linear-gradient(178deg,#8fa2c1 0%,#a9b8d0 46%,#c8d3e4 100%)}
+.surface{background:linear-gradient(180deg,rgba(255,255,255,.075),rgba(255,255,255,.025));border:1px solid rgba(255,255,255,.1)}
+.panel{background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.015));border:1px solid rgba(255,255,255,.09);border-radius:34px;box-shadow:0 50px 120px -60px rgba(0,0,0,.9)}
+.card-light{background:#fff;border:1px solid rgba(0,22,54,.07);box-shadow:0 30px 60px -45px rgba(0,22,54,.55)}
+.lift{transition:transform .25s ease}
+.lift:hover{transform:translateY(-4px)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border-radius:999px;font-weight:600;white-space:nowrap;text-decoration:none;padding:14px 28px;font-size:15px;box-sizing:border-box;border:0;cursor:pointer;font-family:inherit;transition:transform .2s ease,filter .2s ease}
+.btn-p{background:linear-gradient(96deg,#FFBD59,#FF5E01);color:#001636;box-shadow:0 16px 38px -16px rgba(255,94,1,.75)}
+.btn-p:hover{color:#001636;filter:brightness(1.1);transform:translateY(-2px)}
+.btn-g{border:1px solid rgba(255,255,255,.25);background:rgba(255,255,255,.12);color:#fff}
+.btn-g:hover{color:#fff;background:rgba(255,255,255,.2)}
+.btn-l{background:#9DBCEC;color:#072454}
+.btn-l:hover{color:#072454;transform:translateY(-2px)}
+.navlink{font-size:15px;color:rgba(255,255,255,.85);text-decoration:none;padding:8px 0}
+.navlink:hover{color:#fff}
+.tile{display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:13px;flex-shrink:0}
+.field{display:block;width:100%;box-sizing:border-box;border-radius:14px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.06);padding:13px 16px;font:inherit;font-size:14px;color:#fff;margin-top:6px}
+.flabel{display:block;font-size:12.5px;color:rgba(255,255,255,.62)}
+.floaty{animation:floaty 7s ease-in-out infinite}
+@keyframes floaty{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-12px) rotate(-2deg)}}
+.wiggle{animation:wiggle 3.5s ease-in-out infinite;transform-origin:center}
+@keyframes wiggle{0%,100%{transform:rotate(-8deg) scale(1)}50%{transform:rotate(8deg) scale(1.08)}}
+.bob{animation:bob 4s ease-in-out infinite}
+@keyframes bob{0%,100%{transform:translateY(0) rotate(-6deg)}50%{transform:translateY(-8px) rotate(4deg)}}
+.draw path{stroke-dasharray:1400;stroke-dashoffset:1400;animation:draw 2.2s ease .3s forwards}
+@keyframes draw{to{stroke-dashoffset:0}}
+.bg-sky{background:radial-gradient(700px 480px at 12% 10%,rgba(255,255,255,.22),transparent 62%),radial-gradient(800px 520px at 92% 90%,rgba(255,189,89,.18),transparent 62%),linear-gradient(170deg,#2A64C4 0%,#1A57B8 45%,#114DA8 100%)}
+.sticker{background:#fff;color:#001636;border:1px solid rgba(0,22,54,.08);border-radius:24px;box-shadow:0 26px 50px -30px rgba(0,22,54,.5);transition:transform .25s ease}
+.sticker:hover{transform:translateY(-4px) !important}
+.sticker{transform:none}
+.postit{position:relative;background:#FFF6D6;color:#001636;border-radius:6px 6px 22px 6px;padding:34px 28px 28px;box-shadow:0 22px 40px -26px rgba(0,0,0,.6);transition:transform .25s ease}
+.postit:hover{transform:rotate(0) translateY(-4px) !important}
+.bubble{position:relative;background:#fff;border-radius:28px;padding:26px 28px;box-shadow:0 24px 50px -34px rgba(0,22,54,.55);border:2px solid #001636;transition:transform .25s ease}
+.bubble:hover{transform:rotate(0deg) translateY(-4px) !important}
+.marquee{display:flex;gap:24px;width:max-content;animation:marquee 38s linear infinite}
+.marquee:hover{animation-play-state:paused}
+@keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@media (max-width:760px){.wrap{padding:0 20px}.h2{font-size:38px}.hide-sm{display:none}}
+@media (prefers-reduced-motion:reduce){.marquee,.floaty,.wiggle,.bob{animation:none}}
+
+.fieldw{display:block;width:100%;box-sizing:border-box;border-radius:999px;border:1px solid rgba(255,255,255,.25);background:rgba(255,255,255,.1);padding:15px 22px;font:inherit;font-size:15px;color:#fff}
+</style>
+</helmet>
+<div style="font-family:'SF Pro Display',-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;color:#EAF0FB;-webkit-font-smoothing:antialiased">
+
+<div class="bg-hero">
+<header>
+<div class="wrap" style="display:flex;align-items:center;justify-content:space-between;gap:24px;padding-top:20px;padding-bottom:20px;flex-wrap:wrap">
+<a href="Main.dc.html" style="font-size:24px;font-weight:800;letter-spacing:-.04em;color:#FFBD59;text-decoration:none">LEQ<span style="color:#FF5E01">.</span></a>
+<nav style="display:flex;align-items:center;gap:30px;flex-wrap:wrap" aria-label="Navigation principale">
+<a class="navlink" href="Main.dc.html#methode">Méthode</a>
+<a class="navlink" href="Main.dc.html#offres">Formations</a>
+<a class="navlink" href="GrandOral.dc.html">Grand Oral</a>
+<a class="navlink" href="AutresProduits.dc.html" style="color:#FFBD59">Autres produits</a>
+<a class="navlink" href="Evenements.dc.html">Événements</a>
+<a class="navlink" href="APropos.dc.html">À propos</a>
+</nav>
+<a class="btn btn-p" href="Main.dc.html#offres" style="padding:10px 20px;font-size:14px">Découvrir les offres</a>
+</div>
+</header>
+<section style="padding:48px 0 104px">
+<div class="wrap" style="display:flex;flex-wrap:wrap;align-items:center;gap:48px">
+<div style="flex:1.1 1 480px;min-width:0;position:relative">
+<span style="display:inline-flex;align-items:center;gap:8px;border-radius:999px;background:#fff;padding:8px 16px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.16em;color:#FF5E01">Bientôt disponible · fin octobre</span>
+<h1 style="margin:22px 0 0;font-size:64px;font-weight:700;letter-spacing:-.04em;line-height:1.02;color:#fff">La communauté<br><span class="serif" style="font-weight:400;letter-spacing:0;color:#FFBD59">LEQ'FAM</span></h1>
+<svg class="draw" width="230" height="24" viewBox="0 0 230 24" fill="none" aria-hidden="true" style="display:block;margin:4px 0 0 0"><path d="M4 15c32-9 66-11 104-8s78 4 118-6" stroke="#FFBD59" stroke-width="3" stroke-linecap="round"/></svg>
+<p style="margin:22px 0 0;max-width:540px;font-size:17px;line-height:1.7;color:rgba(255,255,255,.88)">La toute première communauté francophone en ligne dédiée à la prise de parole en public, à l'éloquence et aux soft skills. Un espace bienveillant, ouvert à tous sans condition d'âge ou de pays, où l'on s'entraîne, débat, progresse et se cultive ensemble.</p>
+<div style="display:flex;flex-wrap:wrap;align-items:center;gap:12px;margin-top:30px"><a class="btn btn-p" href="https://buy.stripe.com/">Rejoindre la LEQ'FAM</a><span style="display:inline-flex;align-items:baseline;gap:4px;border-radius:999px;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.3);padding:10px 18px;color:#fff"><strong style="font-size:20px;color:#FFBD59">3,99 €</strong><span style="font-size:13px">/ mois</span></span></div>
+</div>
+<div style="flex:.9 1 340px;min-width:0;display:flex;justify-content:center;position:relative">
+<svg class="wiggle hide-sm" width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#FFBD59" stroke-width="1.8" stroke-linecap="round" aria-hidden="true" style="position:absolute;top:-20px;right:6%"><path d="M12 2v5M12 17v5M2 12h5M17 12h5M5 5l3 3M16 16l3 3M19 5l-3 3M8 16l-3 3"/></svg>
+<svg class="wiggle hide-sm" width="32" height="32" viewBox="0 0 24 24" fill="#FF5E01" aria-hidden="true" style="position:absolute;bottom:-10px;left:4%"><path d="M12 21s-7-4.4-9.5-9A5.4 5.4 0 0 1 12 6.1 5.4 5.4 0 0 1 21.5 12C19 16.6 12 21 12 21z"/></svg>
+<div class="floaty" style="width:min(100%,380px);border-radius:24px;background:#fff;color:#001636;box-shadow:0 40px 80px -30px rgba(0,22,54,.7);overflow:hidden">
+<div style="display:flex;align-items:center;gap:10px;padding:14px 18px;background:#001636;color:#fff"><span style="font-size:18px;font-weight:700;color:#FFBD59">#</span><span style="font-weight:600;font-size:14px">vos-prises-de-parole</span></div>
+<div style="padding:18px;display:grid;gap:14px">
+<div style="display:flex;gap:10px"><span style="flex-shrink:0;width:34px;height:34px;border-radius:50%;background:#FFBD59"></span><div><p style="margin:0;font-size:13px;font-weight:700">Inès <span style="font-weight:500;color:rgba(0,22,54,.45)">· membre</span></p><p style="margin:2px 0 0;font-size:14px;line-height:1.45">Je passe ma soutenance vendredi, quelqu'un peut écouter mon intro ?</p></div></div>
+<div style="display:flex;gap:10px"><span style="flex-shrink:0;width:34px;height:34px;border-radius:50%;background:#114DA8"></span><div><p style="margin:0;font-size:13px;font-weight:700">Yanis <span style="font-weight:500;color:#FF5E01">· Ambassadeur</span></p><p style="margin:2px 0 0;font-size:14px;line-height:1.45">Envoie ! Et pense à poser un silence après ta première phrase.</p></div></div>
+<div style="display:flex;gap:8px;flex-wrap:wrap"><span style="border-radius:999px;background:#FFF1E3;padding:4px 10px;font-size:13px">bravo 6</span><span style="border-radius:999px;background:#E8EFFA;padding:4px 10px;font-size:13px">merci 3</span></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+</div>
+
+<!-- CE QU'ON FAIT ENSEMBLE -->
+<section class="bg-light" style="padding:104px 0;color:#001636">
+<div class="wrap">
+<div style="text-align:center;position:relative"><p class="eyebrow" style="color:#FF5E01">Ce qu'on fait ensemble</p><h2 class="h2">S'entraîner, <span class="serif" style="font-weight:400;letter-spacing:0;color:#114DA8">ensemble.</span></h2><svg class="wiggle hide-sm" width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="#FFBD59" stroke-width="1.8" stroke-linecap="round" aria-hidden="true" style="position:absolute;right:18%;top:6px"><path d="M12 2v5M12 17v5M2 12h5M17 12h5M5 5l3 3M16 16l3 3M19 5l-3 3M8 16l-3 3"/></svg></div>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:40px 32px;margin-top:56px">
+<div class="bubble" style="transform:rotate(-1.2deg)"><div style="display:flex;align-items:center;gap:14px"><span class="tile" style="border-radius:50%;background:#114DA8;color:#fff"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m22 8-6 4 6 4V8Z"/><rect x="2" y="6" width="14" height="12" rx="2"/></svg></span><h3 style="margin:0;font-size:19px;font-weight:700;letter-spacing:-.015em">Des lives chaque semaine</h3></div><p style="margin:12px 0 0;font-size:14.5px;line-height:1.65;color:rgba(0,22,54,.7)">Sur des thématiques choisies par la communauté : prise de parole, storytelling, gestion du trac, improvisation, culture générale, avec des invités surprises réguliers.</p><svg width="34" height="24" viewBox="0 0 34 24" aria-hidden="true" style="position:absolute;left:40px;bottom:-21px"><path d="M2 0 L10 22 L30 0" fill="#fff" stroke="#001636" stroke-width="2" stroke-linejoin="round"/><path d="M0 0h34" stroke="#fff" stroke-width="5"/></svg></div>
+<div class="bubble" style="transform:rotate(1deg)"><div style="display:flex;align-items:center;gap:14px"><span class="tile" style="border-radius:50%;background:#114DA8;color:#fff"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg></span><h3 style="margin:0;font-size:19px;font-weight:700;letter-spacing:-.015em">Une entraide quotidienne</h3></div><p style="margin:12px 0 0;font-size:14.5px;line-height:1.65;color:rgba(0,22,54,.7)">Vous préparez une soutenance, un concours, un entretien ? Vous postez, la communauté répond.</p><svg width="34" height="24" viewBox="0 0 34 24" aria-hidden="true" style="position:absolute;left:40px;bottom:-21px"><path d="M2 0 L10 22 L30 0" fill="#fff" stroke="#001636" stroke-width="2" stroke-linejoin="round"/><path d="M0 0h34" stroke="#fff" stroke-width="5"/></svg></div>
+<div class="bubble" style="transform:rotate(-0.8deg)"><div style="display:flex;align-items:center;gap:14px"><span class="tile" style="border-radius:50%;background:#114DA8;color:#fff"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6M18 9h1.5a2.5 2.5 0 0 0 0-5H18M4 22h16M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg></span><h3 style="margin:0;font-size:19px;font-weight:700;letter-spacing:-.015em">Le Grand Prix LEQ</h3></div><p style="margin:12px 0 0;font-size:14.5px;line-height:1.65;color:rgba(0,22,54,.7)">Un concours trimestriel ouvert à tous les membres. Le gagnant est désigné à 50 % par le vote du public et à 50 % par un jury invité. À la clé, jusqu'à 200 € de prix.</p><svg width="34" height="24" viewBox="0 0 34 24" aria-hidden="true" style="position:absolute;left:40px;bottom:-21px"><path d="M2 0 L10 22 L30 0" fill="#fff" stroke="#001636" stroke-width="2" stroke-linejoin="round"/><path d="M0 0h34" stroke="#fff" stroke-width="5"/></svg></div>
+</div>
+</div>
+</section>
+
+<!-- ORGANISATION DISCORD -->
+<section class="bg-night" style="padding:104px 0">
+<div class="wrap" style="display:flex;flex-wrap:wrap;gap:56px;align-items:center">
+<div style="flex:1 1 360px;min-width:0;position:relative">
+<p class="eyebrow">Sur Discord</p>
+<h2 class="h2" style="color:#fff">Comment s'organise <span class="serif" style="font-weight:400;letter-spacing:0;color:#FFBD59">la communauté.</span></h2>
+<p style="margin:18px 0 0;font-size:16px;line-height:1.7;color:rgba(255,255,255,.75)">La LEQ'FAM vit sur Discord, organisée en plusieurs salons. Les salons vocaux accueillent les lives hebdomadaires et les sessions d'entraînement libres.</p>
+<svg class="wiggle hide-sm" width="28" height="28" viewBox="0 0 24 24" fill="#FF5E01" aria-hidden="true" style="position:absolute;right:10%;bottom:-40px"><path d="M12 21s-7-4.4-9.5-9A5.4 5.4 0 0 1 12 6.1 5.4 5.4 0 0 1 21.5 12C19 16.6 12 21 12 21z"/></svg>
+</div>
+<div style="flex:1.2 1 440px;min-width:0;border-radius:24px;background:#0b1d3f;border:1px solid rgba(255,255,255,.1);padding:18px;box-shadow:0 40px 80px -40px rgba(0,0,0,.8)">
+<p style="margin:4px 8px 12px;font-size:12px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.5)">Salons textuels</p>
+<ul style="list-style:none;margin:0;padding:0;display:grid;gap:8px"><li style="display:flex;gap:14px;align-items:flex-start;padding:14px 16px;border-radius:14px;background:rgba(255,255,255,.04)"><span style="flex-shrink:0;font-size:20px;font-weight:700;color:#FFBD59;line-height:1.2">#</span><span><strong style="display:block;font-size:15px;color:#fff">annonces</strong><span style="font-size:14px;line-height:1.55;color:rgba(255,255,255,.7)">toutes les informations importantes sur les lives, les concours et les opportunités extérieures.</span></span></li><li style="display:flex;gap:14px;align-items:flex-start;padding:14px 16px;border-radius:14px;background:rgba(255,255,255,.04)"><span style="flex-shrink:0;font-size:20px;font-weight:700;color:#FFBD59;line-height:1.2">#</span><span><strong style="display:block;font-size:15px;color:#fff">présente-toi</strong><span style="font-size:14px;line-height:1.55;color:rgba(255,255,255,.7)">faire connaissance avec les autres membres dès l'arrivée.</span></span></li><li style="display:flex;gap:14px;align-items:flex-start;padding:14px 16px;border-radius:14px;background:rgba(255,255,255,.04)"><span style="flex-shrink:0;font-size:20px;font-weight:700;color:#FFBD59;line-height:1.2">#</span><span><strong style="display:block;font-size:15px;color:#fff">discussion-générale</strong><span style="font-size:14px;line-height:1.55;color:rgba(255,255,255,.7)">échanger librement sur l'éloquence, la communication et la culture.</span></span></li><li style="display:flex;gap:14px;align-items:flex-start;padding:14px 16px;border-radius:14px;background:rgba(255,255,255,.04)"><span style="flex-shrink:0;font-size:20px;font-weight:700;color:#FFBD59;line-height:1.2">#</span><span><strong style="display:block;font-size:15px;color:#fff">vos-prises-de-parole</strong><span style="font-size:14px;line-height:1.55;color:rgba(255,255,255,.7)">partager ses discours et recevoir des retours bienveillants.</span></span></li><li style="display:flex;gap:14px;align-items:flex-start;padding:14px 16px;border-radius:14px;background:rgba(255,255,255,.04)"><span style="flex-shrink:0;font-size:20px;font-weight:700;color:#FFBD59;line-height:1.2">#</span><span><strong style="display:block;font-size:15px;color:#fff">quiz</strong><span style="font-size:14px;line-height:1.55;color:rgba(255,255,255,.7)">se challenger sur la culture générale et l'éloquence.</span></span></li><li style="display:flex;gap:14px;align-items:flex-start;padding:14px 16px;border-radius:14px;background:rgba(255,255,255,.04)"><span style="flex-shrink:0;font-size:20px;font-weight:700;color:#FFBD59;line-height:1.2">#</span><span><strong style="display:block;font-size:15px;color:#fff">témoignages</strong><span style="font-size:14px;line-height:1.55;color:rgba(255,255,255,.7)">partager ses progrès et inspirer la communauté.</span></span></li><li style="display:flex;gap:14px;align-items:flex-start;padding:14px 16px;border-radius:14px;background:rgba(255,255,255,.04)"><span style="flex-shrink:0;font-size:20px;font-weight:700;color:#FFBD59;line-height:1.2">#</span><span><strong style="display:block;font-size:15px;color:#fff">concours-éloquence</strong><span style="font-size:14px;line-height:1.55;color:rgba(255,255,255,.7)">suivre toute l'actualité du Grand Prix LEQ.</span></span></li></ul>
+</div>
+</div>
+</section>
+
+<!-- LES MEMBRES -->
+<section class="bg-sky" style="padding:104px 0">
+<div class="wrap">
+<div style="text-align:center;position:relative"><p class="eyebrow">Les membres</p><h2 class="h2" style="color:#fff">Membre ou <span class="serif" style="font-weight:400;letter-spacing:0;color:#FFBD59">Ambassadeur ?</span></h2><svg class="wiggle hide-sm" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" aria-hidden="true" style="position:absolute;left:18%;top:0"><path d="M12 2v5M12 17v5M2 12h5M17 12h5M5 5l3 3M16 16l3 3M19 5l-3 3M8 16l-3 3"/></svg></div>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:28px;margin-top:48px;max-width:900px;margin-left:auto;margin-right:auto">
+<div class="sticker" style="padding:30px"><p class="eyebrow" style="color:#114DA8">Membre</p><h3 style="margin:12px 0 0;font-size:26px;font-weight:700;letter-spacing:-.03em">Membre classique</h3><ul style="list-style:none;margin:18px 0 0;padding:0;display:grid;gap:10px"><li style="display:flex;gap:10px;font-size:15px;color:rgba(0,22,54,.78)"><span style="width:8px;height:8px;border-radius:50%;background:#114DA8;flex-shrink:0;margin-top:7px"></span>Accès aux lives hebdomadaires</li><li style="display:flex;gap:10px;font-size:15px;color:rgba(0,22,54,.78)"><span style="width:8px;height:8px;border-radius:50%;background:#114DA8;flex-shrink:0;margin-top:7px"></span>Entraide quotidienne sur les salons</li><li style="display:flex;gap:10px;font-size:15px;color:rgba(0,22,54,.78)"><span style="width:8px;height:8px;border-radius:50%;background:#114DA8;flex-shrink:0;margin-top:7px"></span>Participation au Grand Prix LEQ</li></ul></div>
+<div class="sticker" style="padding:30px;position:relative;background:linear-gradient(160deg,#FFF6E6,#fff)"><span style="position:absolute;top:-14px;right:22px;border-radius:999px;background:#FF5E01;color:#fff;padding:5px 12px;font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase">Privilèges</span><p class="eyebrow" style="color:#FF5E01">Ambassadeur</p><h3 style="margin:12px 0 0;font-size:26px;font-weight:700;letter-spacing:-.03em">Ambassadeur LEQ</h3><ul style="list-style:none;margin:18px 0 0;padding:0;display:grid;gap:10px"><li style="display:flex;gap:10px;font-size:15px;color:rgba(0,22,54,.78)"><span style="width:8px;height:8px;border-radius:50%;background:#FF5E01;flex-shrink:0;margin-top:7px"></span>Accès en avant-première aux nouvelles fonctionnalités</li><li style="display:flex;gap:10px;font-size:15px;color:rgba(0,22,54,.78)"><span style="width:8px;height:8px;border-radius:50%;background:#FF5E01;flex-shrink:0;margin-top:7px"></span>Goodies physiques</li><li style="display:flex;gap:10px;font-size:15px;color:rgba(0,22,54,.78)"><span style="width:8px;height:8px;border-radius:50%;background:#FF5E01;flex-shrink:0;margin-top:7px"></span>Implication directe dans la construction de la communauté</li></ul></div>
+</div>
+</div>
+</section>
+
+<!-- TARIFS ET PARTENARIATS -->
+<section id="tarifs" class="bg-light" style="padding:104px 0;color:#001636">
+<div class="wrap">
+<div style="text-align:center"><p class="eyebrow" style="color:#FF5E01">Tarifs &amp; partenariats</p><h2 class="h2">Accessible à <span class="serif" style="font-weight:400;letter-spacing:0;color:#114DA8">tous.</span></h2></div>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:28px;margin-top:52px;align-items:stretch">
+<div class="lift" style="border-radius:26px;padding:32px;background:linear-gradient(165deg,#04193c,#0e3f8b);color:#fff;box-shadow:0 44px 80px -44px rgba(0,22,54,.85);display:flex;flex-direction:column"><p class="eyebrow">Abonnement</p><p style="margin:18px 0 0;display:flex;align-items:baseline;color:#FFBD59"><span style="font-size:56px;font-weight:700;letter-spacing:-.04em;line-height:1">3,99 €</span><span style="font-size:15px;color:rgba(255,255,255,.65);margin-left:6px">/ mois</span></p><p style="margin:14px 0 0;font-size:15px;line-height:1.6;color:rgba(255,255,255,.78);flex:1">L'abonnement de base, pour accéder à toute la communauté.</p><a class="btn btn-p" href="https://buy.stripe.com/" style="margin-top:24px">Rejoindre la LEQ'FAM</a></div>
+<div class="card-light lift" style="border-radius:26px;padding:32px;display:flex;flex-direction:column"><p class="eyebrow" style="color:#114DA8">Partenaires associatifs</p><h3 style="margin:14px 0 0;font-size:22px;font-weight:700">BDE, clubs, associations</h3><p style="margin:12px 0 0;font-size:15px;line-height:1.6;color:rgba(0,22,54,.7);flex:1">Vos membres bénéficient d'un tarif préférentiel à <strong>1,99 € / mois pendant 6 mois</strong>, puis passent au tarif normal. Vous pouvez aussi intervenir dans nos lives pour partager vos connaissances.</p><a class="btn" href="AutresProduits.dc.html#contact" style="margin-top:24px;background:#114DA8;color:#fff">Devenir partenaire</a></div>
+<div class="card-light lift" style="border-radius:26px;padding:32px;display:flex;flex-direction:column"><p class="eyebrow" style="color:#114DA8">Partenaires institutionnels</p><h3 style="margin:14px 0 0;font-size:22px;font-weight:700">Écoles, entreprises, institutions</h3><p style="margin:12px 0 0;font-size:15px;line-height:1.6;color:rgba(0,22,54,.7);flex:1">En sponsorisant le Grand Prix LEQ, vos membres et adhérents bénéficient d'un <strong>accès gratuit</strong> à la communauté pendant toute la durée du partenariat.</p><a class="btn" href="AutresProduits.dc.html#contact" style="margin-top:24px;background:#114DA8;color:#fff">Devenir partenaire</a></div>
+</div>
+</div>
+</section>
+
+<!-- REJOINDRE : vers la page de paiement -->
+<section id="rejoindre" class="bg-hero" style="padding:104px 0;position:relative;overflow:hidden">
+<div class="wrap" style="max-width:760px;text-align:center;position:relative">
+<svg class="wiggle hide-sm" width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#FFBD59" stroke-width="1.8" stroke-linecap="round" aria-hidden="true" style="position:absolute;left:0;top:0"><path d="M12 2v5M12 17v5M2 12h5M17 12h5M5 5l3 3M16 16l3 3M19 5l-3 3M8 16l-3 3"/></svg>
+<svg class="wiggle hide-sm" width="30" height="30" viewBox="0 0 24 24" fill="#FF5E01" aria-hidden="true" style="position:absolute;right:4%;top:20px"><path d="M12 21s-7-4.4-9.5-9A5.4 5.4 0 0 1 12 6.1 5.4 5.4 0 0 1 21.5 12C19 16.6 12 21 12 21z"/></svg>
+<h2 class="h2" style="color:#fff">Prêt à rejoindre <span class="serif" style="font-weight:400;letter-spacing:0;color:#FFBD59">la LEQ'FAM ?</span></h2>
+<p style="margin:16px auto 0;max-width:520px;font-size:16.5px;line-height:1.7;color:rgba(255,255,255,.85)">3,99 € par mois pour s'entraîner, progresser et se cultiver ensemble.</p>
+<a class="btn btn-p" href="https://buy.stripe.com/" style="margin-top:30px;font-size:17px;padding:18px 34px">Rejoindre la LEQ'FAM</a>
+<p style="margin:14px 0 0;font-size:13px;color:rgba(255,255,255,.65)">Paiement sécurisé</p>
+</div>
+</section>
+
+<footer style="border-top:1px solid rgba(255,255,255,.1);background:#072454">
+<div class="wrap" style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:24px;padding-top:36px;padding-bottom:36px">
+<a href="Main.dc.html" style="font-size:20px;font-weight:800;letter-spacing:-.04em;color:#FFBD59;text-decoration:none">LEQ<span style="color:#FF5E01">.</span></a>
+<nav style="display:flex;flex-wrap:wrap;gap:12px 32px" aria-label="Pied de page"><a href="#" style="font-size:14px;color:rgba(255,255,255,.7);text-decoration:none">Mentions légales</a><a href="Main.dc.html#ecoles" style="font-size:14px;color:rgba(255,255,255,.7);text-decoration:none">Contact</a><a href="https://www.instagram.com/" style="font-size:14px;color:rgba(255,255,255,.7);text-decoration:none">Instagram</a><a href="https://www.linkedin.com/" style="font-size:14px;color:rgba(255,255,255,.7);text-decoration:none">LinkedIn</a></nav>
+<p style="margin:0;font-size:12px;color:rgba(255,255,255,.45)">© 2026 Lieben Éloquence · Tous droits réservés</p>
+</div>
+</footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":4200}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

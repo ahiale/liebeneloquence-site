@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Événements Lieben Éloquence</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+@font-face{font-family:"SF Pro Display";src:url(/_blob/845874c44fc904d95e1b73cab9889614) format("opentype");font-weight:400;font-display:swap}
+@font-face{font-family:"SF Pro Display";src:url(/_blob/e88f99c3de79b60db121ff3f1ea011a9) format("opentype");font-weight:500;font-display:swap}
+@font-face{font-family:"SF Pro Display";src:url(/_blob/34623fcee1e3efb85299ce5595edfa01) format("opentype");font-weight:600;font-display:swap}
+@font-face{font-family:"SF Pro Display";src:url(/_blob/b76f70c5aeaa0f2ee1f7e1a4168bff59) format("opentype");font-weight:700;font-display:swap}
+@font-face{font-family:"Melodrame";src:url(/_blob/81430d426b15e68c75e7839188f02fb4) format("truetype");font-display:swap}
+body{margin:0;background:#001636}
+a{color:#FFBD59}a:hover{color:#FF5E01}
+.wrap{max-width:1152px;margin:0 auto;padding:0 32px;box-sizing:border-box}
+.serif{font-family:"Melodrame","Bodoni Moda",Didot,Georgia,serif;font-style:italic;font-weight:400}
+.eyebrow{margin:0;font-size:11px;line-height:1;letter-spacing:.3em;text-transform:uppercase;font-weight:600;color:#FFBD59}
+.h2{margin:16px 0 0;font-size:52px;font-weight:700;letter-spacing:-.035em;line-height:1.02}
+.warm{background:linear-gradient(96deg,#FFBD59,#FF5E01);-webkit-background-clip:text;background-clip:text;color:transparent}
+.bg-hero{background:radial-gradient(700px 520px at 78% 42%,rgba(255,255,255,.3),transparent 65%),radial-gradient(900px 520px at 90% 0%,rgba(61,116,205,.6),transparent 62%),linear-gradient(160deg,#0B3070 0%,#114DA8 55%,#2A64C4 100%)}
+.bg-night{background:radial-gradient(1100px 620px at 82% -8%,rgba(17,77,168,.5),transparent 62%),radial-gradient(760px 520px at 2% 4%,rgba(77,29,9,.4),transparent 58%),#001636}
+.bg-violet{background:radial-gradient(900px 560px at 96% 34%,rgba(112,38,138,.5),transparent 62%),radial-gradient(800px 520px at 4% 76%,rgba(17,77,168,.45),transparent 60%),linear-gradient(168deg,#041229 0%,#06183a 52%,#170a2c 100%)}
+.bg-light{background:radial-gradient(680px 420px at 92% 6%,rgba(17,77,168,.14),transparent 64%),radial-gradient(560px 400px at 4% 96%,rgba(17,77,168,.1),transparent 62%),linear-gradient(180deg,#FFFFFF 0%,#F6F8FC 50%,#E8EFFA 100%)}
+.bg-steel{background:linear-gradient(178deg,#8fa2c1 0%,#a9b8d0 46%,#c8d3e4 100%)}
+.surface{background:linear-gradient(180deg,rgba(255,255,255,.075),rgba(255,255,255,.025));border:1px solid rgba(255,255,255,.1)}
+.panel{background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.015));border:1px solid rgba(255,255,255,.09);border-radius:34px;box-shadow:0 50px 120px -60px rgba(0,0,0,.9)}
+.card-light{background:#fff;border:1px solid rgba(0,22,54,.07);box-shadow:0 30px 60px -45px rgba(0,22,54,.55)}
+.lift{transition:transform .25s ease}
+.lift:hover{transform:translateY(-4px)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border-radius:999px;font-weight:600;white-space:nowrap;text-decoration:none;padding:14px 28px;font-size:15px;box-sizing:border-box;border:0;cursor:pointer;font-family:inherit;transition:transform .2s ease,filter .2s ease}
+.btn-p{background:linear-gradient(96deg,#FFBD59,#FF5E01);color:#001636;box-shadow:0 16px 38px -16px rgba(255,94,1,.75)}
+.btn-p:hover{color:#001636;filter:brightness(1.1);transform:translateY(-2px)}
+.btn-g{border:1px solid rgba(255,255,255,.25);background:rgba(255,255,255,.12);color:#fff}
+.btn-g:hover{color:#fff;background:rgba(255,255,255,.2)}
+.btn-l{background:#9DBCEC;color:#072454}
+.btn-l:hover{color:#072454;transform:translateY(-2px)}
+.navlink{font-size:15px;color:rgba(255,255,255,.85);text-decoration:none;padding:8px 0}
+.navlink:hover{color:#fff}
+.tile{display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:13px;flex-shrink:0}
+.field{display:block;width:100%;box-sizing:border-box;border-radius:14px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.06);padding:13px 16px;font:inherit;font-size:14px;color:#fff;margin-top:6px}
+.flabel{display:block;font-size:12.5px;color:rgba(255,255,255,.62)}
+.floaty{animation:floaty 7s ease-in-out infinite}
+@keyframes floaty{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-12px) rotate(-2deg)}}
+.wiggle{animation:wiggle 3.5s ease-in-out infinite;transform-origin:center}
+@keyframes wiggle{0%,100%{transform:rotate(-8deg) scale(1)}50%{transform:rotate(8deg) scale(1.08)}}
+.bob{animation:bob 4s ease-in-out infinite}
+@keyframes bob{0%,100%{transform:translateY(0) rotate(-6deg)}50%{transform:translateY(-8px) rotate(4deg)}}
+.draw path{stroke-dasharray:1400;stroke-dashoffset:1400;animation:draw 2.2s ease .3s forwards}
+@keyframes draw{to{stroke-dashoffset:0}}
+.bg-sky{background:radial-gradient(700px 480px at 12% 10%,rgba(255,255,255,.22),transparent 62%),radial-gradient(800px 520px at 92% 90%,rgba(255,189,89,.18),transparent 62%),linear-gradient(170deg,#2A64C4 0%,#1A57B8 45%,#114DA8 100%)}
+.sticker{background:#fff;color:#001636;border:1px solid rgba(0,22,54,.08);border-radius:24px;box-shadow:0 26px 50px -30px rgba(0,22,54,.5);transition:transform .25s ease}
+.sticker:hover{transform:rotate(0) translateY(-4px) !important}
+.postit{position:relative;background:#FFF6D6;color:#001636;border-radius:6px 6px 22px 6px;padding:34px 28px 28px;box-shadow:0 22px 40px -26px rgba(0,0,0,.6);transition:transform .25s ease}
+.postit:hover{transform:rotate(0) translateY(-4px) !important}
+.bubble{position:relative;background:#fff;border-radius:28px;padding:26px 28px;box-shadow:0 24px 50px -34px rgba(0,22,54,.55);border:2px solid #001636;transition:transform .25s ease}
+.bubble:hover{transform:rotate(0deg) translateY(-4px) !important}
+.marquee{display:flex;gap:24px;width:max-content;animation:marquee 38s linear infinite}
+.marquee:hover{animation-play-state:paused}
+@keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@media (max-width:760px){.wrap{padding:0 20px}.h2{font-size:38px}.hide-sm{display:none}}
+@media (prefers-reduced-motion:reduce){.marquee,.floaty,.wiggle,.bob{animation:none}}
+.field-l{display:block;width:100%;box-sizing:border-box;border-radius:14px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.06);padding:13px 16px;font:inherit;font-size:14px;color:#fff;margin-top:6px}
+details summary::-webkit-details-marker{display:none}
+</style>
+</helmet>
+<div style="font-family:'SF Pro Display',-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;color:#EAF0FB;-webkit-font-smoothing:antialiased">
+
+<div class="bg-hero">
+<header>
+<div class="wrap" style="display:flex;align-items:center;justify-content:space-between;gap:24px;padding-top:20px;padding-bottom:20px;flex-wrap:wrap">
+<a href="Main.dc.html" style="font-size:24px;font-weight:800;letter-spacing:-.04em;color:#FFBD59;text-decoration:none">LEQ<span style="color:#FF5E01">.</span></a>
+<nav style="display:flex;align-items:center;gap:30px;flex-wrap:wrap" aria-label="Navigation principale">
+<a class="navlink" href="Main.dc.html#methode">Méthode</a>
+<a class="navlink" href="Main.dc.html#offres">Formations</a>
+<a class="navlink" href="GrandOral.dc.html">Grand Oral</a>
+<a class="navlink" href="AutresProduits.dc.html">Autres produits</a>
+<a class="navlink" href="Evenements.dc.html" style="color:#FFBD59" aria-current="page">Événements</a>
+<a class="navlink" href="APropos.dc.html">À propos</a>
+</nav>
+<a class="btn btn-p" href="Main.dc.html#offres" style="padding:10px 20px;font-size:14px">Découvrir les offres</a>
+</div>
+</header>
+<section style="padding:48px 0 88px">
+<div class="wrap" style="display:flex;flex-wrap:wrap;align-items:center;gap:40px">
+<div style="flex:1.1 1 480px;min-width:0">
+<h1 style="margin:0;font-size:64px;font-weight:700;letter-spacing:-.035em;line-height:1.02;color:#fff">Événements &amp;<br><span class="serif" style="font-weight:400;letter-spacing:0;color:#FFBD59">Actualités</span></h1>
+<svg class="draw" width="230" height="24" viewBox="0 0 230 24" fill="none" aria-hidden="true" style="display:block;margin:4px 0 0 0"><path d="M4 15c32-9 66-11 104-8s78 4 118-6" stroke="#FFBD59" stroke-width="3" stroke-linecap="round"/></svg>
+<p style="margin:22px 0 0;max-width:512px;font-size:16px;line-height:1.7;color:rgba(255,255,255,.85)">Progressez à chaque prise de parole en participant à nos ateliers, conférences et formations collectives. Profitez de l'expertise de professionnels pour gagner en confiance à l'oral.</p>
+<div style="display:flex;flex-wrap:wrap;gap:12px;margin-top:30px"><a class="btn btn-p" href="#a-venir">Voir les événements à venir</a><a class="btn btn-g" href="#newsletter">S'inscrire à la newsletter</a></div>
+</div>
+<div style="flex:.9 1 340px;min-width:0;display:flex;justify-content:center">
+<div style="position:relative;width:min(100%,380px);aspect-ratio:1/1.05">
+<div style="position:absolute;inset:4%;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.5),rgba(255,189,89,.2) 45%,transparent 70%)"></div>
+<div class="floaty" style="position:absolute;left:4%;top:12%;width:62%;transform:rotate(-8deg)"><div style="display:flex;border-radius:18px;background:#fff;color:#001636;box-shadow:0 26px 50px -22px rgba(0,22,54,.7);overflow:hidden"><div style="flex:1;padding:16px 18px;border-right:2px dashed rgba(0,22,54,.18)"><p style="margin:0;font-size:10px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:#114DA8">Atelier</p><p style="margin:6px 0 0;font-size:17px;font-weight:700;letter-spacing:-.02em;line-height:1.2">L'art de captiver</p><p style="margin:8px 0 0;font-size:12px;color:rgba(0,22,54,.55)">Billet LEQ</p></div><div style="width:58px;background:#114DA8;display:flex;align-items:center;justify-content:center"><span class="serif" style="writing-mode:vertical-rl;transform:rotate(180deg);color:#fff;font-size:20px">LEQ</span></div></div></div><div class="bob" style="position:absolute;right:2%;top:40%;width:62%;transform:rotate(5deg)"><div style="display:flex;border-radius:18px;background:#fff;color:#001636;box-shadow:0 26px 50px -22px rgba(0,22,54,.7);overflow:hidden"><div style="flex:1;padding:16px 18px;border-right:2px dashed rgba(0,22,54,.18)"><p style="margin:0;font-size:10px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:#FF5E01">Masterclass</p><p style="margin:6px 0 0;font-size:17px;font-weight:700;letter-spacing:-.02em;line-height:1.2">Prendre la parole</p><p style="margin:8px 0 0;font-size:12px;color:rgba(0,22,54,.55)">Billet LEQ</p></div><div style="width:58px;background:#FF5E01;display:flex;align-items:center;justify-content:center"><span class="serif" style="writing-mode:vertical-rl;transform:rotate(180deg);color:#fff;font-size:20px">LEQ</span></div></div></div><div class="floaty" style="position:absolute;left:10%;bottom:6%;width:62%;transform:rotate(-3deg)"><div style="display:flex;border-radius:18px;background:#fff;color:#001636;box-shadow:0 26px 50px -22px rgba(0,22,54,.7);overflow:hidden"><div style="flex:1;padding:16px 18px;border-right:2px dashed rgba(0,22,54,.18)"><p style="margin:0;font-size:10px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:#001636">Concours</p><p style="margin:6px 0 0;font-size:17px;font-weight:700;letter-spacing:-.02em;line-height:1.2">Grand Prix LEQ</p><p style="margin:8px 0 0;font-size:12px;color:rgba(0,22,54,.55)">Billet LEQ</p></div><div style="width:58px;background:#001636;display:flex;align-items:center;justify-content:center"><span class="serif" style="writing-mode:vertical-rl;transform:rotate(180deg);color:#fff;font-size:20px">LEQ</span></div></div></div>
+<svg class="wiggle hide-sm" width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#FFBD59" stroke-width="1.8" stroke-linecap="round" aria-hidden="true" style="position:absolute;top:0;right:4%"><path d="M12 2v5M12 17v5M2 12h5M17 12h5M5 5l3 3M16 16l3 3M19 5l-3 3M8 16l-3 3"/></svg>
+
+<svg class="wiggle" width="34" height="34" viewBox="0 0 24 24" fill="#FFBD59" aria-hidden="true" style="position:absolute;right:0;bottom:22%"><path d="M12 21s-7-4.4-9.5-9A5.4 5.4 0 0 1 12 6.1 5.4 5.4 0 0 1 21.5 12C19 16.6 12 21 12 21z"/></svg>
+</div>
+</div>
+</div>
+</section>
+</div>
+
+<!-- TOUS LES EVENEMENTS A VENIR -->
+<section id="a-venir" class="bg-sky" style="padding:96px 0 112px;position:relative;overflow:hidden">
+<div class="wrap" style="position:relative">
+<svg class="wiggle hide-sm" width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" aria-hidden="true" style="position:absolute;right:6%;top:0"><path d="M12 2v5M12 17v5M2 12h5M17 12h5M5 5l3 3M16 16l3 3M19 5l-3 3M8 16l-3 3"/></svg>
+<p class="eyebrow">Prochainement</p>
+<h2 class="h2" style="color:#fff">Tous les événements <span class="serif" style="font-weight:400;letter-spacing:0;color:#FFBD59">à venir</span></h2>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,380px));gap:32px;margin-top:48px">
+<article class="sticker" style="overflow:hidden;padding:0;display:flex;flex-direction:column">
+<div style="aspect-ratio:16/10;background:#E8EFFA;display:flex;align-items:center;justify-content:center;color:rgba(0,22,54,.5);font-size:13px;font-weight:600;position:relative">Photo de l'événement<span style="position:absolute;top:14px;left:14px;border-radius:999px;background:#FF5E01;color:#fff;padding:4px 12px;font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#fff">Coming soon</span></div>
+<div style="padding:24px;display:flex;flex-direction:column;flex:1">
+<p style="margin:0;font-size:28px;font-weight:700;letter-spacing:-.03em;color:#114DA8">Décembre 2026</p>
+<p style="margin:8px 0 0;font-size:15px;line-height:1.6;color:rgba(0,22,54,.7)">Le premier rendez-vous LEQ se prépare. La date et le programme arrivent bientôt dans la newsletter.</p>
+<a class="btn btn-p" href="#newsletter" style="margin-top:20px">Être prévenu</a>
+</div>
+</article>
+</div>
+</div>
+</section>
+
+<!-- NEWSLETTER : comme le site -->
+<section id="newsletter" class="bg-light" style="padding:112px 0;color:#001636">
+<div class="wrap" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(380px,1fr));gap:56px">
+<div style="position:relative">
+<p class="eyebrow" style="color:#114DA8">Restez informés</p>
+<h2 style="margin:16px 0 0;font-size:52px;font-weight:700;letter-spacing:-.035em;line-height:1.02">La newsletter<br><span style="color:#114DA8">LEQ.</span></h2>
+<svg class="wiggle hide-sm" width="62" height="50" viewBox="0 0 70 56" fill="none" aria-hidden="true" style="position:absolute;left:200px;top:86px"><path d="M10 6h50a8 8 0 0 1 8 8v16a8 8 0 0 1-8 8H32l-12 12V38H10a8 8 0 0 1-8-8V14a8 8 0 0 1 8-8z" stroke="#FF5E01" stroke-width="2.4" stroke-linejoin="round"/><path d="M20 20h30M20 27h20" stroke="#FFBD59" stroke-width="2.4" stroke-linecap="round"/></svg>
+<p style="margin:24px 0 0;max-width:448px;font-size:16px;line-height:1.7;color:rgba(0,22,54,.7)">Les dates d'ateliers en avant-première, les ressources gratuites, les conseils oratoires et les annonces importantes, directement dans votre boîte mail.</p>
+<ul style="list-style:none;margin:32px 0 0;padding:0;display:grid;gap:12px">
+<li style="display:flex;gap:12px;font-size:14.7px;color:rgba(0,22,54,.78)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2fbd6e" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:2px" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Accès prioritaire aux événements</li>
+<li style="display:flex;gap:12px;font-size:14.7px;color:rgba(0,22,54,.78)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2fbd6e" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:2px" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Conseils &amp; exercices oratoires exclusifs</li>
+<li style="display:flex;gap:12px;font-size:14.7px;color:rgba(0,22,54,.78)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2fbd6e" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:2px" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Ressources gratuites en avant-première</li>
+<li style="display:flex;gap:12px;font-size:14.7px;color:rgba(0,22,54,.78)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2fbd6e" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:2px" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Actualités et coulisses du projet LEQ</li>
+<li style="display:flex;gap:12px;font-size:14.7px;color:rgba(0,22,54,.78)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2fbd6e" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:2px" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Pas de spam, désinscription possible en un clic</li>
+</ul>
+</div>
+<form style="border-radius:26px;background:linear-gradient(168deg,#114DA8,#01143a);padding:32px;box-shadow:0 44px 90px -45px rgba(0,22,54,.9);display:flex;flex-direction:column;gap:16px">
+<h3 style="margin:0;font-size:24px;font-weight:700;letter-spacing:-.03em;color:#fff">S'inscrire à la newsletter</h3>
+<p style="margin:0;font-size:14.4px;line-height:1.6;color:rgba(255,255,255,.65)">Quelques secondes suffisent. Garantie zéro spam, que du contenu utile.</p>
+<label class="flabel">Votre prénom &amp; nom<input class="field" placeholder="Ex : Marie Dupont"></label>
+<label class="flabel">Votre email<input class="field" type="email" placeholder="vous@email.com"></label>
+<label class="flabel">Votre profil (optionnel)<select class="field"><option>Sélectionner</option><option>Lycéen(ne) · Terminale</option><option>Étudiant(e)</option><option>Professionnel(le)</option><option>Établissement scolaire</option></select></label>
+<label class="flabel">Thématiques qui vous intéressent (optionnel)<select class="field"><option>Sélectionner</option><option>Gestion du trac</option><option>Structuration du discours</option><option>Voix &amp; non-verbal</option><option>Improvisation</option><option>Concours d'éloquence</option></select></label>
+<button type="button" class="btn btn-p" style="width:100%">Je m'inscris</button>
+<p style="margin:0;text-align:center;font-size:12.5px;color:rgba(255,255,255,.55)">Vos données restent confidentielles. Désinscription à tout moment.</p>
+</form>
+</div>
+</section>
+
+<!-- FAQ classique -->
+<section class="bg-light" style="padding:112px 0 112px;color:#001636;border-top:1px solid rgba(0,22,54,.08)">
+<div class="wrap" style="max-width:860px">
+<div style="text-align:center"><p class="eyebrow" style="color:#FF5E01">Questions fréquentes</p><h2 class="h2">Vos questions, <span class="serif" style="font-weight:400;letter-spacing:0;color:#114DA8">nos réponses.</span></h2></div>
+<h3 style="margin:48px 0 0;font-size:13px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:#114DA8">Les formations</h3>
+<div style="border-top:1px solid rgba(0,22,54,.12);margin-top:12px"><details style="border-bottom:1px solid rgba(0,22,54,.12);padding:20px 0"><summary style="cursor:pointer;font-size:17px;font-weight:600;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:16px;color:#001636">Comment réserver une séance ?<span style="flex-shrink:0;color:#FF5E01;font-size:24px;font-weight:400;line-height:1">+</span></summary><p style="margin:12px 0 0;font-size:15px;line-height:1.65;color:rgba(0,22,54,.7);max-width:720px">Cliquez sur « Réserver » sous le pack de votre choix : vous choisissez un créneau dans mon agenda pour votre séance diagnostic de 30 minutes, offerte.</p></details><details style="border-bottom:1px solid rgba(0,22,54,.12);padding:20px 0"><summary style="cursor:pointer;font-size:17px;font-weight:600;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:16px;color:#001636">Les séances ont lieu en visio ou en présentiel ?<span style="flex-shrink:0;color:#FF5E01;font-size:24px;font-weight:400;line-height:1">+</span></summary><p style="margin:12px 0 0;font-size:15px;line-height:1.65;color:rgba(0,22,54,.7);max-width:720px">Les deux sont possibles. On choisit ensemble le format qui vous convient le mieux.</p></details><details style="border-bottom:1px solid rgba(0,22,54,.12);padding:20px 0"><summary style="cursor:pointer;font-size:17px;font-weight:600;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:16px;color:#001636">Quelle est la différence entre les packs ?<span style="flex-shrink:0;color:#FF5E01;font-size:24px;font-weight:400;line-height:1">+</span></summary><p style="margin:12px 0 0;font-size:15px;line-height:1.65;color:rgba(0,22,54,.7);max-width:720px">Senghor (3 séances) pose les bases de la culture oratoire. Cicéron (5 séances) vous apprend à structurer et rédiger un discours. Socrate (7 séances) est le parcours complet : trac, improvisation, non-verbal et variation vocale.</p></details><details style="border-bottom:1px solid rgba(0,22,54,.12);padding:20px 0"><summary style="cursor:pointer;font-size:17px;font-weight:600;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:16px;color:#001636">Peut-on payer en plusieurs fois ?<span style="flex-shrink:0;color:#FF5E01;font-size:24px;font-weight:400;line-height:1">+</span></summary><p style="margin:12px 0 0;font-size:15px;line-height:1.65;color:rgba(0,22,54,.7);max-width:720px">Oui : en 3 fois pour les packs Senghor et Cicéron, en 4 fois pour le pack Socrate et l'offre Grand Oral.</p></details><details style="border-bottom:1px solid rgba(0,22,54,.12);padding:20px 0"><summary style="cursor:pointer;font-size:17px;font-weight:600;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:16px;color:#001636">Que se passe-t-il après la formation ?<span style="flex-shrink:0;color:#FF5E01;font-size:24px;font-weight:400;line-height:1">+</span></summary><p style="margin:12px 0 0;font-size:15px;line-height:1.65;color:rgba(0,22,54,.7);max-width:720px">Vous recevez une fiche de synthèse, un diagnostic de fin et une attestation de fin de formation. Je vous accompagne ensuite jusqu'à 3 mois après la formation.</p></details><details style="border-bottom:1px solid rgba(0,22,54,.12);padding:20px 0"><summary style="cursor:pointer;font-size:17px;font-weight:600;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:16px;color:#001636">Comment fonctionne l'offre Grand Oral ?<span style="flex-shrink:0;color:#FF5E01;font-size:24px;font-weight:400;line-height:1">+</span></summary><p style="margin:12px 0 0;font-size:15px;line-height:1.65;color:rgba(0,22,54,.7);max-width:720px">5 séances intensives de 50 minutes, sans diagnostic préalable. Vous réservez votre place directement en ligne.</p></details><details style="border-bottom:1px solid rgba(0,22,54,.12);padding:20px 0"><summary style="cursor:pointer;font-size:17px;font-weight:600;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:16px;color:#001636">Intervenez-vous dans les établissements scolaires ?<span style="flex-shrink:0;color:#FF5E01;font-size:24px;font-weight:400;line-height:1">+</span></summary><p style="margin:12px 0 0;font-size:15px;line-height:1.65;color:rgba(0,22,54,.7);max-width:720px">Oui. Remplissez le formulaire de demande de devis : j'interviens principalement en région parisienne, avec possibilité de déplacement selon la demande.</p></details></div>
+<h3 style="margin:44px 0 0;font-size:13px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:#114DA8">Les événements</h3>
+<div style="border-top:1px solid rgba(0,22,54,.12);margin-top:12px"><details style="border-bottom:1px solid rgba(0,22,54,.12);padding:20px 0"><summary style="cursor:pointer;font-size:17px;font-weight:600;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:16px;color:#001636">À qui s'adressent les événements LEQ ?<span style="flex-shrink:0;color:#FF5E01;font-size:24px;font-weight:400;line-height:1">+</span></summary><p style="margin:12px 0 0;font-size:15px;line-height:1.65;color:rgba(0,22,54,.7);max-width:720px">À tout le monde : lycéens, étudiants, professionnels, entrepreneurs, et toute personne qui veut oser prendre la parole.</p></details><details style="border-bottom:1px solid rgba(0,22,54,.12);padding:20px 0"><summary style="cursor:pointer;font-size:17px;font-weight:600;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:16px;color:#001636">Faut-il un niveau particulier pour participer ?<span style="flex-shrink:0;color:#FF5E01;font-size:24px;font-weight:400;line-height:1">+</span></summary><p style="margin:12px 0 0;font-size:15px;line-height:1.65;color:rgba(0,22,54,.7);max-width:720px">Non. Les ateliers sont ouverts à tous les niveaux, sans prérequis.</p></details><details style="border-bottom:1px solid rgba(0,22,54,.12);padding:20px 0"><summary style="cursor:pointer;font-size:17px;font-weight:600;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:16px;color:#001636">Où ont lieu les événements ?<span style="flex-shrink:0;color:#FF5E01;font-size:24px;font-weight:400;line-height:1">+</span></summary><p style="margin:12px 0 0;font-size:15px;line-height:1.65;color:rgba(0,22,54,.7);max-width:720px">Principalement à Paris et en région parisienne. Le lieu exact est communiqué à l'inscription.</p></details><details style="border-bottom:1px solid rgba(0,22,54,.12);padding:20px 0"><summary style="cursor:pointer;font-size:17px;font-weight:600;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:16px;color:#001636">Comment être prévenu des prochaines dates ?<span style="flex-shrink:0;color:#FF5E01;font-size:24px;font-weight:400;line-height:1">+</span></summary><p style="margin:12px 0 0;font-size:15px;line-height:1.65;color:rgba(0,22,54,.7);max-width:720px">En vous inscrivant à la newsletter : les abonnés reçoivent les dates en avant-première.</p></details></div>
+</div>
+</section>
+
+<footer style="border-top:1px solid rgba(255,255,255,.1);background:#072454">
+<div class="wrap" style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:24px;padding-top:36px;padding-bottom:36px">
+<a href="Main.dc.html" style="font-size:20px;font-weight:800;letter-spacing:-.04em;color:#FFBD59;text-decoration:none">LEQ<span style="color:#FF5E01">.</span></a>
+<nav style="display:flex;flex-wrap:wrap;gap:12px 32px" aria-label="Pied de page"><a href="#" style="font-size:14px;color:rgba(255,255,255,.7);text-decoration:none">Mentions légales</a><a href="Main.dc.html#ecoles" style="font-size:14px;color:rgba(255,255,255,.7);text-decoration:none">Contact</a><a href="https://www.instagram.com/" style="font-size:14px;color:rgba(255,255,255,.7);text-decoration:none">Instagram</a><a href="https://www.linkedin.com/" style="font-size:14px;color:rgba(255,255,255,.7);text-decoration:none">LinkedIn</a></nav>
+<p style="margin:0;font-size:12px;color:rgba(255,255,255,.45)">© 2026 Lieben Éloquence · Tous droits réservés</p>
+</div>
+</footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":3400}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>
