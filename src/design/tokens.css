@@ -525,6 +525,60 @@ input:focus-visible + .chip {
   to { stroke-dashoffset: -32; }
 }
 
+/* Grand titre de l'accueil : les lignes apparaissent l'une après l'autre */
+.hero-line {
+  display: inline-block;
+  animation: hero-in 0.8s cubic-bezier(0.2, 0.9, 0.3, 1) both;
+  animation-delay: var(--d, 0ms);
+}
+@keyframes hero-in {
+  from {
+    opacity: 0;
+    transform: translateY(28px) rotate(-2deg);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Reflet lumineux qui balaie les boutons principaux au survol */
+.btn-p {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+.btn-p::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(110deg, transparent 30%, rgba(255, 255, 255, 0.55) 50%, transparent 70%);
+  transform: translateX(-120%);
+  transition: transform 0.7s ease;
+}
+.btn-p:hover::after {
+  transform: translateX(120%);
+}
+
+/* Cercles gribouillés du constat : se dessinent quand ils arrivent à l'écran */
+@supports (animation-timeline: view()) {
+  .circle-draw path {
+    stroke-dasharray: 620;
+    animation: circle-draw linear both;
+    animation-timeline: view();
+    animation-range: entry 10% cover 45%;
+  }
+}
+@keyframes circle-draw {
+  from {
+    stroke-dashoffset: 620;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
 /* Apparition au défilement : les cartes glissent doucement en entrant à l'écran.
    Uniquement CSS (navigateurs récents) ; ailleurs, tout reste simplement visible.
    « translate » ne touche pas aux rotations des cartes (transform). */
@@ -564,13 +618,17 @@ input:focus-visible + .chip {
 
 @media (prefers-reduced-motion: reduce) {
   .bubble, .sticker, .postit, .card-light, .yearcard, .badge, .reveal,
-  .floaty, .wiggle, .bob, .pulse2, .halo, .marquee, .road-dash, .pop, .grow, .community-popup[open],
+  .floaty, .wiggle, .bob, .pulse2, .halo, .marquee, .road-dash, .pop, .grow, .community-popup[open], .hero-line, .circle-draw path,
   .pack-ill, .pack:hover .pack-ill {
     animation: none !important;
   }
-  .draw path {
+  .draw path,
+  .circle-draw path {
     animation: none;
     stroke-dashoffset: 0;
+  }
+  .btn-p::after {
+    display: none;
   }
   /* Carrousel figé : défilement manuel, sans la copie */
   .marquee-viewport {

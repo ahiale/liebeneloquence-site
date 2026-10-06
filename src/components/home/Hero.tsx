@@ -11,16 +11,13 @@ export function Hero() {
         <div className="wrap flex flex-wrap items-center gap-6">
           <div className="relative min-w-0" style={{ flex: "1.05 1 520px" }}>
             <h1 className="serif m-0 leading-[1.08] tracking-[-0.01em]" style={{ fontSize: "clamp(42px, 8.4vw, 66px)" }}>
-              <span className="text-white">Parlez</span>
+              <span className="hero-line" style={{ ["--d" as string]: "0ms" }}><span className="text-white">Parlez</span></span>
               <br />
-              <span className="text-white/90">pour </span>
-              <span className="text-gold">PLAIRE,</span>
+              <span className="hero-line" style={{ ["--d" as string]: "160ms" }}><span className="text-white/90">pour </span><span className="text-gold">PLAIRE,</span></span>
               <br />
-              <span className="text-white/90">pour </span>
-              <span className="text-gold">CONVAINCRE,</span>
+              <span className="hero-line" style={{ ["--d" as string]: "320ms" }}><span className="text-white/90">pour </span><span className="text-gold">CONVAINCRE,</span></span>
               <br />
-              <span className="text-white/90">pour </span>
-              <span className="text-gold">IMPACTER.</span>
+              <span className="hero-line" style={{ ["--d" as string]: "480ms" }}><span className="text-white/90">pour </span><span className="text-gold">IMPACTER.</span></span>
             </h1>
             <svg className="draw ml-12 sm:ml-24" width="250" height="26" viewBox="0 0 250 26" fill="none" aria-hidden="true" style={{ display: "block", marginTop: 4, maxWidth: "70%" }}>
               <path d="M4 17c34-10 72-12 112-9s82 5 128-7" stroke="#FFBD59" strokeWidth="3" strokeLinecap="round" />
