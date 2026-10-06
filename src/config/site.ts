@@ -51,7 +51,7 @@ export const LEGAL = {
   siren: "106 469 240",
   siret: "106 469 240 00019",
   /** Adresse professionnelle ou de domiciliation. */
-  address: "[ADRESSE À COMPLÉTER]",
+  address: "31 avenue de Saint-Jean-d'Angély, 79000 Niort",
   host: {
     name: "Contabo GmbH",
     address: "Aschauer Straße 32a, 81549 Munich, Allemagne",

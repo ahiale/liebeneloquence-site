@@ -4,7 +4,7 @@ import { z } from "zod";
 import { ADMIN_EMAIL, sendMail, type Mail } from "@/lib/mail";
 import { record } from "@/lib/store";
 import { HONEYPOT, type FormState } from "@/lib/forms";
-import { computeResult, describeAnswers, isComplete, type Answer } from "@/lib/quiz";
+import { computeResult, isComplete, type Answer } from "@/lib/quiz";
 import { getPricing } from "@/content";
 import { formatPrice } from "@/lib/format";
 import * as T from "@/emails/templates";
@@ -15,8 +15,9 @@ import { DEMANDES, ORAUX, PROFILS_GRAND_ORAL } from "@/lib/options";
 /* Actions serveur des formulaires du site. Chaque action :
    1. ignore silencieusement les robots (champ invisible rempli),
    2. vérifie les champs,
-   3. enregistre la demande (data/*.jsonl),
-   4. prévient Rebecca et envoie une confirmation à la personne. */
+   3. enregistre la demande (data/*.jsonl, repris plus tard par l'espace admin du SaaS),
+   4. envoie le mail automatique à la personne ;
+   5. prévient Rebecca seulement pour les demandes qui appellent une réponse (devis, Grand Oral, contact). */
 
 const email = z.string().trim().email("Adresse email invalide").max(200);
 const required = (label: string, max = 200) => z.string().trim().min(1, `${label} : champ obligatoire`).max(max);
@@ -35,10 +36,14 @@ const FAILURE: FormState = {
   message: "L'envoi n'a pas abouti. Réessayez dans un instant ou écrivez directement à formationn@liebeneloquence.com.",
 };
 
-/** Envoie la notification à Rebecca puis la confirmation à la personne. */
-async function notify(admin: { subject: string; html: string }, client: { subject: string; html: string } | null, replyTo: string, attachments?: Mail["attachments"]) {
+/** Notification à Rebecca (uniquement pour les demandes qui appellent une réponse). */
+async function notifyAdmin(admin: { subject: string; html: string }, replyTo: string) {
   await sendMail({ to: ADMIN_EMAIL, replyTo, ...admin });
-  if (client) await sendMail({ to: replyTo, replyTo: ADMIN_EMAIL, ...client, attachments });
+}
+
+/** Mail automatique à la personne (répondre à ce mail écrit à Rebecca). */
+async function confirm(client: { subject: string; html: string }, to: string, attachments?: Mail["attachments"]) {
+  await sendMail({ to, replyTo: ADMIN_EMAIL, ...client, attachments });
 }
 
 /* ---------------------------------------------------------------------------
@@ -66,9 +71,8 @@ export async function demanderDevis(_: FormState, data: FormData): Promise<FormS
 
   await record("demandes", { type: "devis", ...d });
   try {
-    await notify(T.devisAdmin({ ...d, structure: structure.label }), T.devisClient(d), d.email, [
-      { name: "Lieben-Eloquence-presentation.pdf", file: structure.brochure },
-    ]);
+    await notifyAdmin(T.devisAdmin({ ...d, structure: structure.label }), d.email);
+    await confirm(T.devisClient({ ...d, structure: structure.label }), d.email, [{ name: "Lieben-Eloquence-presentation.pdf", file: structure.brochure }]);
     return { status: "success" };
   } catch (e) {
     console.error(e);
@@ -99,7 +103,8 @@ export async function reserverGrandOral(_: FormState, data: FormData): Promise<F
 
   await record("demandes", { type: "grand-oral", ...d });
   try {
-    await notify(T.grandOralAdmin(d), T.grandOralClient({ ...d, price }), d.email);
+    await notifyAdmin(T.grandOralAdmin(d), d.email);
+    await confirm(T.grandOralClient({ ...d, price }), d.email);
     return { status: "success" };
   } catch (e) {
     console.error(e);
@@ -126,7 +131,8 @@ export async function envoyerContact(_: FormState, data: FormData): Promise<Form
 
   await record("demandes", { type: "contact", ...d });
   try {
-    await notify(T.contactAdmin(d), T.contactClient(d), d.email);
+    await notifyAdmin(T.contactAdmin(d), d.email);
+    await confirm(T.contactClient(d), d.email);
     return { status: "success" };
   } catch (e) {
     console.error(e);
@@ -154,7 +160,7 @@ export async function inscrireNewsletter(_: FormState, data: FormData): Promise<
   await record("newsletter", { ...d, consent: "formulaire newsletter du site" });
   await addToNewsletterList(d).catch((e) => console.error(e));
   try {
-    await notify(T.newsletterAdmin(d), T.newsletterClient(d), d.email);
+    await confirm(T.newsletterClient(d), d.email);
     return { status: "success" };
   } catch (e) {
     console.error(e);
@@ -176,7 +182,7 @@ export async function rejoindreListeAttente(_: FormState, data: FormData): Promi
 
   await record("liste-attente", { ...d, consent: "formulaire liste d'attente LEQ'FAM" });
   try {
-    await notify(T.listeAttenteAdmin(d), T.listeAttenteClient(d), d.email);
+    await confirm(T.listeAttenteClient(d), d.email);
     return { status: "success" };
   } catch (e) {
     console.error(e);
@@ -190,17 +196,12 @@ export async function rejoindreListeAttente(_: FormState, data: FormData): Promi
 
 const AnswersSchema = z.array(z.union([z.string().max(30), z.number().int(), z.array(z.string().max(30)).max(4)])).length(6);
 
-/** Enregistre un résultat anonyme et prévient Rebecca (appelé à l'affichage du résultat). */
+/** Enregistre un résultat anonyme (appelé à l'affichage du résultat). Pas de mail. */
 export async function enregistrerQuiz(answers: Answer[]): Promise<void> {
   const parsed = AnswersSchema.safeParse(answers);
   if (!parsed.success || !isComplete(parsed.data)) return;
   const result = computeResult(parsed.data);
   await record("quiz", { answers: parsed.data, profile: result.profileId, level: result.level.name, pack: result.pack });
-  try {
-    await sendMail({ to: ADMIN_EMAIL, ...T.quizAdmin({ result, answers: describeAnswers(parsed.data) }) });
-  } catch (e) {
-    console.error(e);
-  }
 }
 
 const QuizMailSchema = z.object({
@@ -228,9 +229,7 @@ export async function recevoirResultatQuiz(_: FormState, data: FormData): Promis
   await record("quiz", { answers, profile: result.profileId, pack: result.pack, prenom, email: mail });
   try {
     const fiche = await renderFicheOrateur(result, prenom);
-    await notify(T.quizAdmin({ result, answers: describeAnswers(answers), prenom, email: mail }), T.quizClient({ result, prenom }), mail, [
-      { name: "fiche-orateur-LEQ.png", content: fiche, contentType: "image/png", cid: "fiche" },
-    ]);
+    await confirm(T.quizClient({ result, prenom }), mail, [{ name: "fiche-orateur-LEQ.png", content: fiche, contentType: "image/png", cid: "fiche" }]);
     return { status: "success" };
   } catch (e) {
     console.error(e);

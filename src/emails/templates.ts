@@ -6,10 +6,10 @@ import type { QuizResult } from "@/lib/quiz";
 /**
  * Mails automatiques envoyés par le site.
  *
- * Chaque formulaire envoie deux mails :
- *   - une CONFIRMATION designée à la personne (…Client) ;
- *   - une NOTIFICATION à Rebecca avec tous les détails (…Admin). Répondre à la notification
- *     écrit directement à la personne.
+ * Chaque formulaire envoie une CONFIRMATION designée à la personne (…Client).
+ * Les demandes qui appellent une réponse (devis, Grand Oral, contact) envoient aussi une
+ * NOTIFICATION à Rebecca (…Admin) : répondre à la notification écrit directement à la personne.
+ * Newsletter, liste d'attente et quiz : aucune notification, les données sont enregistrées.
  *
  * Pour modifier un texte : changer les phrases entre guillemets ci-dessous.
  * Mise en page compatible avec les messageries (Gmail, Outlook, Apple Mail, mobile).
@@ -214,13 +214,6 @@ export function contactClient(d: Contact): Email {
 
 type Newsletter = { nom: string; email: string; profil: string; thematique: string };
 
-export function newsletterAdmin(d: Newsletter): Email {
-  return {
-    subject: `Nouvelle inscription newsletter : ${d.nom}`,
-    html: admin("Nouvelle inscription à la newsletter", [["Nom", d.nom], ["Email", d.email], ["Profil", d.profil], ["Thématique", d.thematique]]),
-  };
-}
-
 export function newsletterClient(d: Newsletter): Email {
   return {
     subject: "Bienvenue dans la newsletter LEQ",
@@ -242,13 +235,6 @@ export function newsletterClient(d: Newsletter): Email {
    Liste d'attente LEQ'FAM
    ------------------------------------------------------------------------- */
 
-export function listeAttenteAdmin(d: { prenom: string; email: string }): Email {
-  return {
-    subject: `Liste d'attente LEQ'FAM : ${d.prenom}`,
-    html: admin("Nouvelle inscription à la liste d'attente LEQ'FAM", [["Prénom", d.prenom], ["Email", d.email]]),
-  };
-}
-
 export function listeAttenteClient(d: { prenom: string }): Email {
   return {
     subject: "Vous êtes sur la liste d'attente de la LEQ'FAM",
@@ -269,24 +255,6 @@ export function listeAttenteClient(d: { prenom: string }): Email {
 /* ---------------------------------------------------------------------------
    Quiz d'orateur
    ------------------------------------------------------------------------- */
-
-export function quizAdmin(d: { result: QuizResult; answers: [string, string][]; prenom?: string; email?: string }): Email {
-  return {
-    subject: `Quiz d'orateur : ${d.result.profile.name}${d.prenom ? ` (${d.prenom})` : ""}`,
-    html: admin(
-      d.prenom ? "Fiche orateur demandée" : "Nouveau résultat de quiz (anonyme)",
-      [
-        ["Prénom", d.prenom],
-        ["Email", d.email],
-        ["Profil", d.result.profile.name],
-        ["Niveau", d.result.level.name],
-        ["Points à travailler", d.result.points.map((pt) => pt.title).join(", ")],
-        ["Pack indicatif (pour vous seulement)", d.result.pack],
-        ...d.answers.map(([q, a], i) => [`Q${i + 1}. ${q}`, a] as [string, string]),
-      ],
-    ),
-  };
-}
 
 /** Mail du quiz : court, avec la fiche infographie (image `cid:fiche`) et le lien de réservation. */
 export function quizClient(d: { result: QuizResult; prenom: string }): Email {
