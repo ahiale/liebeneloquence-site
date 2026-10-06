@@ -95,16 +95,18 @@ export function MicDoodle({
   width = 70,
   height = 90,
   stand = "#fff",
+  body = "#fff",
 }: {
   className?: string;
   style?: CSSProperties;
   width?: number;
   height?: number;
   stand?: string;
+  body?: string;
 }) {
   return (
     <svg className={className} style={style} width={width} height={height} viewBox="0 0 70 90" fill="none" aria-hidden="true">
-      <rect x="20" y="4" width="30" height="44" rx="15" fill="#fff" stroke="#001636" strokeWidth="2.5" />
+      <rect x="20" y="4" width="30" height="44" rx="15" fill={body} stroke="#001636" strokeWidth="2.5" />
       <path d="M24 18h22M24 26h22M24 34h22" stroke="#001636" strokeWidth="2" strokeLinecap="round" />
       <path d="M12 36c0 14 10 24 23 24s23-10 23-24M35 60v18M24 84h22" stroke={stand} strokeWidth="3" strokeLinecap="round" />
     </svg>

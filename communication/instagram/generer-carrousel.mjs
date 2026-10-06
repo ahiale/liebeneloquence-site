@@ -166,8 +166,8 @@ const slides = [
   frame(6, total, BG.clair, h("div", { flexDirection: "column" },
     img(BUBBLE, 110, 88, { position: "absolute", top: 110, right: 90 }),
     h("div", { fontSize: 26, fontWeight: 600, letterSpacing: 8, color: ORANGE }, "SUR MESURE"),
-    h("div", { fontSize: 84, fontWeight: 700, letterSpacing: -3, marginTop: 16, lineHeight: 1.05 }, "Votre parole,"),
-    serif("votre moment.", { fontSize: 100, color: ROYAL, lineHeight: 1.1, marginBottom: 36 }),
+    h("div", { fontSize: 84, fontWeight: 700, letterSpacing: -3, marginTop: 16, lineHeight: 1.05 }, "Autres"),
+    serif("services", { fontSize: 100, color: ROYAL, lineHeight: 1.1, marginBottom: 36 }),
     ...[
       ["Interventions en école", "Ateliers ludiques pour les établissements et les structures culturelles"],
       ["Discours sur mesure", "Mariage, hommage, soutenance, prise de poste"],

@@ -119,7 +119,7 @@ export default async function AutresServicesPage() {
             <div className="relative text-center">
               <p className="eyebrow" style={{ color: "#114DA8" }}>Sur mesure</p>
               <h2 className="h2">
-                Votre parole, <span className="serif text-royal">votre moment.</span>
+                Autres <span className="serif text-royal">services</span>
               </h2>
               <Star className="wiggle hide-sm absolute" style={{ right: "18%", top: 10 }} />
             </div>
