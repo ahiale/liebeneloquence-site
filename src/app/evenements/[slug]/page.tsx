@@ -1,199 +1,155 @@
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
+import Image from "next/image";
 import Link from "next/link";
-import {
-  CalendarDays,
-  Clock,
-  MapPin,
-  Wallet,
-  Users,
-  Target,
-  ArrowLeft,
-  ArrowRight,
-  Check,
-  CalendarCheck,
-} from "lucide-react";
-import { Container, Eyebrow } from "@/components/ui/Section";
-import { ButtonLink } from "@/components/ui/Button";
-import { Reveal } from "@/components/ui/Reveal";
+import { notFound } from "next/navigation";
+import { getEvent, getEvents } from "@/content";
 import { Header } from "@/components/layout/Header";
-import { EVENTS, getEvent } from "@/data/events";
-import { SITE } from "@/data/site";
+import { ArrowLeft, Check, DrawUnderline, Sparkle } from "@/components/ui/Doodles";
+import { Icon, type IconName } from "@/components/ui/Icons";
 
-export function generateStaticParams() {
-  return EVENTS.map((e) => ({ slug: e.slug }));
+type Props = { params: Promise<{ slug: string }> };
+
+export async function generateStaticParams() {
+  return (await getEvents()).map((e) => ({ slug: e.slug }));
 }
 
-export async function generateMetadata({
-  params,
-}: {
-  params: Promise<{ slug: string }>;
-}): Promise<Metadata> {
-  const { slug } = await params;
-  const event = getEvent(slug);
-  if (!event) return { title: "Événement introuvable" };
-
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const event = await getEvent((await params).slug);
+  if (!event) return {};
   return {
-    title: event.title,
-    description: event.excerpt,
-    openGraph: { title: event.title, description: event.excerpt },
+    title: event.title ? `${event.title} · ${event.dateLabel}` : `Événement LEQ · ${event.dateLabel}`,
+    description: event.summary,
+    alternates: { canonical: `/evenements/${event.slug}` },
+    openGraph: event.image ? { images: [event.image] } : undefined,
   };
 }
 
-export default async function EventPage({
-  params,
-}: {
-  params: Promise<{ slug: string }>;
-}) {
-  const { slug } = await params;
-  const event = getEvent(slug);
+export default async function EvenementPage({ params }: Props) {
+  const event = await getEvent((await params).slug);
   if (!event) notFound();
 
-  const infos = [
-    { icon: CalendarDays, label: "Date", value: event.dateLabel, tone: "text-gold" },
-    { icon: Clock, label: "Heure", value: event.timeLabel, tone: "text-royal-200" },
-    { icon: MapPin, label: "Lieu", value: event.place, tone: "text-orange" },
-    { icon: Wallet, label: "Tarif", value: event.priceLabel, tone: "text-success-300" },
-    { icon: Users, label: "Capacité", value: event.capacity, tone: "text-royal-200" },
-    { icon: Target, label: "Niveau", value: event.level, tone: "text-gold" },
+  const infos: { icon: IconName; label: string; value: string | null }[] = [
+    { icon: "calendar", label: "Date", value: event.dateLabel },
+    { icon: "clock", label: "Horaires", value: event.timeLabel },
+    { icon: "mapPin", label: "Lieu", value: event.location },
+    { icon: "ticket", label: "Tarif", value: event.priceLabel },
   ];
 
-  const others = EVENTS.filter((e) => e.slug !== event.slug).slice(0, 2);
+  // Données structurées pour Google (uniquement si la date est connue)
+  const jsonLd = event.startsAt
+    ? {
+        "@context": "https://schema.org",
+        "@type": "Event",
+        name: event.title ?? `Événement LEQ ${event.dateLabel}`,
+        startDate: event.startsAt,
+        description: event.summary,
+        location: event.location ? { "@type": "Place", name: event.location, address: event.location } : undefined,
+        organizer: { "@type": "Organization", name: "Lieben Éloquence", url: "https://liebeneloquence.com" },
+      }
+    : null;
 
   return (
     <>
-      <Header />
-
-      <main className="bg-night pt-32 pb-24 sm:pt-40">
-        <Container>
-          <Link
-            href="/evenements"
-            className="inline-flex items-center gap-2 text-sm text-white/55 transition-colors hover:text-white"
-          >
-            <ArrowLeft size={15} /> Tous les événements
+      {jsonLd && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />}
+      <div className="bg-hero">
+        <Header />
+        <section className="wrap pt-6 pb-20 sm:pt-10 sm:pb-24">
+          <Link href="/evenements" className="inline-flex items-center gap-2 text-[14px] text-white/80 no-underline hover:text-white">
+            <ArrowLeft /> Tous les événements
           </Link>
+          <div className="mt-8 flex flex-wrap items-center gap-10">
+            <div className="relative min-w-0" style={{ flex: "1.1 1 460px" }}>
+              <div className="flex flex-wrap gap-2">
+                {event.type && <span className="rounded-full bg-white px-3.5 py-1.5 text-[11px] font-bold tracking-[.16em] text-royal uppercase">{event.type}</span>}
+                {event.badge && <span className="rounded-full bg-orange px-3.5 py-1.5 text-[11px] font-bold tracking-[.16em] text-white uppercase">{event.badge}</span>}
+              </div>
+              <h1 className="mt-5 mb-0 leading-[1.05] font-bold tracking-[-0.035em] text-white" style={{ fontSize: "clamp(38px, 7vw, 58px)" }}>
+                {event.title ?? <span className="serif text-gold">{event.dateLabel}</span>}
+              </h1>
+              <DrawUnderline style={{ marginTop: 4 }} />
+              <p className="mt-5 mb-0 max-w-[540px] text-[17px] leading-[1.7] text-white/88">{event.summary}</p>
+            </div>
+            <div className="relative min-w-0" style={{ flex: ".9 1 320px" }}>
+              <Sparkle className="wiggle hide-sm absolute z-[2]" size={44} style={{ top: -22, right: -10 }} />
+              <div className="relative overflow-hidden rounded-[26px] border-4 border-white bg-cloud" style={{ aspectRatio: "16 / 10", boxShadow: "0 30px 60px -20px rgba(0,22,54,.6)" }}>
+                {event.image ? (
+                  <Image src={event.image} alt="" fill priority sizes="(max-width: 760px) 90vw, 460px" style={{ objectFit: "cover" }} />
+                ) : (
+                  <span className="flex h-full items-center justify-center text-[13px] font-semibold text-ink/50">Photo de l&apos;événement</span>
+                )}
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
 
-          <Reveal className="panel mt-6 px-6 py-12 sm:px-10 sm:py-14">
-            <span className="inline-flex items-center gap-2 rounded-full bg-royal px-4 py-2 text-[0.7rem] font-semibold uppercase tracking-[0.16em] text-white">
-              {event.kind}
-            </span>
+      <main className="bg-light py-16 text-ink sm:py-24">
+        <div className="wrap grid gap-10 lg:grid-cols-[minmax(0,1fr)_340px]">
+          <div>
+            <div className="grid gap-4">
+              {event.description.map((para) => (
+                <p key={para} className="m-0 text-[16px] leading-[1.75] text-ink/80">{para}</p>
+              ))}
+            </div>
+            {event.program.length > 0 && (
+              <>
+                <h2 className="mt-12 mb-0 text-[26px] font-bold tracking-[-0.03em]">
+                  Au <span className="serif text-royal">programme</span>
+                </h2>
+                <ol className="mt-5 mb-0 grid list-none gap-3 p-0">
+                  {event.program.map((step, i) => (
+                    <li key={step} className="flex items-start gap-4 rounded-[18px] bg-white p-4" style={{ boxShadow: "0 20px 40px -32px rgba(0,22,54,.6)" }}>
+                      <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gold text-[15px] font-bold">{i + 1}</span>
+                      <span className="pt-1.5 text-[15px] text-ink/80">{step}</span>
+                    </li>
+                  ))}
+                </ol>
+              </>
+            )}
+            {event.audience.length > 0 && (
+              <>
+                <h2 className="mt-12 mb-0 text-[26px] font-bold tracking-[-0.03em]">
+                  Pour <span className="serif text-royal">qui ?</span>
+                </h2>
+                <ul className="mt-5 mb-0 grid list-none gap-3 p-0">
+                  {event.audience.map((a) => (
+                    <li key={a} className="flex gap-3 text-[15px] text-ink/80">
+                      <Check />
+                      {a}
+                    </li>
+                  ))}
+                </ul>
+              </>
+            )}
+          </div>
 
-            <h1 className="h-section mt-7 text-4xl sm:text-[3rem]">
-              {event.title}
-            </h1>
-            <p className="mt-6 max-w-3xl leading-relaxed text-white/72">
-              {event.description}
-            </p>
-
-            <dl className="mt-10 grid gap-4 sm:grid-cols-2">
-              {infos.map((info) => (
-                <div
-                  key={info.label}
-                  className="flex items-start gap-4 rounded-[20px] border border-white/10 bg-white/6 p-5"
-                >
-                  <info.icon
-                    size={20}
-                    strokeWidth={1.9}
-                    className={`mt-0.5 shrink-0 ${info.tone}`}
-                  />
+          <aside className="h-fit rounded-[26px] p-7 text-white lg:sticky lg:top-6" style={{ background: "linear-gradient(165deg,#04193c,#0e3f8b)", boxShadow: "0 44px 80px -44px rgba(0,22,54,.85)" }}>
+            <p className="eyebrow">Infos pratiques</p>
+            <dl className="mt-5 mb-0 grid gap-4">
+              {infos.map((i) => (
+                <div key={i.label} className="flex items-start gap-3">
+                  <span className="tile h-10 w-10 rounded-full bg-white/10 text-gold">
+                    <Icon name={i.icon} size={18} />
+                  </span>
                   <div>
-                    <dt className="text-[0.75rem] text-white/50">{info.label}</dt>
-                    <dd className="mt-0.5 font-semibold leading-snug">
-                      {info.value}
-                    </dd>
+                    <dt className="text-[12px] text-white/55">{i.label}</dt>
+                    <dd className="m-0 text-[15px] font-semibold">{i.value ?? "Bientôt annoncé"}</dd>
                   </div>
                 </div>
               ))}
             </dl>
-
-            <div className="mt-10 flex flex-col gap-3 sm:flex-row">
-              <ButtonLink href={SITE.calendly} external variant="primary" size="lg">
-                <CalendarCheck size={17} /> Réserver ma place
-              </ButtonLink>
-              <ButtonLink href="/evenements#newsletter" variant="ghost" size="lg">
-                Être prévenu des prochaines dates
-              </ButtonLink>
-            </div>
-          </Reveal>
-
-          <div className="mt-6 grid gap-5 lg:grid-cols-2">
-            <Reveal className="surface rounded-card p-7">
-              <Eyebrow>Au programme</Eyebrow>
-              <ul className="mt-6 space-y-4">
-                {event.program.map((p, i) => (
-                  <li key={p} className="flex gap-4">
-                    <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-gold/14 text-[0.75rem] font-bold text-gold">
-                      {i + 1}
-                    </span>
-                    <span className="pt-0.5 text-[0.92rem] leading-snug text-white/78">
-                      {p}
-                    </span>
-                  </li>
-                ))}
-              </ul>
-            </Reveal>
-
-            <Reveal delay={110} className="surface rounded-card p-7">
-              <Eyebrow>Pour qui&nbsp;?</Eyebrow>
-              <ul className="mt-6 space-y-4">
-                {event.audience.map((a) => (
-                  <li key={a} className="flex gap-3">
-                    <Check
-                      size={18}
-                      strokeWidth={2.6}
-                      className="mt-0.5 shrink-0 text-success-300"
-                    />
-                    <span className="text-[0.92rem] leading-snug text-white/78">
-                      {a}
-                    </span>
-                  </li>
-                ))}
-              </ul>
-
-              <p className="mt-8 rounded-[16px] border border-white/10 bg-white/5 p-5 text-[0.87rem] leading-relaxed text-white/62">
-                Les places sont limitées à {event.capacity.toLowerCase()} pour
-                garantir un temps de parole réel à chaque participant et un
-                retour individuel.
-              </p>
-            </Reveal>
-          </div>
-
-          {others.length > 0 && (
-            <section className="mt-16">
-              <h2 className="h-section text-2xl sm:text-3xl">
-                Les autres rendez-vous
-              </h2>
-              <div className="mt-6 grid gap-5 sm:grid-cols-2">
-                {others.map((o) => (
-                  <Link
-                    key={o.slug}
-                    href={`/evenements/${o.slug}`}
-                    className="surface surface-hover group rounded-card p-6"
-                  >
-                    <p className="text-[0.68rem] font-semibold uppercase tracking-[0.16em] text-white/45">
-                      {o.kind}
-                    </p>
-                    <h3 className="mt-2 text-lg font-bold tracking-[-0.02em]">
-                      {o.title}
-                    </h3>
-                    <p className="mt-2 text-[0.85rem] text-white/58">
-                      {o.dateLabel} · {o.priceLabel}
-                    </p>
-                    <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-gold">
-                      Voir le détail
-                      <ArrowRight
-                        size={15}
-                        className="transition-transform group-hover:translate-x-1"
-                      />
-                    </span>
-                  </Link>
-                ))}
-              </div>
-            </section>
-          )}
-        </Container>
+            {event.registrationUrl ? (
+              <a className="btn btn-p mt-7 w-full" href={event.registrationUrl} target="_blank" rel="noreferrer noopener">
+                S&apos;inscrire
+              </a>
+            ) : (
+              <Link className="btn btn-p mt-7 w-full" href="/evenements#newsletter">
+                Être prévenu
+              </Link>
+            )}
+          </aside>
+        </div>
       </main>
-
     </>
   );
 }

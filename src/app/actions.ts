@@ -1,16 +1,24 @@
 "use server";
 
 import { z } from "zod";
-import { ADMIN_EMAIL, esc, fieldsTable, layout, sendMail } from "@/lib/mail";
+import { ADMIN_EMAIL, sendMail } from "@/lib/mail";
+import { record } from "@/lib/store";
 import { HONEYPOT, type FormState } from "@/lib/forms";
+import { computeResult, describeAnswers, isComplete, type Answer } from "@/lib/quiz";
+import { getPricing } from "@/content";
+import { formatPrice } from "@/lib/format";
+import * as T from "@/emails/templates";
+import { DEMANDES, ORAUX, PROFILS_GRAND_ORAL } from "@/lib/options";
 
 /* Actions serveur des formulaires du site. Chaque action :
    1. ignore silencieusement les robots (champ invisible rempli),
    2. vérifie les champs,
-   3. prévient Rebecca et envoie une confirmation à la personne. */
+   3. enregistre la demande (data/*.jsonl),
+   4. prévient Rebecca et envoie une confirmation à la personne. */
 
-const email = z.string().trim().email("Adresse email invalide");
-const required = (label: string) => z.string().trim().min(1, `${label} : champ obligatoire`).max(2000);
+const email = z.string().trim().email("Adresse email invalide").max(200);
+const required = (label: string, max = 200) => z.string().trim().min(1, `${label} : champ obligatoire`).max(max);
+const optional = (max = 4000) => z.string().trim().max(max).optional().default("");
 
 function invalid(error: z.ZodError): FormState {
   const fields: Record<string, string> = {};
@@ -25,11 +33,16 @@ const FAILURE: FormState = {
   message: "L'envoi n'a pas abouti. Réessayez dans un instant ou écrivez directement à formationn@liebeneloquence.com.",
 };
 
+/** Envoie la notification à Rebecca puis la confirmation à la personne. */
+async function notify(admin: { subject: string; html: string }, client: { subject: string; html: string } | null, replyTo: string, attachments?: { name: string; file: string }[]) {
+  await sendMail({ to: ADMIN_EMAIL, replyTo, ...admin });
+  if (client) await sendMail({ to: replyTo, replyTo: ADMIN_EMAIL, ...client, attachments });
+}
+
 /* ---------------------------------------------------------------------------
-   Demande de devis (écoles)
+   Demande de devis (écoles et structures)
    ------------------------------------------------------------------------- */
 
-/** Type de structure → brochure envoyée en pièce jointe. */
 const STRUCTURES = {
   scolaire: { label: "Établissement scolaire / université", brochure: "brochures/LEQ-brochure-etudiants.pdf" },
   culturelle: { label: "Structure culturelle / association", brochure: "brochures/LEQ-brochure-acteurs-culturels.pdf" },
@@ -39,7 +52,7 @@ const DevisSchema = z.object({
   structure: z.enum(["scolaire", "culturelle"], { message: "Choisissez le type de structure" }),
   nom: required("Nom et établissement"),
   email,
-  message: z.string().trim().max(4000).optional().default(""),
+  message: optional(),
 });
 
 export async function demanderDevis(_: FormState, data: FormData): Promise<FormState> {
@@ -49,26 +62,147 @@ export async function demanderDevis(_: FormState, data: FormData): Promise<FormS
   const d = parsed.data;
   const structure = STRUCTURES[d.structure];
 
+  await record("demandes", { type: "devis", ...d });
   try {
-    await sendMail({
-      to: ADMIN_EMAIL,
-      replyTo: d.email,
-      subject: `Demande de devis : ${d.nom}`,
-      html: layout(
-        "Nouvelle demande de devis",
-        fieldsTable([["Structure", structure.label], ["Nom & établissement", d.nom], ["Email", d.email], ["Message", d.message]]),
-      ),
-    });
-    await sendMail({
-      to: d.email,
-      replyTo: ADMIN_EMAIL,
-      subject: "Votre demande de devis Lieben Éloquence",
-      html: layout(
-        "Merci pour votre demande",
-        `<p>Bonjour,</p><p>Nous avons bien reçu votre demande de devis pour <strong>${esc(d.nom)}</strong>. Vous trouverez ci-joint notre document de présentation avec toutes les informations détaillées sur les parcours.</p><p>Nous revenons vers vous très vite.</p><p>Rebecca Lieben Ahiale<br>Lieben Éloquence</p>`,
-      ),
-      attachments: [{ name: "Lieben-Eloquence-presentation.pdf", file: structure.brochure }],
-    });
+    await notify(T.devisAdmin({ ...d, structure: structure.label }), T.devisClient(d), d.email, [
+      { name: "Lieben-Eloquence-presentation.pdf", file: structure.brochure },
+    ]);
+    return { status: "success" };
+  } catch (e) {
+    console.error(e);
+    return FAILURE;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Réservation Grand Oral
+   ------------------------------------------------------------------------- */
+
+const GrandOralSchema = z.object({
+  prenom: required("Prénom"),
+  nom: required("Nom"),
+  email,
+  profil: z.enum(PROFILS_GRAND_ORAL, { message: "Indiquez votre profil" }),
+  oral: z.enum(ORAUX, { message: "Indiquez votre oral" }),
+  date: z.union([z.literal(""), z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Date invalide")]).default(""),
+  attentes: optional(),
+});
+
+export async function reserverGrandOral(_: FormState, data: FormData): Promise<FormState> {
+  if (isBot(data)) return { status: "success" };
+  const parsed = GrandOralSchema.safeParse(Object.fromEntries(data));
+  if (!parsed.success) return invalid(parsed.error);
+  const d = parsed.data;
+  const price = formatPrice((await getPricing()).grandOral.price);
+
+  await record("demandes", { type: "grand-oral", ...d });
+  try {
+    await notify(T.grandOralAdmin(d), T.grandOralClient({ ...d, price }), d.email);
+    return { status: "success" };
+  } catch (e) {
+    console.error(e);
+    return FAILURE;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Contact (discours, animation, coaching, partenariat)
+   ------------------------------------------------------------------------- */
+
+const ContactSchema = z.object({
+  nom: required("Prénom et nom"),
+  email,
+  demande: z.enum(DEMANDES, { message: "Choisissez le type de demande" }),
+  message: required("Message", 4000),
+});
+
+export async function envoyerContact(_: FormState, data: FormData): Promise<FormState> {
+  if (isBot(data)) return { status: "success" };
+  const parsed = ContactSchema.safeParse(Object.fromEntries(data));
+  if (!parsed.success) return invalid(parsed.error);
+  const d = parsed.data;
+
+  await record("demandes", { type: "contact", ...d });
+  try {
+    await notify(T.contactAdmin(d), T.contactClient(d), d.email);
+    return { status: "success" };
+  } catch (e) {
+    console.error(e);
+    return FAILURE;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Newsletter
+   ------------------------------------------------------------------------- */
+
+const NewsletterSchema = z.object({
+  nom: required("Prénom et nom"),
+  email,
+  profil: optional(100),
+  thematique: optional(100),
+});
+
+export async function inscrireNewsletter(_: FormState, data: FormData): Promise<FormState> {
+  if (isBot(data)) return { status: "success" };
+  const parsed = NewsletterSchema.safeParse(Object.fromEntries(data));
+  if (!parsed.success) return invalid(parsed.error);
+  const d = parsed.data;
+
+  await record("newsletter", { ...d, consent: "formulaire newsletter du site" });
+  try {
+    await notify(T.newsletterAdmin(d), T.newsletterClient(d), d.email);
+    return { status: "success" };
+  } catch (e) {
+    console.error(e);
+    return FAILURE;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Quiz d'orateur
+   ------------------------------------------------------------------------- */
+
+const AnswersSchema = z.array(z.union([z.string().max(30), z.number().int()])).length(6);
+
+/** Enregistre un résultat anonyme et prévient Rebecca (appelé à l'affichage du résultat). */
+export async function enregistrerQuiz(answers: Answer[]): Promise<void> {
+  const parsed = AnswersSchema.safeParse(answers);
+  if (!parsed.success || !isComplete(parsed.data)) return;
+  const result = computeResult(parsed.data);
+  await record("quiz", { answers: parsed.data, profile: result.profileId, level: result.level.name, pack: result.pack });
+  try {
+    await sendMail({ to: ADMIN_EMAIL, ...T.quizAdmin({ result, answers: describeAnswers(parsed.data) }) });
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+const QuizMailSchema = z.object({
+  prenom: required("Prénom"),
+  email,
+  answers: z.string().transform((s, ctx) => {
+    try {
+      return AnswersSchema.parse(JSON.parse(s));
+    } catch {
+      ctx.addIssue({ code: "custom", message: "Réponses invalides" });
+      return z.NEVER;
+    }
+  }),
+});
+
+/** Envoie le résultat du quiz à la personne qui le demande. */
+export async function recevoirResultatQuiz(_: FormState, data: FormData): Promise<FormState> {
+  if (isBot(data)) return { status: "success" };
+  const parsed = QuizMailSchema.safeParse(Object.fromEntries(data));
+  if (!parsed.success) return invalid(parsed.error);
+  const { prenom, email: mail, answers } = parsed.data;
+  if (!isComplete(answers)) return FAILURE;
+  const result = computeResult(answers);
+
+  await record("quiz", { answers, profile: result.profileId, prenom, email: mail });
+  try {
+    await notify(T.quizAdmin({ result, answers: describeAnswers(answers), prenom, email: mail }), T.quizClient({ result, prenom }), mail);
     return { status: "success" };
   } catch (e) {
     console.error(e);

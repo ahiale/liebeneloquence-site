@@ -39,3 +39,21 @@ export const FOOTER_LINKS = [
 
 /** Vrai si le lien est encore un emplacement « [À COMPLÉTER] ». */
 export const isPlaceholder = (href: string) => href.startsWith("[");
+
+/** Lien de paiement, ou repli vers le formulaire de contact tant que le lien Stripe n'est pas renseigné. */
+export const paymentHref = (href: string) => (isPlaceholder(href) ? "/autres-produits#contact" : href);
+
+/** Informations légales (page Mentions légales). */
+export const LEGAL = {
+  owner: "Rebecca Lieben Ahiale",
+  status: "Entrepreneur individuel",
+  siren: "106 469 240",
+  siret: "106 469 240 00019",
+  /** Adresse professionnelle ou de domiciliation. */
+  address: "[ADRESSE À COMPLÉTER]",
+  host: {
+    name: "Contabo GmbH",
+    address: "Aschauer Straße 32a, 81549 Munich, Allemagne",
+    url: "https://contabo.com",
+  },
+} as const;

@@ -1,8 +1,9 @@
 import type { MetadataRoute } from "next";
+import { SITE } from "@/config/site";
 
 export default function robots(): MetadataRoute.Robots {
   return {
-    rules: { userAgent: "*", allow: "/", disallow: "/mentions-legales" },
-    sitemap: "https://lieben-eloquence.fr/sitemap.xml",
+    rules: { userAgent: "*", allow: "/" },
+    sitemap: `${SITE.url}/sitemap.xml`,
   };
 }

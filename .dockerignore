@@ -1,0 +1,12 @@
+node_modules
+.next
+.next-build
+.git
+.github
+.k3s
+data
+deploy
+LEQ-maquette-v2
+*.md
+!content/*.md
+.env*

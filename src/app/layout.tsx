@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import Script from "next/script";
 import { melodrame, sfPro } from "@/design/fonts";
 import { Footer } from "@/components/layout/Footer";
 import { SITE } from "@/config/site";
@@ -34,6 +35,10 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
       <body>
         {children}
         <Footer />
+        {/* Mesure d'audience Umami (sans cookie), active seulement si configurée au build */}
+        {process.env.UMAMI_WEBSITE_ID && (
+          <Script src={process.env.UMAMI_SCRIPT_URL || "https://stats.liebeneloquence.com/script.js"} data-website-id={process.env.UMAMI_WEBSITE_ID} strategy="afterInteractive" />
+        )}
       </body>
     </html>
   );

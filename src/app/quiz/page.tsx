@@ -1,12 +1,21 @@
 import type { Metadata } from "next";
-import { QuizApp } from "@/components/quiz/QuizApp";
+import { SimpleHeader } from "@/components/layout/SimpleHeader";
+import { Sparkle } from "@/components/ui/Doodles";
+import { Quiz } from "@/components/quiz/Quiz";
 
 export const metadata: Metadata = {
-  title: "Quel type d'orateur êtes-vous ?",
-  description:
-    "6 questions, 2 minutes : découvrez votre profil d'orateur, vos forces, vos axes de travail et la formation LEQ qui vous correspond.",
+  title: "Quiz : quel type d'orateur êtes-vous ?",
+  description: "6 questions, 2 minutes : découvrez votre profil d'orateur, votre niveau et vos points à travailler.",
+  alternates: { canonical: "/quiz" },
 };
 
 export default function QuizPage() {
-  return <QuizApp />;
+  return (
+    <div className="bg-hero relative min-h-screen overflow-hidden text-white">
+      <Sparkle className="wiggle hide-sm absolute" size={46} style={{ left: "6%", top: 180 }} />
+      <Sparkle className="wiggle hide-sm absolute" size={34} color="#fff" style={{ right: "8%", top: 320 }} />
+      <SimpleHeader />
+      <Quiz />
+    </div>
+  );
 }

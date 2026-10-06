@@ -13,7 +13,10 @@ type IconName =
   | "mic"
   | "trophy"
   | "video"
-  | "chat";
+  | "chat"
+  | "calendar"
+  | "clock"
+  | "ticket";
 
 const PATHS: Record<IconName, React.ReactNode> = {
   target: (
@@ -77,6 +80,24 @@ const PATHS: Record<IconName, React.ReactNode> = {
     </>
   ),
   chat: <path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z" />,
+  calendar: (
+    <>
+      <rect x="3" y="4" width="18" height="18" rx="2" />
+      <path d="M16 2v4M8 2v4M3 10h18" />
+    </>
+  ),
+  clock: (
+    <>
+      <circle cx="12" cy="12" r="10" />
+      <path d="M12 6v6l4 2" />
+    </>
+  ),
+  ticket: (
+    <>
+      <path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z" />
+      <path d="M13 5v2M13 17v2M13 11v2" />
+    </>
+  ),
 };
 
 export function Icon({ name, size = 20, color = "currentColor" }: { name: IconName; size?: number; color?: string }) {

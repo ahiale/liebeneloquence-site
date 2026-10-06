@@ -9,3 +9,7 @@ build
 .env*
 next-env.d.ts
 screens
+# Données des formulaires (stockées sur le serveur, jamais dans git)
+data
+.next-build
+!deploy/.env.example

@@ -1,69 +1,60 @@
 import type { Metadata } from "next";
-import { Container, Eyebrow } from "@/components/ui/Section";
-import { Header } from "@/components/layout/Header";
-import { SITE } from "@/data/site";
+import Link from "next/link";
+import { LEGAL, SITE } from "@/config/site";
+import { LegalPage } from "@/components/layout/LegalPage";
 
 export const metadata: Metadata = {
   title: "Mentions légales",
-  description:
-    "Mentions légales, éditeur, hébergement et traitement des données personnelles du site Lieben Éloquence.",
-  robots: { index: false, follow: true },
+  alternates: { canonical: "/mentions-legales" },
 };
-
-const SECTIONS = [
-  {
-    title: "Éditeur du site",
-    body: `Le site ${SITE.name} (${SITE.shortName}) est édité par Rebecca Lieben Ahiale, formatrice indépendante en prise de parole en public. Contact : ${SITE.email}.`,
-  },
-  {
-    title: "Hébergement",
-    body: "Le site est hébergé sur une infrastructure européenne. Les coordonnées complètes de l'hébergeur sont communiquées sur simple demande à l'adresse de contact ci-dessus.",
-  },
-  {
-    title: "Propriété intellectuelle",
-    body: "L'ensemble des contenus présents sur ce site — textes, supports pédagogiques, méthodes, identité visuelle — est protégé par le droit d'auteur. Toute reproduction ou réutilisation, totale ou partielle, sans autorisation écrite préalable est interdite.",
-  },
-  {
-    title: "Données personnelles",
-    body: "Les informations transmises via les formulaires (demande de devis, réservation de séance, newsletter) servent uniquement à répondre à votre demande et à vous adresser les communications que vous avez sollicitées. Elles ne sont ni vendues ni cédées à des tiers. Conformément au RGPD, vous disposez d'un droit d'accès, de rectification et de suppression de vos données, exerçable à l'adresse de contact.",
-  },
-  {
-    title: "Cookies",
-    body: "Ce site ne dépose aucun cookie publicitaire ni traceur tiers à des fins de profilage.",
-  },
-  {
-    title: "Prestations et tarifs",
-    body: "Les tarifs indiqués sur ce site s'entendent en euros, toutes taxes comprises. Le tarif étudiant est accessible sur présentation d'un justificatif de scolarité en cours de validité. La séance diagnostic de 30 minutes est offerte et sans engagement, hors offre Grand Oral.",
-  },
-];
 
 export default function MentionsLegalesPage() {
   return (
-    <>
-      <Header />
-      <main className="bg-night pt-32 pb-24 sm:pt-40">
-        <Container className="max-w-3xl">
-          <Eyebrow>Informations légales</Eyebrow>
-          <h1 className="h-section mt-4 text-4xl sm:text-5xl">
-            Mentions légales
-          </h1>
+    <LegalPage title="Mentions" accent="légales" updated="6 octobre 2026">
+      <h2>Éditeur du site</h2>
+      <p>
+        Le site {SITE.url.replace("https://", "")} est édité par <strong>{LEGAL.owner}</strong>, {LEGAL.status.toLowerCase()} exerçant sous le nom commercial « Lieben Éloquence ».
+      </p>
+      <ul>
+        <li>SIREN : {LEGAL.siren}</li>
+        <li>SIRET : {LEGAL.siret}</li>
+        <li>Adresse : {LEGAL.address}</li>
+        <li>
+          Email : <a href={`mailto:${SITE.email}`}>{SITE.email}</a>
+        </li>
+        <li>Téléphone : {SITE.phone}</li>
+      </ul>
+      <p>Directrice de la publication : {LEGAL.owner}.</p>
 
-          <div className="mt-12 space-y-8">
-            {SECTIONS.map((s) => (
-              <section key={s.title} className="surface rounded-card p-7">
-                <h2 className="text-lg font-semibold tracking-[-0.02em] text-gold">
-                  {s.title}
-                </h2>
-                <p className="mt-3 leading-relaxed text-white/70">{s.body}</p>
-              </section>
-            ))}
-          </div>
+      <h2>Hébergement</h2>
+      <p>
+        Le site est hébergé par {LEGAL.host.name}, {LEGAL.host.address} (<a href={LEGAL.host.url}>{LEGAL.host.url.replace("https://", "")}</a>).
+      </p>
 
-          <p className="mt-10 text-[0.8rem] text-white/40">
-            Dernière mise à jour : août 2026.
-          </p>
-        </Container>
-      </main>
-    </>
+      <h2>Propriété intellectuelle</h2>
+      <p>
+        L&apos;ensemble des contenus de ce site (textes, illustrations, logo LEQ, photographies, quiz, supports) est la propriété de {LEGAL.owner}, sauf mention contraire. Toute reproduction, représentation ou diffusion, totale ou partielle, sans autorisation écrite préalable est interdite.
+      </p>
+
+      <h2>Données personnelles</h2>
+      <p>
+        Les informations recueillies via les formulaires du site sont traitées conformément au Règlement général sur la protection des données (RGPD). Pour en savoir plus et exercer vos droits, consultez la <Link href="/confidentialite">politique de confidentialité</Link>.
+      </p>
+
+      <h2>Cookies</h2>
+      <p>
+        Le site ne dépose aucun cookie publicitaire ni de traçage. Le détail figure sur la page <Link href="/cookies">gestion des cookies</Link>.
+      </p>
+
+      <h2>Liens externes</h2>
+      <p>
+        Le site contient des liens vers des services tiers (Calendly pour la prise de rendez-vous, Stripe pour le paiement, Discord, Instagram, LinkedIn). Lieben Éloquence n&apos;est pas responsable du contenu ni des pratiques de ces services.
+      </p>
+
+      <h2>Médiation de la consommation</h2>
+      <p>
+        Conformément à l&apos;article L612-1 du Code de la consommation, en cas de litige non résolu, le client consommateur peut recourir gratuitement à un médiateur de la consommation. Coordonnées du médiateur : [MÉDIATEUR À COMPLÉTER].
+      </p>
+    </LegalPage>
   );
 }

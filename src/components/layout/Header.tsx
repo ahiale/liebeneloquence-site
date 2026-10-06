@@ -23,7 +23,9 @@ export function Header() {
     return () => window.removeEventListener("keydown", onKey);
   }, [open]);
 
-  const isActive = (href: string) => !href.startsWith("/#") && pathname.startsWith(href);
+  // La Communauté est une sous-page d'« Autres produits ».
+  const section = pathname.startsWith("/communaute") ? "/autres-produits" : pathname;
+  const isActive = (href: string) => !href.startsWith("/#") && section.startsWith(href);
 
   return (
     <header className="relative z-40">

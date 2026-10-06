@@ -1,0 +1,25 @@
+# Caddy obtient et renouvelle seul les certificats HTTPS de chaque domaine.
+
+liebeneloquence.com {
+	encode zstd gzip
+	reverse_proxy site:3000
+	header {
+		Strict-Transport-Security "max-age=31536000; includeSubDomains"
+		X-Content-Type-Options "nosniff"
+		Referrer-Policy "strict-origin-when-cross-origin"
+		X-Frame-Options "SAMEORIGIN"
+	}
+}
+
+www.liebeneloquence.com {
+	redir https://liebeneloquence.com{uri} permanent
+}
+
+stats.liebeneloquence.com {
+	reverse_proxy umami:3000
+}
+
+# Plus tard, le SaaS :
+# app.liebeneloquence.com {
+# 	reverse_proxy app:3000
+# }

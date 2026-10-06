@@ -1,37 +1,42 @@
-# =========================
-# BUILD STAGE
-# =========================
-FROM node:20-alpine AS builder
+# Image de production du site Lieben Éloquence (Next.js en mode « standalone »)
 
+# ---------- Dépendances ----------
+FROM node:22-alpine AS deps
 WORKDIR /app
-
-# Install dependencies
 COPY package.json package-lock.json ./
 RUN npm ci
 
-# Copy source
+# ---------- Build ----------
+FROM node:22-alpine AS builder
+WORKDIR /app
+# Identifiant Umami (mesure d'audience), injecté au build. Vide = pas de statistiques.
+ARG UMAMI_WEBSITE_ID=""
+ENV UMAMI_WEBSITE_ID=$UMAMI_WEBSITE_ID
+ENV NEXT_TELEMETRY_DISABLED=1
+COPY --from=deps /app/node_modules ./node_modules
 COPY . .
-
-# Build Next.js
 RUN npm run build
 
-# =========================
-# RUNNER STAGE
-# =========================
-FROM node:20-alpine AS runner
-
+# ---------- Exécution ----------
+FROM node:22-alpine AS runner
 WORKDIR /app
+ENV NODE_ENV=production \
+    NEXT_TELEMETRY_DISABLED=1 \
+    PORT=3000 \
+    HOSTNAME=0.0.0.0 \
+    DATA_DIR=/data
 
-ENV NODE_ENV=production
+RUN addgroup -S leq && adduser -S leq -G leq && mkdir -p /data && chown leq:leq /data
 
-# Copy only what is needed
-COPY --from=builder /app/public ./public
-COPY --from=builder /app/.next ./.next
-COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app/package.json ./package.json
-COPY --from=builder /app/next.config.* ./ 
+COPY --from=builder --chown=leq:leq /app/.next/standalone ./
+COPY --from=builder --chown=leq:leq /app/.next/static ./.next/static
+COPY --from=builder --chown=leq:leq /app/public ./public
+# Brochures jointes aux mails de devis
+COPY --from=builder --chown=leq:leq /app/assets ./assets
 
-EXPOSE 3333
+USER leq
+EXPOSE 3000
+# Données des formulaires (newsletter, quiz, demandes) : volume persistant
+VOLUME ["/data"]
 
-# IMPORTANT for Next.js
-CMD ["npx", "next", "start", "-p", "3333"]
+CMD ["node", "server.js"]

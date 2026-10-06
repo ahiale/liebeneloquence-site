@@ -1,0 +1,59 @@
+# Services du serveur liebeneloquence.com
+# Emplacement sur le serveur : /opt/leq/docker-compose.yml (avec Caddyfile et .env à côté)
+
+services:
+  # Le site vitrine
+  site:
+    image: ghcr.io/ahiale/liebeneloquence-site:latest
+    restart: unless-stopped
+    env_file: .env
+    volumes:
+      - site-data:/data # inscriptions newsletter, résultats du quiz, demandes
+
+  # Serveur web : HTTPS automatique (Let's Encrypt) et aiguillage par sous-domaine
+  caddy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data
+      - caddy-config:/config
+    depends_on:
+      - site
+      - umami
+
+  # Statistiques de visite sans cookie (stats.liebeneloquence.com)
+  umami:
+    image: ghcr.io/umami-software/umami:postgresql-latest
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: postgresql://umami:${UMAMI_DB_PASSWORD}@umami-db:5432/umami
+      APP_SECRET: ${UMAMI_APP_SECRET}
+    depends_on:
+      - umami-db
+
+  umami-db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: umami
+      POSTGRES_USER: umami
+      POSTGRES_PASSWORD: ${UMAMI_DB_PASSWORD}
+    volumes:
+      - umami-db:/var/lib/postgresql/data
+
+  # Plus tard : le SaaS sur app.liebeneloquence.com
+  # app:
+  #   image: ghcr.io/ahiale/liebeneloquence-app:latest
+  #   restart: unless-stopped
+  #   env_file: .env.app
+
+volumes:
+  site-data:
+  caddy-data:
+  caddy-config:
+  umami-db:

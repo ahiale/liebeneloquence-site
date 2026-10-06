@@ -1,248 +1,201 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import { Quote, ArrowRight, Sparkles } from "lucide-react";
-import { Container, Eyebrow, SectionTitle } from "@/components/ui/Section";
-import { ButtonLink } from "@/components/ui/Button";
-import { Reveal } from "@/components/ui/Reveal";
+import Link from "next/link";
+import { SITE } from "@/config/site";
 import { Header } from "@/components/layout/Header";
-import { InstagramIcon, LinkedinIcon } from "@/components/ui/BrandIcons";
-import { MILESTONES, EXPERTISES, FACTS } from "@/data/parcours";
-import { SITE } from "@/data/site";
+import { DrawUnderline, Heart, MicDoodle, Sparkle } from "@/components/ui/Doodles";
 
 export const metadata: Metadata = {
-  title: "À propos — Rebecca Lieben Ahiale",
-  description:
-    "Du concours d'éloquence à la présidence d'Eloquentia Toulon : le parcours, les distinctions et les expériences de Rebecca Lieben Ahiale, fondatrice de Lieben Éloquence.",
+  title: "À propos",
+  description: "Rebecca Lieben Ahiale, oratrice, jurée et formatrice en prise de parole depuis 2019 : parcours, distinctions et expériences.",
+  alternates: { canonical: "/a-propos" },
 };
+
+const CHIFFRES = [
+  { value: "2019", label: "premier concours d'éloquence" },
+  { value: "6 ans", label: "de scène, de jury et de coaching" },
+  { value: "5", label: "distinctions et titres remportés" },
+  { value: "100 %", label: "des profils accompagnés, du lycée au doctorat" },
+];
+
+const PARCOURS = [
+  {
+    year: "2019",
+    title: "Le début du parcours oratoire",
+    intro: "Première fois sur la scène d'un concours d'éloquence. Tout commence là.",
+    items: [
+      "Double championne d'un concours national d'argumentation poétique",
+      "Responsable communication du magazine scolaire",
+      "Animatrice des jeux de culture générale au lycée",
+      "Paire éducatrice : accompagnement des élèves à la prise de parole",
+    ],
+  },
+  {
+    year: "2022",
+    title: "Révélation & montée en puissance",
+    intro: "Une deuxième compétition qui révèle un potentiel et fédère une vraie communauté.",
+    items: [
+      "Vice-championne du concours d'art oratoire au féminin",
+      "Maîtrise de cérémonie et modération de conférences",
+      "Organisation d'événements universitaires",
+      "Responsable du club d'éloquence de l'université pendant 2 ans",
+    ],
+  },
+  {
+    year: "2023",
+    title: "Reconnaissance nationale",
+    intro: "Le travail est distingué au-delà du cercle universitaire.",
+    items: [
+      "Lauréate du Trophée Coup de Cœur de la meilleure compétition d'éloquence du Togo",
+      "Distinctions honorifiques et apparitions dans la presse",
+      "Début de la création de contenu autour de l'éloquence",
+      "Membre de jury dans plusieurs concours d'art oratoire",
+    ],
+  },
+  {
+    year: "2024",
+    title: "Influence & création de contenu",
+    intro: "La parole passe de la scène à l'écran, avec des formats culturels travaillés.",
+    items: [
+      "Top 3 des créatrices de contenu culture générale du pays",
+      "Interviews, vidéos, tournages",
+      "Collaboration avec des scénaristes et créateurs de formats culturels",
+    ],
+  },
+  {
+    year: "2025",
+    title: "Leadership & professionnalisation",
+    intro: "Direction d'association, organisation de compétition et premiers accompagnements individuels.",
+    items: [
+      "Présidente d'Eloquentia Toulon",
+      "Organisation d'une compétition d'éloquence de bout en bout : logistique, coaching, jury",
+      "Lancement des cours particuliers dans le sud de la France",
+      "Accompagnement de profils variés : docteurs, ingénieurs, étudiants, lycéens",
+    ],
+  },
+];
 
 export default function AProposPage() {
   return (
     <>
-      <Header />
+      <div className="bg-hero">
+        <Header />
+        <section className="pt-10 pb-20 sm:pt-[72px] sm:pb-[88px]">
+          <div className="wrap flex flex-wrap items-center gap-12">
+            <div className="min-w-0" style={{ flex: "1.15 1 520px" }}>
+              <p className="eyebrow">La formatrice</p>
+              <h1 className="mt-4 mb-0 leading-[1.02] font-bold tracking-[-0.035em] text-white" style={{ fontSize: "clamp(38px, 7vw, 50px)" }}>
+                On ne naît pas orateur,
+                <br />
+                <span className="serif text-gold">on le devient.</span>
+              </h1>
+              <DrawUnderline width={220} style={{ marginTop: 4 }} />
+              <div className="mt-7 grid max-w-[600px] gap-[18px] text-[16px] leading-[1.7] text-white/85">
+                <p className="m-0">
+                  C&apos;est ce qu&apos;écrivait Cicéron. Au vu de mon parcours, je crois plutôt être née oratrice, comme la majorité d&apos;entre nous. Une personne qui parle et qui s&apos;exprime est déjà un orateur. Mais le fossé entre un orateur et un <strong className="font-semibold text-gold">bon</strong> orateur est immense. Ce fossé, j&apos;ai pris le temps de le combler ces dernières années.
+                </p>
+                <p className="m-0">
+                  De la jeune fille qui jouait à l&apos;animatrice télé devant son miroir à l&apos;oratrice d&apos;aujourd&apos;hui, le chemin a été long. Moi, c&apos;est Rebecca Lieben Ahiale, togolaise d&apos;origine et résidant en France.
+                </p>
+                <p className="m-0">
+                  À côté de l&apos;art oratoire, je travaille dans la tech. Un profil qu&apos;on n&apos;a pas l&apos;habitude de voir, parce que pour beaucoup, l&apos;art oratoire rime avec droit et littérature. La preuve que non.
+                </p>
+              </div>
+              <div className="mt-9 flex flex-wrap gap-3">
+                <Link className="btn btn-p" href="/#offres">Voir les formations</Link>
+                <a className="btn btn-g" href={SITE.instagram} target="_blank" rel="noreferrer noopener">Instagram</a>
+                <a className="btn btn-g" href={SITE.linkedin} target="_blank" rel="noreferrer noopener">LinkedIn</a>
+              </div>
+            </div>
+            <div className="flex min-w-0 justify-center" style={{ flex: ".85 1 300px" }}>
+              <div className="relative w-full max-w-[384px]">
+                <div aria-hidden="true" className="absolute inset-0 rounded-[28px]" style={{ transform: "translate(-16px,16px)", border: "1px solid rgba(255,189,89,.25)" }} />
+                <Image src="/formatrice.jpg" alt="Portrait de Rebecca Lieben Ahiale" width={900} height={1199} priority sizes="(max-width: 760px) 90vw, 384px" className="relative block h-auto w-full rounded-[28px] object-cover" style={{ aspectRatio: "4 / 5" }} />
+                <div className="bob absolute z-[2] rounded-[20px] bg-white px-4 py-2.5 text-[15px] font-bold text-ink" style={{ left: -20, top: "16%", boxShadow: "4px 4px 0 #FF5E01" }}>
+                  Togo <span className="serif text-orange">→</span> France
+                </div>
+                <div className="bob absolute z-[2] rounded-[20px] bg-gold px-4 py-2.5 text-[15px] font-bold text-ink" style={{ right: -16, bottom: "20%", boxShadow: "4px 4px 0 #001636" }}>
+                  Scène &amp; tech
+                </div>
+                <Heart className="wiggle absolute z-[2]" size={34} style={{ left: -10, bottom: "6%" }} />
+                <MicDoodle className="floaty absolute z-[2]" width={62} height={80} stand="#FFBD59" style={{ right: "8%", top: -40 }} />
+                <Sparkle className="wiggle absolute z-[2]" size={44} style={{ top: -18, left: -14 }} />
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="border-y border-white/8 bg-white/4 py-12">
+          <div className="wrap grid gap-8 text-center" style={{ gridTemplateColumns: "repeat(auto-fit,minmax(min(200px,100%),1fr))" }}>
+            {CHIFFRES.map((c) => (
+              <div key={c.value}>
+                <p className="serif m-0 text-[46px] leading-[1.1] text-gold">{c.value}</p>
+                <p className="mx-auto mt-2 mb-0 max-w-[208px] text-[13.6px] leading-[1.4] text-white/60">{c.label}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+      </div>
 
       <main>
-        {/* Séquence sombre continue : hero, chiffres clés et parcours. */}
-        <div className="bg-night">
-          {/* -------------------------------------------------------- Hero */}
-          <section className="pt-32 pb-20 sm:pt-40 sm:pb-24">
-            <Container className="grid items-center gap-12 lg:grid-cols-[1.15fr_0.85fr]">
-              <div className="reveal">
-                <Eyebrow>La formatrice</Eyebrow>
-                <h1 className="h-section mt-4 text-4xl sm:text-[3.1rem]">
-                  On ne naît pas orateur,
-                  <br />
-                  <span className="accent">on le devient.</span>
-                </h1>
-
-                <div className="mt-8 space-y-5 leading-relaxed text-white/70">
-                  <p>
-                    C&apos;est ce qu&apos;écrivait Cicéron. Au vu de mon
-                    parcours, je crois plutôt être née oratrice — comme la
-                    majorité d&apos;entre nous. Une personne qui parle et qui
-                    s&apos;exprime est déjà un orateur. Mais le fossé entre un
-                    orateur et un{" "}
-                    <em className="not-italic font-semibold text-gold">bon</em>{" "}
-                    orateur est immense. Ce fossé, j&apos;ai pris le temps de le
-                    combler ces dernières années.
-                  </p>
-                  <p>
-                    De la jeune fille qui jouait à l&apos;animatrice télé devant
-                    son miroir à l&apos;oratrice d&apos;aujourd&apos;hui, le
-                    chemin a été long. Moi, c&apos;est Rebecca Lieben Ahiale,
-                    togolaise d&apos;origine et résidant en France.
-                  </p>
-                  <p>
-                    À côté de l&apos;art oratoire, je travaille dans la tech. Un
-                    profil qu&apos;on n&apos;a pas l&apos;habitude de voir,
-                    parce que pour beaucoup, l&apos;art oratoire rime avec droit
-                    et littérature. La preuve que non.
-                  </p>
-                </div>
-
-                <div className="mt-9 flex flex-wrap gap-3">
-                  <ButtonLink href="/#offres" variant="primary" size="lg">
-                    Voir les formations <ArrowRight size={17} />
-                  </ButtonLink>
-                  <ButtonLink
-                    href={SITE.instagram}
-                    external
-                    variant="ghost"
-                    size="lg"
-                  >
-                    <InstagramIcon size={17} /> Instagram
-                  </ButtonLink>
-                  <ButtonLink
-                    href={SITE.linkedin}
-                    external
-                    variant="ghost"
-                    size="lg"
-                  >
-                    <LinkedinIcon size={16} /> LinkedIn
-                  </ButtonLink>
-                </div>
-              </div>
-
-              <Reveal className="relative mx-auto w-full max-w-sm">
-                <div className="relative aspect-[4/5] overflow-hidden rounded-[28px] ring-1 ring-white/12">
-                  <Image
-                    src="/formatrice.jpg"
-                    alt="Portrait de Rebecca Lieben Ahiale"
-                    fill
-                    sizes="(max-width: 1024px) 88vw, 384px"
-                    className="object-cover"
-                    priority
-                  />
-                </div>
-                <div
-                  aria-hidden
-                  className="absolute -bottom-4 -left-4 -z-10 h-full w-full rounded-[28px] border border-gold/25"
-                />
-              </Reveal>
-            </Container>
-          </section>
-
-          {/* -------------------------------------------------- Chiffres clés */}
-          <section className="border-y border-white/8 bg-white/4 py-12">
-            <Container>
-              <dl className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
-                {FACTS.map((f, i) => (
-                  <Reveal key={f.label} delay={i * 90} className="text-center">
-                    <dd className="font-serif text-4xl italic text-gold sm:text-5xl">
-                      {f.value}
-                    </dd>
-                    <dt className="mx-auto mt-2 max-w-[13rem] text-[0.85rem] leading-snug text-white/60">
-                      {f.label}
-                    </dt>
-                  </Reveal>
-                ))}
-              </dl>
-            </Container>
-          </section>
-
-          {/* ------------------------------------------------- Le parcours */}
-          <section className="py-20 sm:py-28">
-            <Container>
-              <Reveal>
-                <Eyebrow>Distinctions &amp; prix</Eyebrow>
-                <SectionTitle>
-                  Le <span className="accent">parcours</span>, année après
-                  année.
-                </SectionTitle>
-              </Reveal>
-
-              <ol className="mt-14 space-y-8">
-                {MILESTONES.map((m, i) => (
-                  <Reveal
-                    key={m.year}
-                    delay={i * 80}
-                    as="li"
-                    className="grid gap-6 md:grid-cols-[auto_1fr]"
-                  >
-                    <div className="flex items-start gap-5 md:w-40 md:flex-col md:gap-3">
-                      <span className="font-serif text-4xl italic text-orange">
-                        {m.year}
-                      </span>
-                      <span
-                        aria-hidden
-                        className="mt-3 hidden h-px w-14 bg-[linear-gradient(90deg,var(--color-orange),transparent)] md:block"
-                      />
-                    </div>
-
-                    <div className="surface rounded-card p-7">
-                      <h3 className="text-xl font-bold tracking-[-0.025em]">
-                        {m.title}
-                      </h3>
-                      <p className="mt-2 text-[0.9rem] leading-relaxed text-white/60">
-                        {m.summary}
-                      </p>
-                      <ul className="mt-5 grid gap-2.5 sm:grid-cols-2">
-                        {m.items.map((item) => (
-                          <li
-                            key={item}
-                            className="flex gap-2.5 text-[0.88rem] leading-snug text-white/78"
-                          >
-                            <span
-                              aria-hidden
-                              className="mt-[0.45rem] h-1.5 w-1.5 shrink-0 rounded-full bg-gold"
-                            />
-                            {item}
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  </Reveal>
-                ))}
-              </ol>
-            </Container>
-          </section>
-        </div>
-
-        {/* ------------------------------------------------------ Expertise */}
-        <section className="bg-night-violet py-20 sm:py-24">
-          <Container>
-            <Reveal>
-              <Eyebrow className="text-royal-200">
-                Expériences professionnelles
-              </Eyebrow>
-              <SectionTitle>Un profil hybride.</SectionTitle>
-              <p className="mt-5 max-w-2xl leading-relaxed text-white/65">
-                L&apos;éloquence n&apos;est réservée ni au droit ni à la
-                littérature. Mon parcours mêle la scène, la tech et les médias —
-                et c&apos;est précisément ce croisement qui nourrit ma façon
-                d&apos;accompagner.
-              </p>
-            </Reveal>
-
-            <div className="mt-12 grid gap-5 md:grid-cols-3">
-              {EXPERTISES.map((e, i) => (
-                <Reveal
-                  key={e.title}
-                  delay={i * 110}
-                  className="surface rounded-card p-7"
-                >
-                  <span className="inline-grid h-11 w-11 place-items-center rounded-[13px] bg-gold/14 text-gold ring-1 ring-gold/25">
-                    <Sparkles size={20} strokeWidth={1.9} />
-                  </span>
-                  <h3 className="mt-4 text-lg font-semibold tracking-[-0.02em]">
-                    {e.title}
-                  </h3>
-                  <p className="mt-2 text-[0.88rem] leading-relaxed text-white/62">
-                    {e.desc}
-                  </p>
-                </Reveal>
-              ))}
+        <section className="bg-light py-20 text-ink sm:py-28">
+          <div className="wrap">
+            <p className="eyebrow" style={{ color: "#CC4A00" }}>Distinctions &amp; prix</p>
+            <div className="relative">
+              <h2 className="h2">
+                Le <span className="serif text-orange">parcours</span>, année après année.
+              </h2>
+              <Sparkle className="wiggle hide-sm absolute" style={{ right: "12%", top: -10 }} />
             </div>
-          </Container>
+            <ol className="mt-14 mb-0 grid list-none gap-8 p-0">
+              {PARCOURS.map((y, i) => (
+                <li key={y.year} className="grid gap-2 sm:grid-cols-[160px_minmax(0,1fr)] sm:gap-6">
+                  <div>
+                    <span className="relative inline-block px-3.5 py-1.5">
+                      <svg viewBox="0 0 140 70" preserveAspectRatio="none" fill="none" aria-hidden="true" className="absolute" style={{ inset: "-4px -10px", width: "calc(100% + 20px)", height: "calc(100% + 8px)" }}>
+                        <path d="M20 38C22 12 110 6 128 26s-20 38-64 38S6 52 10 34 70 8 112 12" stroke="#FF5E01" strokeWidth="3" strokeLinecap="round" />
+                      </svg>
+                      <span className="serif relative text-[40px] text-orange">{y.year}</span>
+                    </span>
+                    <div className="hide-sm mt-2.5 h-px w-14" style={{ background: "linear-gradient(90deg,#FF5E01,transparent)" }} />
+                  </div>
+                  <div className="card-light yearcard rounded-[24px] p-7" style={{ transform: `rotate(${i % 2 ? 0.6 : -0.6}deg)` }}>
+                    <h3 className="m-0 text-[20px] font-bold tracking-[-0.025em]">{y.title}</h3>
+                    <p className="mt-2 mb-0 text-[14.4px] leading-[1.6] text-ink/60">{y.intro}</p>
+                    <ul className="mt-5 mb-0 grid list-none gap-2.5 p-0">
+                      {y.items.map((it) => (
+                        <li key={it} className="flex gap-2.5 text-[14px] text-ink/78">
+                          <span className="mt-2.5 h-0.5 w-3 shrink-0 rounded-sm bg-orange" />
+                          {it}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </li>
+              ))}
+            </ol>
+          </div>
         </section>
 
-        {/* --------------------------------------------------- Citation CTA */}
-        <section className="bg-night py-20 sm:py-24">
-          <Container>
-            <Reveal className="panel px-6 py-16 text-center sm:px-12">
-              <Quote size={34} className="mx-auto text-gold" />
-              <p className="mx-auto mt-7 max-w-3xl font-serif text-2xl italic leading-snug text-white/88 sm:text-3xl">
-                Aujourd&apos;hui, j&apos;ai les clés pour accompagner les gens
-                dans leur prise de parole. J&apos;ai toujours quelque chose à
-                dire sur le discours des autres — et les techniques pour le
-                rendre meilleur.
-              </p>
-              <p className="mt-6 text-[0.85rem] text-white/50">
-                Rebecca Lieben Ahiale · Fondatrice de Lieben Éloquence
-              </p>
-
-              <div className="mt-10 flex flex-col justify-center gap-3 sm:flex-row">
-                <ButtonLink href="/quiz" variant="primary" size="lg">
-                  Découvrir mon profil d&apos;orateur <ArrowRight size={17} />
-                </ButtonLink>
-                <ButtonLink href="/#offres" variant="ghost" size="lg">
-                  Voir les formations
-                </ButtonLink>
+        <section className="bg-night py-20 sm:py-[104px]">
+          <div className="wrap">
+            <div className="panel px-6 py-14 text-center sm:px-12 sm:py-16">
+              <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#FFBD59" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <path d="M16 3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2 1 1 0 0 1 1 1v1a2 2 0 0 1-2 2 1 1 0 0 0-1 1v2a1 1 0 0 0 1 1 6 6 0 0 0 6-6V5a2 2 0 0 0-2-2z" />
+                <path d="M5 3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2 1 1 0 0 1 1 1v1a2 2 0 0 1-2 2 1 1 0 0 0-1 1v2a1 1 0 0 0 1 1 6 6 0 0 0 6-6V5a2 2 0 0 0-2-2z" />
+              </svg>
+              <blockquote className="serif mx-auto mt-7 mb-0 max-w-[768px] leading-[1.35] text-white/88" style={{ fontSize: "clamp(22px, 4vw, 30px)" }}>
+                Aujourd&apos;hui, j&apos;ai les clés pour accompagner les gens dans leur prise de parole. J&apos;ai toujours quelque chose à dire sur le discours des autres, et les techniques pour le rendre meilleur.
+              </blockquote>
+              <p className="mt-6 mb-0 text-[13.6px] text-white/50">Rebecca Lieben Ahiale · Fondatrice de Lieben Éloquence</p>
+              <div className="mt-10 flex flex-wrap justify-center gap-3">
+                <Link className="btn btn-p" href="/quiz">Découvrir mon profil d&apos;orateur</Link>
+                <Link className="btn btn-g" href="/#offres">Voir les formations</Link>
               </div>
-            </Reveal>
-          </Container>
+            </div>
+          </div>
         </section>
       </main>
-
     </>
   );
 }
