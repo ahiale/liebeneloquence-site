@@ -113,9 +113,9 @@ export default async function EvenementPage({ params }: Props) {
                     <article key={sp.name} className="bubble flex flex-col p-6" style={{ transform: `rotate(${i % 2 ? 0.8 : -0.8}deg)` }}>
                       <div className="flex items-center gap-3.5">
                         {sp.image ? (
-                          <Image src={sp.image} alt={sp.name} width={56} height={56} className="h-14 w-14 shrink-0 rounded-full object-cover" style={{ objectPosition: "50% 20%" }} />
+                          <Image src={sp.image} alt={sp.name} width={144} height={144} className="h-[72px] w-[72px] shrink-0 rounded-full border-[3px] border-gold object-cover" style={{ objectPosition: "50% 20%" }} />
                         ) : (
-                          <span aria-hidden="true" className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-gold text-[22px] font-bold text-ink">
+                          <span aria-hidden="true" className="flex h-[72px] w-[72px] shrink-0 items-center justify-center rounded-full bg-gold text-[26px] font-bold text-ink">
                             {sp.name.charAt(0)}
                           </span>
                         )}
