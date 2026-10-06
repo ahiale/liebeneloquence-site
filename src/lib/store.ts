@@ -10,10 +10,11 @@ import path from "node:path";
  *   data/newsletter.jsonl   inscriptions à la newsletter
  *   data/quiz.jsonl         réponses et résultats du quiz
  *   data/demandes.jsonl     devis, réservations Grand Oral, contacts
+ *   data/liste-attente.jsonl  liste d'attente de la communauté LEQ'FAM
  */
 const DATA_DIR = process.env.DATA_DIR || path.join(process.cwd(), "data");
 
-export type Collection = "newsletter" | "quiz" | "demandes";
+export type Collection = "newsletter" | "quiz" | "demandes" | "liste-attente";
 
 export async function record(collection: Collection, data: Record<string, unknown>): Promise<void> {
   try {

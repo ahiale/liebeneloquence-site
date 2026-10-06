@@ -13,6 +13,7 @@ const TRAITEMENTS = [
   ["Réservation Grand Oral", "Prénom, nom, email, profil, type et date de l'oral, attentes", "Gérer la réservation et l'accompagnement", "Exécution du contrat", "3 ans après la fin de l'accompagnement"],
   ["Formulaire de contact", "Nom, email, type de demande, message", "Répondre à la demande", "Intérêt légitime", "3 ans après le dernier contact"],
   ["Newsletter", "Nom, email, profil et thématique (facultatifs)", "Envoyer la newsletter", "Consentement", "Jusqu'à la désinscription"],
+  ["Liste d'attente LEQ'FAM", "Prénom, email", "Prévenir de l'ouverture de la communauté", "Consentement", "Jusqu'à l'ouverture, puis 6 mois au plus"],
   ["Quiz d'orateur", "Réponses au quiz ; prénom et email si vous demandez votre résultat", "Calculer et envoyer le résultat, améliorer l'offre", "Intérêt légitime ; consentement pour l'envoi par email", "1 an"],
 ];
 

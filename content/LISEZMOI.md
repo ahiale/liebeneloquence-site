@@ -30,3 +30,12 @@ Le carrousel n'apparaît sur l'accueil que s'il y a au moins un avis publié.
 Copier un bloc de `evenements.json`. Le `slug` devient l'adresse de la page : `/evenements/<slug>` (minuscules, chiffres et tirets). Les photos vont dans `public/evenements/` et se renseignent ainsi : `"image": "/evenements/ma-photo.jpg"`. Un champ inconnu se met à `null`.
 
 Ces noms de champs sont ceux que reprendra le futur SaaS.
+
+## Ouvrir la communauté LEQ'FAM
+
+Tant que `leqfam.availability` contient un texte dans `tarifs.json` (ex. « Bientôt disponible · fin octobre »), la page Communauté affiche une **liste d'attente**. Le jour du lancement :
+
+1. renseigner le lien Stripe LEQ'FAM dans `src/config/site.ts` ;
+2. mettre `"availability": null` dans `tarifs.json`.
+
+Les boutons mènent alors au paiement. Les inscrits à la liste d'attente sont dans `/data/liste-attente.jsonl` sur le serveur.

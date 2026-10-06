@@ -6,6 +6,7 @@ import { formatPrice } from "@/lib/format";
 import { Header } from "@/components/layout/Header";
 import { BubbleTail, DrawUnderline, Heart, Sparkle } from "@/components/ui/Doodles";
 import { Icon, type IconName } from "@/components/ui/Icons";
+import { WaitlistForm } from "@/components/communaute/WaitlistForm";
 
 export const metadata: Metadata = {
   title: "La communauté LEQ'FAM",
@@ -32,9 +33,12 @@ const SALONS = [
 export default async function CommunautePage() {
   const { leqfam } = await getPricing();
   const price = formatPrice(leqfam.monthlyPrice);
-  const join = paymentHref(SITE.stripeLeqfam);
-  const external = join.startsWith("http");
-  const joinProps = external ? { target: "_blank", rel: "noreferrer noopener" } : {};
+  // Tant que la communauté n'est pas ouverte (mention de disponibilité dans tarifs.json),
+  // les boutons mènent à la liste d'attente ; ensuite, au paiement Stripe.
+  const waitlist = leqfam.availability !== null;
+  const join = waitlist ? "#rejoindre" : paymentHref(SITE.stripeLeqfam);
+  const joinLabel = waitlist ? "Rejoindre la liste d'attente" : "Rejoindre la LEQ'FAM";
+  const joinProps = join.startsWith("http") ? { target: "_blank", rel: "noreferrer noopener" } : {};
 
   return (
     <>
@@ -56,7 +60,7 @@ export default async function CommunautePage() {
                 La toute première communauté francophone en ligne dédiée à la prise de parole en public, à l&apos;éloquence et aux soft skills. Un espace bienveillant, ouvert à tous sans condition d&apos;âge ou de pays, où l&apos;on s&apos;entraîne, débat, progresse et se cultive ensemble.
               </p>
               <div className="mt-[30px] flex flex-wrap items-center gap-3">
-                <a className="btn btn-p" href={join} {...joinProps}>Rejoindre la LEQ&apos;FAM</a>
+                <a className="btn btn-p" href={join} {...joinProps}>{joinLabel}</a>
                 <span className="inline-flex items-baseline gap-1 rounded-full px-[18px] py-2.5 text-white" style={{ background: "rgba(255,255,255,.14)", border: "1px solid rgba(255,255,255,.3)" }}>
                   <strong className="text-[20px] text-gold">{price}</strong>
                   <span className="text-[13px]">/ mois</span>
@@ -208,7 +212,7 @@ export default async function CommunautePage() {
                   <span className="ml-1.5 text-[15px] text-white/65">/ mois</span>
                 </p>
                 <p className="mt-3.5 mb-0 flex-1 text-[15px] leading-[1.6] text-white/78">L&apos;abonnement de base, pour accéder à toute la communauté.</p>
-                <a className="btn btn-p mt-6" href={join} {...joinProps}>Rejoindre la LEQ&apos;FAM</a>
+                <a className="btn btn-p mt-6" href={join} {...joinProps}>{joinLabel}</a>
               </div>
               <div className="card-light lift flex flex-col rounded-[26px] p-8">
                 <p className="eyebrow" style={{ color: "#114DA8" }}>Partenaires associatifs</p>
@@ -242,10 +246,16 @@ export default async function CommunautePage() {
               Prêt à rejoindre <span className="serif text-gold">la LEQ&apos;FAM ?</span>
             </h2>
             <p className="mx-auto mt-4 mb-0 max-w-[520px] text-[16.5px] leading-[1.7] text-white/85">{price} par mois pour s&apos;entraîner, progresser et se cultiver ensemble.</p>
-            <a className="btn btn-p mt-[30px]" href={join} {...joinProps} style={{ fontSize: 17, padding: "18px 34px" }}>
-              Rejoindre la LEQ&apos;FAM
-            </a>
-            <p className="mt-3.5 mb-0 text-[13px] text-white/65">Paiement sécurisé</p>
+            {waitlist ? (
+              <WaitlistForm />
+            ) : (
+              <>
+                <a className="btn btn-p mt-[30px]" href={join} {...joinProps} style={{ fontSize: 17, padding: "18px 34px" }}>
+                  Rejoindre la LEQ&apos;FAM
+                </a>
+                <p className="mt-3.5 mb-0 text-[13px] text-white/65">Paiement sécurisé</p>
+              </>
+            )}
           </div>
         </section>
       </main>

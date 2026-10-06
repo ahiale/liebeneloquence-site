@@ -129,6 +129,31 @@ export function newsletterClient(d: Newsletter): Email {
 }
 
 /* ---------------------------------------------------------------------------
+   Liste d'attente LEQ'FAM
+   ------------------------------------------------------------------------- */
+
+export function listeAttenteAdmin(d: { prenom: string; email: string }): Email {
+  return {
+    subject: `Liste d'attente LEQ'FAM : ${d.prenom}`,
+    html: layout("Nouvelle inscription à la liste d'attente LEQ'FAM", fieldsTable([["Prénom", d.prenom], ["Email", d.email]])),
+  };
+}
+
+export function listeAttenteClient(d: { prenom: string }): Email {
+  return {
+    subject: "Vous êtes sur la liste d'attente de la LEQ'FAM",
+    html: layout(
+      "Bienvenue sur la liste d'attente !",
+      hello(d.prenom) +
+        p("Votre place sur la liste d'attente de la <strong>LEQ'FAM</strong>, la communauté dédiée à la prise de parole, à l'éloquence et aux soft skills, est bien enregistrée.") +
+        p("Vous serez parmi les premières personnes prévenues à l'ouverture, avec le lien pour rejoindre la communauté sur Discord.") +
+        p("Aucun paiement n'est demandé pour l'instant. Pour vous retirer de la liste, il suffit de répondre à ce mail.") +
+        signature,
+    ),
+  };
+}
+
+/* ---------------------------------------------------------------------------
    Quiz d'orateur
    ------------------------------------------------------------------------- */
 

@@ -138,6 +138,7 @@ Si l'option « mots de passe d'application » n'apparaît pas, c'est que l'admin
   docker compose exec site cat /data/newsletter.jsonl
   docker compose exec site cat /data/quiz.jsonl
   docker compose exec site cat /data/demandes.jsonl
+  docker compose exec site cat /data/liste-attente.jsonl
   ```
 - **Voir les erreurs du site :** `docker compose logs site --tail 100`
 

@@ -160,6 +160,28 @@ export async function inscrireNewsletter(_: FormState, data: FormData): Promise<
 }
 
 /* ---------------------------------------------------------------------------
+   Liste d'attente LEQ'FAM
+   ------------------------------------------------------------------------- */
+
+const ListeAttenteSchema = z.object({ prenom: required("Prénom"), email });
+
+export async function rejoindreListeAttente(_: FormState, data: FormData): Promise<FormState> {
+  if (isBot(data)) return { status: "success" };
+  const parsed = ListeAttenteSchema.safeParse(Object.fromEntries(data));
+  if (!parsed.success) return invalid(parsed.error);
+  const d = parsed.data;
+
+  await record("liste-attente", { ...d, consent: "formulaire liste d'attente LEQ'FAM" });
+  try {
+    await notify(T.listeAttenteAdmin(d), T.listeAttenteClient(d), d.email);
+    return { status: "success" };
+  } catch (e) {
+    console.error(e);
+    return FAILURE;
+  }
+}
+
+/* ---------------------------------------------------------------------------
    Quiz d'orateur
    ------------------------------------------------------------------------- */
 
