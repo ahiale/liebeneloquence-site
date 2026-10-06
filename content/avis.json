@@ -1,7 +1,7 @@
 [
   {
     "id": "sophie-concours-eloquence",
-    "status": "draft",
+    "status": "published",
     "author": "Sophie",
     "role": "Finaliste d'un concours d'éloquence",
     "rating": 5,
@@ -10,7 +10,7 @@
   },
   {
     "id": "olivia-soutenance",
-    "status": "draft",
+    "status": "published",
     "author": "Olivia",
     "role": "Étudiante, préparation de soutenance",
     "rating": 5,
@@ -19,7 +19,7 @@
   },
   {
     "id": "rowena-concours-beaute",
-    "status": "draft",
+    "status": "published",
     "author": "Rowena",
     "role": "Candidate à un concours de beauté",
     "rating": 5,
@@ -46,7 +46,7 @@
   },
   {
     "id": "eub-negociation",
-    "status": "draft",
+    "status": "published",
     "author": "Eub",
     "role": "Entrepreneur, stratégie de négociation",
     "rating": 5,
@@ -55,7 +55,7 @@
   },
   {
     "id": "yolo-maif",
-    "status": "draft",
+    "status": "published",
     "author": "Yolo",
     "role": "Formation en entreprise, MAIF",
     "rating": 5,
