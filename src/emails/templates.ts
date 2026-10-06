@@ -1,46 +1,140 @@
 import "server-only";
 import { SITE, isPlaceholder } from "@/config/site";
-import { esc, fieldsTable, layout } from "@/lib/mail";
+import { esc } from "@/lib/mail";
 import type { QuizResult } from "@/lib/quiz";
 
 /**
- * Textes des mails automatiques envoyés par le site.
- * Un modèle = un objet { subject, html }. Modifier ici le texte d'un mail.
+ * Mails automatiques envoyés par le site.
+ *
+ * Chaque formulaire envoie deux mails :
+ *   - une CONFIRMATION designée à la personne (…Client) ;
+ *   - une NOTIFICATION à Rebecca avec tous les détails (…Admin). Répondre à la notification
+ *     écrit directement à la personne.
+ *
+ * Pour modifier un texte : changer les phrases entre guillemets ci-dessous.
+ * Mise en page compatible avec les messageries (Gmail, Outlook, Apple Mail, mobile).
  */
 
 type Email = { subject: string; html: string };
 
-const p = (text: string) => `<p style="font-size:15px;line-height:1.6;margin:0 0 14px">${text}</p>`;
+const C = { navy: "#001636", royal: "#114DA8", gold: "#FFBD59", orange: "#FF5E01", text: "#33415c", muted: "#6b7a90", cloud: "#F6F8FC" };
+const FONT = "-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif";
+const SERIF = "Georgia,'Times New Roman',serif";
+const LOGO = `${SITE.url}/email/logo-leq.png`;
 
-const button = (href: string, label: string) =>
-  `<p style="margin:22px 0"><a href="${esc(href)}" style="display:inline-block;background:#FF5E01;color:#fff;text-decoration:none;font-weight:bold;padding:13px 26px;border-radius:999px">${esc(label)}</a></p>`;
+/* ---------------------------------------------------------------------------
+   Briques de mise en page
+   ------------------------------------------------------------------------- */
 
-const signature = p(`À très vite,<br><strong>Rebecca Lieben Ahiale</strong><br>Lieben Éloquence<br><a href="mailto:${SITE.email}" style="color:#114DA8">${SITE.email}</a>`);
+const p = (text: string) => `<p style="margin:0 0 16px;font-family:${FONT};font-size:16px;line-height:1.65;color:${C.text}">${text}</p>`;
+
+const h2 = (text: string) => `<h2 style="margin:28px 0 12px;font-family:${FONT};font-size:18px;line-height:1.3;color:${C.royal}">${text}</h2>`;
+
+/** Bouton orange compatible Outlook (table). */
+const button = (href: string, label: string) => `
+<table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin:26px 0">
+  <tr><td style="border-radius:999px;background:${C.orange}">
+    <a href="${esc(href)}" style="display:inline-block;padding:15px 30px;font-family:${FONT};font-size:16px;font-weight:bold;color:#ffffff;text-decoration:none;border-radius:999px">${esc(label)}</a>
+  </td></tr>
+</table>`;
+
+/** Encadré clair (récapitulatif, infos). */
+const box = (inner: string) =>
+  `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:8px 0 20px"><tr><td style="background:${C.cloud};border-left:4px solid ${C.gold};border-radius:12px;padding:18px 20px;font-family:${FONT};font-size:15px;line-height:1.6;color:${C.text}">${inner}</td></tr></table>`;
+
+/** Lignes « libellé : valeur » (récapitulatifs). */
+const rows = (items: [string, string | undefined][]) =>
+  items
+    .filter(([, v]) => v)
+    .map(([k, v]) => `<div style="margin:0 0 6px"><span style="color:${C.muted}">${esc(k)} :</span> <strong style="color:${C.navy};white-space:pre-wrap">${esc(v!)}</strong></div>`)
+    .join("");
 
 const hello = (prenom?: string) => p(prenom ? `Bonjour ${esc(prenom)},` : "Bonjour,");
 
+const signature = `
+<p style="margin:28px 0 0;font-family:${FONT};font-size:16px;line-height:1.6;color:${C.text}">À très vite,</p>
+<p style="margin:4px 0 0;font-family:${SERIF};font-style:italic;font-size:22px;color:${C.royal}">Rebecca Lieben Ahiale</p>
+<p style="margin:2px 0 0;font-family:${FONT};font-size:13px;color:${C.muted}">Fondatrice de Lieben Éloquence</p>`;
+
+/**
+ * Gabarit complet : bandeau bleu nuit + logo, carte blanche, pied de page.
+ * `preheader` = aperçu affiché dans la liste des mails.
+ */
+function layout({ title, accent, preheader, body, reason }: { title: string; accent?: string; preheader: string; body: string; reason: string }): string {
+  return `<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light"><title>${esc(title)}</title></head>
+<body style="margin:0;padding:0;background:#EAF0F8">
+<div style="display:none;max-height:0;overflow:hidden;opacity:0">${esc(preheader)}</div>
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#EAF0F8">
+<tr><td align="center" style="padding:28px 12px">
+  <table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" style="width:100%;max-width:600px">
+    <!-- Bandeau -->
+    <tr><td style="background:${C.navy};border-radius:24px 24px 0 0;padding:28px 36px">
+      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr>
+        <td><a href="${SITE.url}"><img src="${LOGO}" width="92" height="40" alt="LEQ." style="display:block;border:0;width:92px;height:auto;color:${C.gold};font-family:${FONT};font-size:28px;font-weight:bold"></a></td>
+        <td align="right" style="font-family:${SERIF};font-style:italic;font-size:15px;color:${C.gold}">Parlez pour plaire, convaincre, impacter.</td>
+      </tr></table>
+    </td></tr>
+    <tr><td style="height:4px;line-height:4px;font-size:0;background:${C.orange}">&nbsp;</td></tr>
+    <!-- Carte -->
+    <tr><td style="background:#ffffff;padding:36px 36px 40px;border-radius:0 0 24px 24px">
+      <h1 style="margin:0 0 22px;font-family:${FONT};font-size:26px;line-height:1.2;letter-spacing:-0.5px;color:${C.navy}">${esc(title)}${accent ? ` <span style="font-family:${SERIF};font-style:italic;font-weight:normal;color:${C.orange}">${esc(accent)}</span>` : ""}</h1>
+      ${body}
+    </td></tr>
+    <!-- Pied -->
+    <tr><td align="center" style="padding:26px 24px 8px;font-family:${FONT};font-size:13px;line-height:1.7;color:${C.muted}">
+      <strong style="color:${C.navy}">Lieben Éloquence</strong> · Formations et coaching en prise de parole<br>
+      <a href="mailto:${SITE.email}" style="color:${C.royal};text-decoration:none">${SITE.email}</a> · ${SITE.phone}<br>
+      <a href="${SITE.url}" style="color:${C.royal}">liebeneloquence.com</a> · <a href="${SITE.instagram}" style="color:${C.royal}">Instagram</a> · <a href="${SITE.linkedin}" style="color:${C.royal}">LinkedIn</a>
+    </td></tr>
+    <tr><td align="center" style="padding:6px 24px 0;font-family:${FONT};font-size:11.5px;line-height:1.6;color:#94a0b4">${esc(reason)}</td></tr>
+  </table>
+</td></tr>
+</table>
+</body></html>`;
+}
+
+/** Notification interne pour Rebecca (même gabarit, contenu factuel). */
+function admin(title: string, items: [string, string | undefined][], note?: string): string {
+  return layout({
+    title,
+    preheader: items.map(([, v]) => v).filter(Boolean).slice(0, 3).join(" · "),
+    body: box(rows(items)) + (note ? p(note) : "") + p(`<span style="color:${C.muted};font-size:14px">Répondez simplement à ce mail pour écrire à la personne.</span>`),
+    reason: "Notification automatique du site liebeneloquence.com.",
+  });
+}
+
+const REASON = "Vous recevez ce mail suite à votre demande sur liebeneloquence.com.";
+
 /* ---------------------------------------------------------------------------
-   Devis (écoles et structures)
+   Devis (écoles et structures culturelles)
    ------------------------------------------------------------------------- */
 
-export function devisAdmin(d: { structure: string; nom: string; email: string; message: string }): Email {
+type Devis = { structure: string; nom: string; email: string; message: string };
+
+export function devisAdmin(d: Devis): Email {
   return {
     subject: `Demande de devis : ${d.nom}`,
-    html: layout("Nouvelle demande de devis", fieldsTable([["Structure", d.structure], ["Nom & établissement", d.nom], ["Email", d.email], ["Message", d.message]]) + p("Répondez directement à ce mail pour écrire à la personne.")),
+    html: admin("Nouvelle demande de devis", [["Structure", d.structure], ["Nom & établissement", d.nom], ["Email", d.email], ["Message", d.message]], "La brochure correspondante lui a été envoyée automatiquement."),
   };
 }
 
-export function devisClient(d: { nom: string }): Email {
+export function devisClient(d: Devis): Email {
   return {
-    subject: "Votre demande de devis Lieben Éloquence",
-    html: layout(
-      "Merci pour votre demande",
-      hello() +
-        p(`Nous avons bien reçu votre demande de devis pour <strong>${esc(d.nom)}</strong>.`) +
-        p("Vous trouverez en pièce jointe notre document de présentation, avec le détail des modules, le déroulé des séances et la grille tarifaire.") +
+    subject: "Votre demande de devis · Lieben Éloquence",
+    html: layout({
+      title: "Merci pour votre",
+      accent: "demande.",
+      preheader: "Votre document de présentation est en pièce jointe.",
+      reason: REASON,
+      body:
+        hello() +
+        p(`Nous avons bien reçu votre demande d'intervention pour <strong>${esc(d.nom)}</strong>.`) +
+        p("Vous trouverez <strong>en pièce jointe notre document de présentation</strong> : les modules, le déroulé des séances et la grille tarifaire.") +
         p("Je reviens vers vous très rapidement pour construire ensemble l'intervention qui correspond à vos publics et à vos objectifs.") +
+        box(rows([["Votre structure", d.structure], ["Votre message", d.message || undefined]])) +
         signature,
-    ),
+    }),
   };
 }
 
@@ -53,10 +147,10 @@ type GrandOral = { prenom: string; nom: string; email: string; profil: string; o
 export function grandOralAdmin(d: GrandOral): Email {
   return {
     subject: `Réservation Grand Oral : ${d.prenom} ${d.nom}`,
-    html: layout(
+    html: admin(
       "Nouvelle réservation Grand Oral",
-      fieldsTable([["Prénom", d.prenom], ["Nom", d.nom], ["Email", d.email], ["Profil", d.profil], ["Oral", d.oral], ["Date de l'oral", d.date], ["Attentes", d.attentes]]) +
-        p("Le lien de paiement lui a été envoyé automatiquement. Une fois le paiement reçu sur Stripe, contactez la personne pour planifier les séances."),
+      [["Prénom", d.prenom], ["Nom", d.nom], ["Email", d.email], ["Profil", d.profil], ["Oral", d.oral], ["Date de l'oral", d.date ? formatDate(d.date) : undefined], ["Attentes", d.attentes]],
+      "Le lien de paiement Stripe lui a été envoyé. Vous recevrez la notification de Stripe dès que le paiement est effectué : contactez alors la personne pour planifier les séances.",
     ),
   };
 }
@@ -64,21 +158,26 @@ export function grandOralAdmin(d: GrandOral): Email {
 export function grandOralClient(d: GrandOral & { price: string }): Email {
   const link = isPlaceholder(SITE.stripeGrandOral) ? null : `${SITE.stripeGrandOral}?prefilled_email=${encodeURIComponent(d.email)}`;
   return {
-    subject: "Votre place pour l'offre Grand Oral",
-    html: layout(
-      "Votre demande est bien reçue",
-      hello(d.prenom) +
-        p(`Merci pour votre demande d'accompagnement pour votre <strong>${esc(d.oral.toLowerCase())}</strong>${d.date ? ` du ${esc(formatDate(d.date))}` : ""}.`) +
-        p(`Pour confirmer votre place dans l'offre Grand Oral (5 séances intensives, ${esc(d.price)}), il vous reste à effectuer le paiement en ligne. Le paiement en plusieurs fois est possible.`) +
-        (link ? button(link, "Je confirme ma place") : p("Je vous envoie le lien de paiement dans un prochain mail.")) +
-        p("Une fois le paiement effectué, je vous contacte pour planifier vos séances.") +
+    subject: "Votre place pour l'offre Grand Oral · Lieben Éloquence",
+    html: layout({
+      title: "Votre demande est bien",
+      accent: "reçue.",
+      preheader: "Dernière étape : valider votre paiement pour confirmer votre place.",
+      reason: REASON,
+      body:
+        hello(d.prenom) +
+        p("Merci pour votre confiance ! Voici le récapitulatif de votre demande :") +
+        box(rows([["Offre", `Grand Oral · 5 séances intensives · ${d.price}`], ["Votre oral", d.oral], ["Date", d.date ? formatDate(d.date) : undefined]])) +
+        p("<strong>Dernière étape : validez votre paiement</strong> pour confirmer votre place. Le paiement est sécurisé, et possible en plusieurs fois.") +
+        (link ? button(link, "Je valide mon paiement") : p("Le lien de paiement vous est envoyé dans un prochain mail.")) +
+        p("Dès que votre paiement est validé, je vous contacte pour planifier vos séances ensemble.") +
         signature,
-    ),
+    }),
   };
 }
 
 /* ---------------------------------------------------------------------------
-   Contact (discours, animation, coaching, partenariat)
+   Contact (discours, animation, coaching, partenariat…)
    ------------------------------------------------------------------------- */
 
 type Contact = { nom: string; email: string; demande: string; message: string };
@@ -86,19 +185,26 @@ type Contact = { nom: string; email: string; demande: string; message: string };
 export function contactAdmin(d: Contact): Email {
   return {
     subject: `${d.demande} : ${d.nom}`,
-    html: layout("Nouvelle demande de contact", fieldsTable([["Nom", d.nom], ["Email", d.email], ["Demande", d.demande], ["Message", d.message]]) + p("Répondez directement à ce mail pour écrire à la personne.")),
+    html: admin("Nouvelle demande de contact", [["Nom", d.nom], ["Email", d.email], ["Demande", d.demande], ["Message", d.message]]),
   };
 }
 
 export function contactClient(d: Contact): Email {
   return {
     subject: "Votre message à Lieben Éloquence",
-    html: layout(
-      "Message bien reçu",
-      hello(d.nom.split(" ")[0]) +
-        p(`Merci pour votre message concernant : <strong>${esc(d.demande.toLowerCase())}</strong>. Je le lis avec attention et je vous réponds par mail dans les meilleurs délais.`) +
+    html: layout({
+      title: "Message bien",
+      accent: "reçu.",
+      preheader: "Je vous réponds par mail dans les meilleurs délais.",
+      reason: REASON,
+      body:
+        hello(d.nom.split(" ")[0]) +
+        p("Merci pour votre message ! Je le lis avec attention et je vous réponds par mail dans les meilleurs délais.") +
+        box(rows([["Votre demande", d.demande], ["Votre message", d.message]])) +
+        p("En attendant, vous pouvez découvrir toutes les offres sur le site :") +
+        button(SITE.url, "Découvrir Lieben Éloquence") +
         signature,
-    ),
+    }),
   };
 }
 
@@ -111,20 +217,24 @@ type Newsletter = { nom: string; email: string; profil: string; thematique: stri
 export function newsletterAdmin(d: Newsletter): Email {
   return {
     subject: `Nouvelle inscription newsletter : ${d.nom}`,
-    html: layout("Nouvelle inscription à la newsletter", fieldsTable([["Nom", d.nom], ["Email", d.email], ["Profil", d.profil], ["Thématique", d.thematique]])),
+    html: admin("Nouvelle inscription à la newsletter", [["Nom", d.nom], ["Email", d.email], ["Profil", d.profil], ["Thématique", d.thematique]]),
   };
 }
 
 export function newsletterClient(d: Newsletter): Email {
   return {
     subject: "Bienvenue dans la newsletter LEQ",
-    html: layout(
-      "Bienvenue dans la newsletter LEQ.",
-      hello(d.nom.split(" ")[0]) +
-        p("Votre inscription est confirmée. Vous recevrez en avant-première les dates des ateliers, des ressources gratuites, des conseils oratoires et les annonces importantes.") +
+    html: layout({
+      title: "Bienvenue dans la",
+      accent: "newsletter LEQ.",
+      preheader: "Votre inscription est confirmée.",
+      reason: "Vous recevez ce mail suite à votre inscription à la newsletter sur liebeneloquence.com. Pour vous désinscrire, répondez simplement à ce mail.",
+      body:
+        hello(d.nom.split(" ")[0]) +
+        p("Votre inscription est confirmée ! Vous recevrez en avant-première les dates des ateliers, des ressources gratuites, des conseils oratoires et les annonces importantes.") +
         p("Pas de spam, promis. Pour vous désinscrire à tout moment, il suffit de répondre à ce mail.") +
         signature,
-    ),
+    }),
   };
 }
 
@@ -135,21 +245,24 @@ export function newsletterClient(d: Newsletter): Email {
 export function listeAttenteAdmin(d: { prenom: string; email: string }): Email {
   return {
     subject: `Liste d'attente LEQ'FAM : ${d.prenom}`,
-    html: layout("Nouvelle inscription à la liste d'attente LEQ'FAM", fieldsTable([["Prénom", d.prenom], ["Email", d.email]])),
+    html: admin("Nouvelle inscription à la liste d'attente LEQ'FAM", [["Prénom", d.prenom], ["Email", d.email]]),
   };
 }
 
 export function listeAttenteClient(d: { prenom: string }): Email {
   return {
     subject: "Vous êtes sur la liste d'attente de la LEQ'FAM",
-    html: layout(
-      "Bienvenue sur la liste d'attente !",
-      hello(d.prenom) +
+    html: layout({
+      title: "Bienvenue sur la liste",
+      accent: "d'attente !",
+      preheader: "Vous serez parmi les premiers prévenus à l'ouverture de la LEQ'FAM.",
+      reason: "Vous recevez ce mail suite à votre inscription à la liste d'attente LEQ'FAM. Pour vous retirer de la liste, répondez simplement à ce mail.",
+      body:
+        hello(d.prenom) +
         p("Votre place sur la liste d'attente de la <strong>LEQ'FAM</strong>, la communauté dédiée à la prise de parole, à l'éloquence et aux soft skills, est bien enregistrée.") +
-        p("Vous serez parmi les premières personnes prévenues à l'ouverture, avec le lien pour rejoindre la communauté sur Discord.") +
-        p("Aucun paiement n'est demandé pour l'instant. Pour vous retirer de la liste, il suffit de répondre à ce mail.") +
+        p("Vous serez parmi les premières personnes prévenues à l'ouverture, avec le lien pour rejoindre la communauté sur Discord. Aucun paiement n'est demandé pour l'instant.") +
         signature,
-    ),
+    }),
   };
 }
 
@@ -160,49 +273,44 @@ export function listeAttenteClient(d: { prenom: string }): Email {
 export function quizAdmin(d: { result: QuizResult; answers: [string, string][]; prenom?: string; email?: string }): Email {
   return {
     subject: `Quiz d'orateur : ${d.result.profile.name}${d.prenom ? ` (${d.prenom})` : ""}`,
-    html: layout(
-      "Nouveau résultat de quiz",
-      fieldsTable([
+    html: admin(
+      d.prenom ? "Fiche orateur demandée" : "Nouveau résultat de quiz (anonyme)",
+      [
         ["Prénom", d.prenom],
         ["Email", d.email],
         ["Profil", d.result.profile.name],
         ["Niveau", d.result.level.name],
         ["Points à travailler", d.result.points.map((pt) => pt.title).join(", ")],
-        ["Pack conseillé", d.result.pack],
-      ]) +
-        `<h2 style="font-size:16px;margin:24px 0 8px">Réponses</h2>` +
-        fieldsTable(d.answers),
+        ["Pack indicatif (pour vous seulement)", d.result.pack],
+        ...d.answers.map(([q, a], i) => [`Q${i + 1}. ${q}`, a] as [string, string]),
+      ],
     ),
   };
 }
 
-/** Fiche orateur envoyée par mail : ce que la page n'affiche pas (exercices, pack conseillé). */
-export function quizClient(d: { result: QuizResult; prenom: string; pack: { name: string; sessions: number; price: string } }): Email {
+/** Mail du quiz : court, avec la fiche infographie (image `cid:fiche`) et le lien de réservation. */
+export function quizClient(d: { result: QuizResult; prenom: string }): Email {
   const r = d.result;
-  const h2 = (t: string) => `<h2 style="font-size:17px;margin:28px 0 10px;color:#114DA8">${t}</h2>`;
-  const exercises = r.points
-    .map(
-      (pt, i) =>
-        `<div style="margin:0 0 12px;padding:14px 16px;border-radius:12px;background:#F6F8FC;border-left:4px solid #FFBD59"><p style="margin:0 0 6px;font-size:15px"><strong>${i + 1}. ${esc(pt.title)}</strong></p><p style="margin:0;font-size:14.5px;line-height:1.6">${esc(pt.exercise)}</p></div>`,
-    )
-    .join("");
   return {
     subject: `Votre fiche orateur : ${r.profile.name}`,
-    html: layout(
-      `Votre fiche orateur, ${esc(d.prenom)}`,
-      p(`Vous êtes <strong>${esc(r.profile.name)}</strong>, niveau <strong>${esc(r.level.name.toLowerCase())}</strong>. ${esc(r.profile.desc)}`) +
-        h2("Votre plan d'entraînement") +
-        p("Un exercice concret pour chacun de vos points à travailler. Quelques minutes par jour suffisent pour sentir la différence.") +
-        exercises +
-        h2("Le pack que je vous conseille") +
-        p(`<strong>${esc(d.pack.name)}</strong> · ${d.pack.sessions} séances · ${esc(d.pack.price)}<br>${esc(r.packWhy)}`) +
-        (r.examNote ? p(`${esc(r.examNote)} <a href="${SITE.url}/grand-oral" style="color:#114DA8">Découvrir l'offre Grand Oral</a>`) : "") +
-        p("Le plus simple pour démarrer : une séance diagnostic de 30 minutes, offerte, pour faire le point ensemble sur vos objectifs.") +
+    html: layout({
+      title: "Votre fiche",
+      accent: "orateur.",
+      preheader: `Vous êtes ${r.profile.name}. Voici votre fiche et vos exercices.`,
+      reason: "Vous recevez ce mail car vous avez demandé votre fiche orateur sur liebeneloquence.com.",
+      body:
+        hello(d.prenom) +
+        p(`Merci d'avoir fait le quiz ! Vous êtes <strong>${esc(r.profile.name)}</strong>, niveau <strong>${esc(r.level.name.toLowerCase())}</strong>. Voici votre fiche orateur, avec un exercice concret pour chacun de vos points à travailler. Elle est aussi en pièce jointe, pour la garder ou la partager.`) +
+        `<img src="cid:fiche" width="528" alt="Votre fiche orateur : ${esc(r.profile.name)}" style="display:block;width:100%;max-width:528px;height:auto;border:0;border-radius:18px;margin:8px 0 24px">` +
+        h2("Envie d'aller plus loin ?") +
+        p("Réservez votre séance diagnostic de 30 minutes, offerte : on fait le point ensemble sur votre profil et vos objectifs.") +
         button(SITE.calendly, "Réserver ma séance offerte") +
         signature,
-    ),
+    }),
   };
 }
+
+/* ------------------------------------------------------------------------- */
 
 function formatDate(iso: string): string {
   const d = new Date(`${iso}T12:00:00`);

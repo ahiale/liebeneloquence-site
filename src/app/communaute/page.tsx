@@ -224,7 +224,7 @@ export default async function CommunautePage() {
                   </strong>
                   , puis passent au tarif normal. Vous pouvez aussi intervenir dans nos lives pour partager vos connaissances.
                 </p>
-                <Link className="btn btn-royal mt-6" href={`/autres-produits?demande=${encodeURIComponent("Partenariat LEQ'FAM")}#contact`}>Devenir partenaire</Link>
+                <Link className="btn btn-royal mt-6" href={`/autres-services?demande=${encodeURIComponent("Partenariat LEQ'FAM")}#contact`}>Devenir partenaire</Link>
               </div>
               <div className="card-light lift flex flex-col rounded-[26px] p-8">
                 <p className="eyebrow" style={{ color: "#114DA8" }}>Partenaires institutionnels</p>
@@ -232,7 +232,7 @@ export default async function CommunautePage() {
                 <p className="mt-3 mb-0 flex-1 text-[15px] leading-[1.6] text-ink/70">
                   En sponsorisant le Grand Prix LEQ, vos membres et adhérents bénéficient d&apos;un <strong>accès gratuit</strong> à la communauté pendant toute la durée du partenariat.
                 </p>
-                <Link className="btn btn-royal mt-6" href={`/autres-produits?demande=${encodeURIComponent("Partenariat LEQ'FAM")}#contact`}>Devenir partenaire</Link>
+                <Link className="btn btn-royal mt-6" href={`/autres-services?demande=${encodeURIComponent("Partenariat LEQ'FAM")}#contact`}>Devenir partenaire</Link>
               </div>
             </div>
           </div>

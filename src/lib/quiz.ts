@@ -4,16 +4,19 @@
  * Utilisé à la fois par la page (affichage) et par le serveur (mail du résultat).
  */
 
-export type Answer = string | number;
+/** Une réponse : un choix, ou plusieurs pour les questions à choix multiples. */
+export type Answer = string | number | string[];
+type Tag = string | number;
 
-export type QuizOption = { label: string; tag: Answer; img: string };
-export type QuizQuestion = { axis: string; text: string; options: QuizOption[] };
+export type QuizOption = { label: string; tag: Tag; img: string };
+export type QuizQuestion = { axis: string; text: string; options: QuizOption[]; multiple?: boolean };
 
 const img = (name: string) => `/quiz/q-${name}.svg`;
 
-const q = (axis: string, text: string, opts: [string, Answer, string][]): QuizQuestion => ({
+const q = (axis: string, text: string, opts: [string, Tag, string][], multiple = false): QuizQuestion => ({
   axis,
   text,
+  multiple,
   options: opts.map(([label, tag, icon]) => ({ label, tag, img: img(icon) })),
 });
 
@@ -47,13 +50,13 @@ export const QUESTIONS: QuizQuestion[] = [
     ["Ma voix tremble, je ne sais pas quoi faire de mes mains", "nonverbal", "waves"],
     ["Les questions imprévues me déstabilisent", "impro", "help"],
     ["Je doute de la valeur de ce que j’ai à dire", "confiance", "feather"],
-  ]),
+  ], true),
   q("Votre objectif", "Pourquoi voulez-vous progresser maintenant ?", [
     ["Un examen ou un oral bientôt", "examen", "grad"],
     ["Ma vie professionnelle", "pro", "brief"],
     ["Un projet à défendre ou à pitcher", "pitch", "rocket"],
     ["Pour moi, pour oser enfin", "perso", "heart"],
-  ]),
+  ], true),
 ];
 
 export type ProfileId = "conteur" | "stratege" | "tribun" | "diplomate" | "improvisateur";
@@ -100,13 +103,7 @@ const POINTS = {
   },
 };
 
-/* Recommandation de pack (textes de la maquette, non affichés sur la page). */
-const PACK_WHY = {
-  Senghor: "Pour poser les bases de la culture oratoire et prendre confiance.",
-  Cicéron: "Pour structurer vos discours et apprendre à convaincre.",
-  Socrate: "Le parcours complet pour travailler le trac, le non-verbal et l’improvisation.",
-} as const;
-const EXAM_NOTE = "Un oral d’examen arrive ? Regardez aussi l’offre Grand Oral.";
+
 
 const LEVELS = [
   { name: "Orateur en éveil", width: "33%", desc: "Vous posez les premières bases. Chaque séance vous fera gagner en aisance." },
@@ -121,22 +118,30 @@ export type QuizResult = {
   profile: (typeof PROFILES)[ProfileId];
   level: (typeof LEVELS)[number];
   points: { title: string; desc: string; exercise: string }[];
-  /** Pack conseillé (non affiché sur la page, envoyé dans la fiche par mail). */
+  /** Pack indicatif, transmis uniquement à Rebecca (jamais proposé à la personne). */
   pack: (typeof PACK_NAMES)[number];
-  packWhy: string;
-  /** Mention Grand Oral si l'objectif est un examen. */
-  examNote: string | null;
+  /** Objectifs choisis (question 6). */
+  objectives: string[];
 };
+
+const asList = (v: Answer | undefined): Tag[] => (v === undefined ? [] : Array.isArray(v) ? v : [v]);
+
+/** Vrai si la question a reçu une réponse valide. */
+export function isAnswered(qq: QuizQuestion, v: Answer | undefined): boolean {
+  if (qq.multiple) return Array.isArray(v) && v.length > 0 && v.every((t) => qq.options.some((o) => o.tag === t));
+  return !Array.isArray(v) && qq.options.some((o) => o.tag === v);
+}
 
 /** Vrai si les 6 réponses sont valides. */
 export function isComplete(a: Answer[]): boolean {
-  return a.length === QUESTIONS.length && QUESTIONS.every((qq, i) => qq.options.some((o) => o.tag === a[i]));
+  return a.length === QUESTIONS.length && QUESTIONS.every((qq, i) => isAnswered(qq, a[i]));
 }
 
 export function computeResult(a: Answer[]): QuizResult {
   const count: Record<string, number> = {};
   [0, 1].forEach((i) => {
-    if (a[i] !== undefined) count[a[i]] = (count[a[i]] || 0) + (i === 0 ? 1.1 : 1);
+    const v = a[i];
+    if (v !== undefined && !Array.isArray(v)) count[v] = (count[v] || 0) + (i === 0 ? 1.1 : 1);
   });
   const best = (Object.keys(count).sort((x, y) => count[y] - count[x])[0] || "conteur") as ProfileId;
 
@@ -144,29 +149,29 @@ export function computeResult(a: Answer[]): QuizResult {
   const levelIdx = lv <= 2 ? 0 : lv <= 4 ? 1 : 2;
 
   const pts: { title: string; desc: string; exercise: string }[] = [];
-  const frein = a[4] as keyof typeof POINTS | undefined;
-  if (frein && POINTS[frein]) pts.push(POINTS[frein]);
+  // Question 5 à choix multiples : chaque frein choisi devient un point à travailler.
+  const freins = asList(a[4]).filter((f): f is keyof typeof POINTS => typeof f === "string" && f in POINTS);
+  freins.forEach((f) => pts.push(POINTS[f]));
   if (Number(a[3] || 0) <= 1) pts.push(POINTS.trac);
   if (best === "stratege") pts.push(POINTS.ethos);
-  if (best !== "stratege" && best !== "diplomate" && frein !== "structure") pts.push(POINTS.structure);
-  if (best === "diplomate" && frein !== "confiance") pts.push(POINTS.confiance);
-  const points = pts.slice(0, 3);
+  if (best !== "stratege" && best !== "diplomate" && !freins.includes("structure")) pts.push(POINTS.structure);
+  if (best === "diplomate" && !freins.includes("confiance")) pts.push(POINTS.confiance);
+  const points = pts.filter((pt, i) => pts.indexOf(pt) === i).slice(0, 3);
 
   const packIdx = points.length >= 3 && levelIdx < 2 ? 2 : levelIdx;
 
-  const pack = PACK_NAMES[packIdx];
-  return {
-    profileId: best,
-    profile: PROFILES[best],
-    level: LEVELS[levelIdx],
-    points,
-    pack,
-    packWhy: PACK_WHY[pack],
-    examNote: a[5] === "examen" ? EXAM_NOTE : null,
-  };
+  const objectives = asList(a[5])
+    .map((t) => QUESTIONS[5].options.find((o) => o.tag === t)?.label)
+    .filter((l): l is string => Boolean(l));
+  return { profileId: best, profile: PROFILES[best], level: LEVELS[levelIdx], points, pack: PACK_NAMES[packIdx], objectives };
 }
 
 /** Réponses lisibles (question → réponse) pour le mail à Rebecca. */
 export function describeAnswers(a: Answer[]): [string, string][] {
-  return QUESTIONS.map((qq, i) => [qq.text, qq.options.find((o) => o.tag === a[i])?.label ?? "?"]);
+  return QUESTIONS.map((qq, i) => [
+    qq.text,
+    asList(a[i])
+      .map((t) => qq.options.find((o) => o.tag === t)?.label ?? "?")
+      .join(" · ") || "?",
+  ]);
 }

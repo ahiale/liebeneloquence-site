@@ -31,8 +31,9 @@ RUN addgroup -S leq && adduser -S leq -G leq && mkdir -p /data && chown leq:leq 
 COPY --from=builder --chown=leq:leq /app/.next/standalone ./
 COPY --from=builder --chown=leq:leq /app/.next/static ./.next/static
 COPY --from=builder --chown=leq:leq /app/public ./public
-# Brochures jointes aux mails de devis
+# Brochures jointes aux mails de devis, polices de la fiche orateur
 COPY --from=builder --chown=leq:leq /app/assets ./assets
+COPY --from=builder --chown=leq:leq /app/src/design/fonts ./src/design/fonts
 
 USER leq
 EXPOSE 3000

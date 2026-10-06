@@ -6,11 +6,11 @@ import { IDLE } from "@/lib/forms";
 import { FieldError, fieldProps, FormError, FormSuccess, Honeypot, SubmitButton } from "@/components/ui/Form";
 
 /** Liste d'attente LEQ'FAM, affichée tant que la communauté n'est pas ouverte. */
-export function WaitlistForm() {
+export function WaitlistForm({ className = "mx-auto mt-[30px] max-w-[560px]" }: { className?: string }) {
   const [state, action] = useActionState(rejoindreListeAttente, IDLE);
 
   return (
-    <div className="mx-auto mt-[30px] max-w-[560px] rounded-[26px] p-5 text-left sm:p-6" style={{ background: "rgba(0,22,54,.35)", border: "1px solid rgba(255,255,255,.25)" }}>
+    <div className={`${className} rounded-[26px] p-5 text-left sm:p-6`} style={{ background: "rgba(0,22,54,.35)", border: "1px solid rgba(255,255,255,.25)" }}>
       {state.status === "success" ? (
         <FormSuccess title="Vous êtes sur la liste !">Un mail de confirmation vient de vous être envoyé. Vous serez prévenu·e dès l&apos;ouverture.</FormSuccess>
       ) : (

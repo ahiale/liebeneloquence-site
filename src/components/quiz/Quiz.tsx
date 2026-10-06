@@ -5,7 +5,7 @@ import { useActionState, useEffect, useRef, useState } from "react";
 import { enregistrerQuiz, recevoirResultatQuiz } from "@/app/actions";
 import { SITE } from "@/config/site";
 import { IDLE } from "@/lib/forms";
-import { QUESTIONS, computeResult, type Answer } from "@/lib/quiz";
+import { QUESTIONS, computeResult, isAnswered, type Answer } from "@/lib/quiz";
 import { Check, Sparkle } from "@/components/ui/Doodles";
 import { FieldError, fieldProps, FormError, FormSuccess, Honeypot, SubmitButton } from "@/components/ui/Form";
 
@@ -19,7 +19,7 @@ export function Quiz() {
 
   const q = QUESTIONS[qi];
   const current = answers[qi];
-  const answered = current !== undefined;
+  const answered = isAnswered(q, current);
 
   // Place le focus sur le titre à chaque changement d'écran (clavier, lecteur d'écran).
   useEffect(() => {
@@ -31,11 +31,17 @@ export function Quiz() {
     setQi(0);
     setStep("q");
   };
-  const pick = (tag: Answer) => {
+  const pick = (tag: string | number) => {
     const next = answers.slice();
-    next[qi] = tag;
+    if (q.multiple) {
+      // Choix multiples : on coche / décoche
+      const list = Array.isArray(current) ? current : [];
+      const t = String(tag);
+      next[qi] = list.includes(t) ? list.filter((x) => x !== t) : [...list, t];
+    } else next[qi] = tag;
     setAnswers(next);
   };
+  const isOn = (tag: string | number) => (Array.isArray(current) ? current.includes(String(tag)) : current === tag);
   const next = () => {
     if (!answered) return;
     if (qi >= QUESTIONS.length - 1) {
@@ -84,7 +90,7 @@ export function Quiz() {
       )}
 
       {step === "q" && (
-        <section aria-labelledby="quiz-question">
+        <section key={qi} className="pop" aria-labelledby="quiz-question">
           <p className="m-0 text-center text-[12px] font-semibold tracking-[.2em] text-white/85">
             QUESTION {qi + 1} / {QUESTIONS.length} · <span className="text-gold">{q.axis}</span>
           </p>
@@ -94,11 +100,12 @@ export function Quiz() {
           <h2 id="quiz-question" ref={titleRef} tabIndex={-1} className="mx-auto mt-8 mb-0 max-w-[820px] text-center leading-[1.15] font-bold tracking-[-0.03em] outline-none" style={{ fontSize: "clamp(26px, 5vw, 40px)" }}>
             {q.text}
           </h2>
-          <div role="radiogroup" aria-labelledby="quiz-question" className="mt-8 grid gap-3.5 sm:mt-10 sm:gap-[22px]" style={{ gridTemplateColumns: "repeat(auto-fit,minmax(min(150px,40%),1fr))" }}>
+          {q.multiple && <p className="mt-3 mb-0 text-center text-[14px] font-semibold text-gold">Plusieurs réponses possibles</p>}
+          <div role={q.multiple ? "group" : "radiogroup"} aria-labelledby="quiz-question" className="mt-8 grid gap-3.5 sm:mt-10 sm:gap-[22px]" style={{ gridTemplateColumns: "repeat(auto-fit,minmax(min(150px,40%),1fr))" }}>
             {q.options.map((o) => {
-              const on = current === o.tag;
+              const on = isOn(o.tag);
               return (
-                <button key={o.label} type="button" role="radio" aria-checked={on} onClick={() => pick(o.tag)} className={`quiz-opt ${on ? "quiz-opt-on" : ""}`}>
+                <button key={o.label} type="button" role={q.multiple ? "checkbox" : "radio"} aria-checked={on} onClick={() => pick(o.tag)} className={`quiz-opt ${on ? "quiz-opt-on" : ""}`}>
                   <span className="relative flex items-center justify-center overflow-hidden bg-cloud" style={{ aspectRatio: "4 / 3" }}>
                     <span className="halo absolute rounded-full" style={{ inset: "10%", background: "radial-gradient(circle,rgba(255,189,89,.85),transparent 70%)" }} />
                     {/* eslint-disable-next-line @next/next/no-img-element */}

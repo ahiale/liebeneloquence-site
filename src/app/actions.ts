@@ -1,13 +1,15 @@
 "use server";
 
 import { z } from "zod";
-import { ADMIN_EMAIL, sendMail } from "@/lib/mail";
+import { ADMIN_EMAIL, sendMail, type Mail } from "@/lib/mail";
 import { record } from "@/lib/store";
 import { HONEYPOT, type FormState } from "@/lib/forms";
 import { computeResult, describeAnswers, isComplete, type Answer } from "@/lib/quiz";
 import { getPricing } from "@/content";
 import { formatPrice } from "@/lib/format";
 import * as T from "@/emails/templates";
+import { renderFicheOrateur } from "@/emails/fiche-orateur";
+import { addToNewsletterList } from "@/lib/brevo";
 import { DEMANDES, ORAUX, PROFILS_GRAND_ORAL } from "@/lib/options";
 
 /* Actions serveur des formulaires du site. Chaque action :
@@ -34,7 +36,7 @@ const FAILURE: FormState = {
 };
 
 /** Envoie la notification à Rebecca puis la confirmation à la personne. */
-async function notify(admin: { subject: string; html: string }, client: { subject: string; html: string } | null, replyTo: string, attachments?: { name: string; file: string }[]) {
+async function notify(admin: { subject: string; html: string }, client: { subject: string; html: string } | null, replyTo: string, attachments?: Mail["attachments"]) {
   await sendMail({ to: ADMIN_EMAIL, replyTo, ...admin });
   if (client) await sendMail({ to: replyTo, replyTo: ADMIN_EMAIL, ...client, attachments });
 }
@@ -150,6 +152,7 @@ export async function inscrireNewsletter(_: FormState, data: FormData): Promise<
   const d = parsed.data;
 
   await record("newsletter", { ...d, consent: "formulaire newsletter du site" });
+  await addToNewsletterList(d).catch((e) => console.error(e));
   try {
     await notify(T.newsletterAdmin(d), T.newsletterClient(d), d.email);
     return { status: "success" };
@@ -185,7 +188,7 @@ export async function rejoindreListeAttente(_: FormState, data: FormData): Promi
    Quiz d'orateur
    ------------------------------------------------------------------------- */
 
-const AnswersSchema = z.array(z.union([z.string().max(30), z.number().int()])).length(6);
+const AnswersSchema = z.array(z.union([z.string().max(30), z.number().int(), z.array(z.string().max(30)).max(4)])).length(6);
 
 /** Enregistre un résultat anonyme et prévient Rebecca (appelé à l'affichage du résultat). */
 export async function enregistrerQuiz(answers: Answer[]): Promise<void> {
@@ -221,16 +224,13 @@ export async function recevoirResultatQuiz(_: FormState, data: FormData): Promis
   const { prenom, email: mail, answers } = parsed.data;
   if (!isComplete(answers)) return FAILURE;
   const result = computeResult(answers);
-  const packs = (await getPricing()).packs;
-  const pack = packs.find((pk) => pk.name === result.pack) ?? packs[0];
 
   await record("quiz", { answers, profile: result.profileId, pack: result.pack, prenom, email: mail });
   try {
-    await notify(
-      T.quizAdmin({ result, answers: describeAnswers(answers), prenom, email: mail }),
-      T.quizClient({ result, prenom, pack: { name: pack.name, sessions: pack.sessions, price: formatPrice(pack.price) } }),
-      mail,
-    );
+    const fiche = await renderFicheOrateur(result, prenom);
+    await notify(T.quizAdmin({ result, answers: describeAnswers(answers), prenom, email: mail }), T.quizClient({ result, prenom }), mail, [
+      { name: "fiche-orateur-LEQ.png", content: fiche, contentType: "image/png", cid: "fiche" },
+    ]);
     return { status: "success" };
   } catch (e) {
     console.error(e);

@@ -7,13 +7,13 @@ import { formatPrice } from "@/lib/format";
 import { Header } from "@/components/layout/Header";
 import { Check, DrawUnderline, Heart, Sparkle, SpeechBubble, Star } from "@/components/ui/Doodles";
 import { Icon, type IconName } from "@/components/ui/Icons";
-import { ContactForm } from "@/components/autres-produits/ContactForm";
+import { ContactForm } from "@/components/autres-services/ContactForm";
 import { DEMANDES } from "@/lib/options";
 
 export const metadata: Metadata = {
-  title: "Autres produits",
+  title: "Autres services",
   description: "La communauté LEQ'FAM, des discours sur mesure, l'animation de vos événements, le coaching concours d'éloquence et bientôt une application mobile.",
-  alternates: { canonical: "/autres-produits" },
+  alternates: { canonical: "/autres-services" },
 };
 
 const LEQFAM_POINTS = [
@@ -38,7 +38,7 @@ const APP_POINTS = [
   "Des débats face à une IA",
 ];
 
-export default async function AutresProduitsPage() {
+export default async function AutresServicesPage() {
   const { leqfam } = await getPricing();
 
   return (
@@ -51,7 +51,7 @@ export default async function AutresProduitsPage() {
             <Heart className="wiggle hide-sm absolute" size={34} color="#FFBD59" style={{ right: "16%", top: 40 }} />
             <p className="eyebrow">L&apos;univers LEQ</p>
             <h1 className="mt-5 mb-0 leading-[1.02] font-bold tracking-[-0.04em] text-white" style={{ fontSize: "clamp(42px, 8vw, 64px)" }}>
-              Autres <span className="serif text-gold">produits</span>
+              Autres <span className="serif text-gold">services</span>
             </h1>
             <DrawUnderline className="hide-sm" style={{ margin: "4px auto 0", transform: "translateX(70px)" }} />
             <p className="mx-auto mt-[22px] mb-0 max-w-[620px] text-[17px] leading-[1.7] text-white/85">

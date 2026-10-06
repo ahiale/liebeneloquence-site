@@ -9,7 +9,7 @@ import { FieldError, fieldProps, FormError, FormSuccess, Honeypot, SubmitButton 
 
 export function ContactForm() {
   const [state, action] = useActionState(envoyerContact, IDLE);
-  // Pré-sélection depuis un lien : /autres-produits?demande=Partenariat%20LEQ'FAM#contact
+  // Pré-sélection depuis un lien : /autres-services?demande=Partenariat%20LEQ'FAM#contact
   const preset = useSearchParams().get("demande");
   const initial = DEMANDES.find((d) => d === preset) ?? DEMANDES[0];
 

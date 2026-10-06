@@ -8,7 +8,7 @@ import { NAV } from "@/config/site";
 
 /**
  * En-tête principal, posé dans le hero de chaque page (non fixe, comme la maquette).
- * Sous 1024 px, la navigation passe dans un menu déroulant.
+ * Sous 1280 px, la navigation passe dans un menu déroulant.
  */
 export function Header() {
   const pathname = usePathname();
@@ -23,16 +23,14 @@ export function Header() {
     return () => window.removeEventListener("keydown", onKey);
   }, [open]);
 
-  // La Communauté est une sous-page d'« Autres produits ».
-  const section = pathname.startsWith("/communaute") ? "/autres-produits" : pathname;
-  const isActive = (href: string) => !href.startsWith("/#") && section.startsWith(href);
+  const isActive = (href: string) => !href.startsWith("/#") && pathname.startsWith(href);
 
   return (
     <header className="relative z-40">
       <div className="wrap flex items-center justify-between gap-6 py-5">
         <Logo />
 
-        <nav aria-label="Navigation principale" className="hidden items-center gap-[30px] lg:flex">
+        <nav aria-label="Navigation principale" className="hidden items-center gap-[26px] xl:flex">
           {NAV.map((item) => (
             <Link
               key={item.href}
@@ -47,13 +45,13 @@ export function Header() {
           ))}
         </nav>
 
-        <Link href="/#offres" className="btn btn-p btn-sm hidden lg:inline-flex">
+        <Link href="/#offres" className="btn btn-p btn-sm hidden xl:inline-flex">
           Découvrir les offres
         </Link>
 
         <button
           type="button"
-          className="grid h-11 w-11 place-items-center rounded-full border border-white/25 bg-white/12 text-white lg:hidden"
+          className="grid h-11 w-11 place-items-center rounded-full border border-white/25 bg-white/12 text-white xl:hidden"
           aria-label={open ? "Fermer le menu" : "Ouvrir le menu"}
           aria-expanded={open}
           aria-controls="menu-mobile"
@@ -66,7 +64,7 @@ export function Header() {
       </div>
 
       {open && (
-        <div id="menu-mobile" className="wrap absolute inset-x-0 top-full lg:hidden">
+        <div id="menu-mobile" className="wrap absolute inset-x-0 top-full xl:hidden">
           <nav
             aria-label="Navigation principale"
             className="flex flex-col gap-1 rounded-[22px] border border-white/10 bg-ink-800/97 p-4 shadow-2xl backdrop-blur-xl"

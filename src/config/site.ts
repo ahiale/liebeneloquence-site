@@ -23,7 +23,8 @@ export const NAV = [
   { label: "Méthode", href: "/#methode" },
   { label: "Formations", href: "/#offres" },
   { label: "Grand Oral", href: "/grand-oral" },
-  { label: "Autres produits", href: "/autres-produits" },
+  { label: "Autres services", href: "/autres-services" },
+  { label: "Communauté", href: "/communaute" },
   { label: "Événements", href: "/evenements" },
   { label: "À propos", href: "/a-propos" },
 ] as const;
@@ -32,7 +33,7 @@ export const FOOTER_LINKS = [
   { label: "Mentions légales", href: "/mentions-legales" },
   { label: "Confidentialité", href: "/confidentialite" },
   { label: "Cookies", href: "/cookies" },
-  { label: "Contact", href: "/autres-produits#contact" },
+  { label: "Contact", href: "/autres-services#contact" },
   { label: "Instagram", href: SITE.instagram, external: true },
   { label: "LinkedIn", href: SITE.linkedin, external: true },
 ] as const;
@@ -41,7 +42,7 @@ export const FOOTER_LINKS = [
 export const isPlaceholder = (href: string) => href.startsWith("[");
 
 /** Lien de paiement, ou repli vers le formulaire de contact tant que le lien Stripe n'est pas renseigné. */
-export const paymentHref = (href: string) => (isPlaceholder(href) ? "/autres-produits#contact" : href);
+export const paymentHref = (href: string) => (isPlaceholder(href) ? "/autres-services#contact" : href);
 
 /** Informations légales (page Mentions légales). */
 export const LEGAL = {

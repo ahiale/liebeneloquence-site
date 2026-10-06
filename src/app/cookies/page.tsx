@@ -25,6 +25,11 @@ export default function CookiesPage() {
         Lorsque vous cliquez sur un lien vers un service externe (Calendly pour réserver une séance, Stripe pour payer, Discord, Instagram, LinkedIn), vous quittez le site Lieben Éloquence. Ces services peuvent alors déposer leurs propres cookies, selon leurs politiques respectives, que nous vous invitons à consulter.
       </p>
 
+      <h2>Mémorisation technique</h2>
+      <p>
+        Pour ne pas vous présenter plusieurs fois la fenêtre d&apos;invitation à la communauté LEQ&apos;FAM, le site enregistre dans votre navigateur la date à laquelle elle vous a été montrée (stockage local, conservé 30 jours). Cette information reste sur votre appareil, n&apos;est jamais transmise et ne sert à aucun suivi. Elle est exemptée de consentement car strictement nécessaire à ce fonctionnement.
+      </p>
+
       <h2>Une question ?</h2>
       <p>
         Consultez la <Link href="/confidentialite">politique de confidentialité</Link> ou écrivez-nous.

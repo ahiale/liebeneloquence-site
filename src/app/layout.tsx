@@ -3,6 +3,9 @@ import Script from "next/script";
 import { melodrame, sfPro } from "@/design/fonts";
 import { Footer } from "@/components/layout/Footer";
 import { SITE } from "@/config/site";
+import { getPricing } from "@/content";
+import { formatPrice } from "@/lib/format";
+import { CommunityPopup } from "@/components/communaute/CommunityPopup";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -29,12 +32,14 @@ export const viewport: Viewport = {
   themeColor: "#001636",
 };
 
-export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+  const { leqfam } = await getPricing();
   return (
     <html lang="fr" className={`${sfPro.variable} ${melodrame.variable}`}>
       <body>
         {children}
         <Footer />
+        <CommunityPopup price={formatPrice(leqfam.monthlyPrice)} availability={leqfam.availability} />
         {/* Mesure d'audience Umami (sans cookie), active seulement si configurée au build */}
         {process.env.UMAMI_WEBSITE_ID && (
           <Script src={process.env.UMAMI_SCRIPT_URL || "https://stats.liebeneloquence.com/script.js"} data-website-id={process.env.UMAMI_WEBSITE_ID} strategy="afterInteractive" />

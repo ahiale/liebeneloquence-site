@@ -323,6 +323,15 @@ input:focus-visible + .chip {
   outline-offset: 3px;
 }
 
+/* Pop-up communauté */
+.community-popup::backdrop {
+  background: rgba(0, 13, 33, 0.72);
+  backdrop-filter: blur(4px);
+}
+.community-popup[open] {
+  animation: pop 0.45s cubic-bezier(0.2, 0.9, 0.3, 1.3) both;
+}
+
 /* Texte long (pages légales) */
 .legal h2 {
   margin: 44px 0 0;
@@ -515,6 +524,33 @@ input:focus-visible + .chip {
   to { stroke-dashoffset: -32; }
 }
 
+/* Apparition au défilement : les cartes glissent doucement en entrant à l'écran.
+   Uniquement CSS (navigateurs récents) ; ailleurs, tout reste simplement visible.
+   « translate » ne touche pas aux rotations des cartes (transform). */
+@supports (animation-timeline: view()) {
+  .bubble,
+  .sticker,
+  .postit,
+  .card-light,
+  .yearcard,
+  .badge,
+  .reveal {
+    animation: rise linear both;
+    animation-timeline: view();
+    animation-range: entry 0% entry 70%;
+  }
+}
+@keyframes rise {
+  from {
+    opacity: 0;
+    translate: 0 48px;
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
+
 /* ============================================================================
    Mobile
    ========================================================================== */
@@ -526,6 +562,7 @@ input:focus-visible + .chip {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .bubble, .sticker, .postit, .card-light, .yearcard, .badge, .reveal,
   .floaty, .wiggle, .bob, .pulse2, .halo, .marquee, .road-dash, .pop, .grow,
   .pack-ill, .pack:hover .pack-ill {
     animation: none !important;

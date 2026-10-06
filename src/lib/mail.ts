@@ -17,7 +17,9 @@ import { SITE } from "@/config/site";
  * Sans SMTP_PASSWORD (développement), le mail est affiché dans la console.
  */
 
-type Attachment = { name: string; file: string };
+/** Pièce jointe : un fichier du dossier /assets, ou un contenu généré (ex. image de la fiche orateur).
+ *  `cid` permet d'afficher une image dans le corps du mail : <img src="cid:...">. */
+type Attachment = { name: string; file: string } | { name: string; content: Buffer; contentType: string; cid?: string };
 
 export type Mail = {
   to: string;
@@ -63,10 +65,11 @@ export async function sendMail(mail: Mail): Promise<void> {
     replyTo: mail.replyTo,
     subject: mail.subject,
     html: mail.html,
-    attachments: (mail.attachments ?? []).map((a) => ({
-      filename: a.name,
-      path: path.join(process.cwd(), "assets", a.file),
-    })),
+    attachments: (mail.attachments ?? []).map((a) =>
+      "file" in a
+        ? { filename: a.name, path: path.join(process.cwd(), "assets", a.file) }
+        : { filename: a.name, content: a.content, contentType: a.contentType, cid: a.cid },
+    ),
   });
 }
 
@@ -78,8 +81,17 @@ async function savePreview(mail: Mail): Promise<void> {
     const dir = PREVIEW_DIR();
     await mkdir(dir, { recursive: true });
     const slug = mail.subject.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^\w]+/g, "-").replace(/^-|-$/g, "").toLowerCase().slice(0, 60);
-    const file = path.join(dir, `${new Date().toISOString().replace(/[:.]/g, "-")}-${slug}.html`);
-    await writeFile(file, `<!doctype html><meta charset="utf-8"><title>${esc(mail.subject)}</title><p style="font:13px Arial;color:#6b7a90">À : ${esc(mail.to)} · Objet : ${esc(mail.subject)}</p><hr>${mail.html}`, "utf8");
+    const base = `${new Date().toISOString().replace(/[:.]/g, "-")}-${slug}`;
+    let html = mail.html;
+    // Images générées : enregistrées à côté du mail, et affichées dans l'aperçu
+    for (const a of mail.attachments ?? []) {
+      if ("content" in a) {
+        const name = `${base}-${a.name}`;
+        await writeFile(path.join(dir, name), a.content);
+        if (a.cid) html = html.replaceAll(`cid:${a.cid}`, encodeURIComponent(name));
+      }
+    }
+    await writeFile(path.join(dir, `${base}.html`), `<!doctype html><meta charset="utf-8"><title>${esc(mail.subject)}</title><p style="font:13px Arial;color:#6b7a90;margin:12px">À : ${esc(mail.to)} · Objet : ${esc(mail.subject)} · Pièces jointes : ${(mail.attachments ?? []).map((a) => esc(a.name)).join(", ") || "aucune"}</p>${html}`, "utf8");
   } catch {
     /* aperçu facultatif */
   }
@@ -88,25 +100,4 @@ async function savePreview(mail: Mail): Promise<void> {
 /** Échappe le texte saisi par l'utilisateur avant de l'insérer dans un mail HTML. */
 export function esc(value: string): string {
   return value.replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]!);
-}
-
-/** Mise en page commune des mails (sobre, compatible messageries). */
-export function layout(title: string, body: string): string {
-  return `<div style="font-family:Arial,Helvetica,sans-serif;max-width:560px;margin:0 auto;color:#001636">
-<p style="font-size:22px;font-weight:800;color:#114DA8;margin:0 0 16px">LEQ<span style="color:#FF5E01">.</span></p>
-<h1 style="font-size:20px;margin:0 0 16px">${title}</h1>
-${body}
-<p style="margin:28px 0 0;font-size:12px;color:#6b7a90">Lieben Éloquence · ${SITE.url.replace("https://", "")}</p>
-</div>`;
-}
-
-/** Tableau « champ : valeur » pour les notifications internes. */
-export function fieldsTable(rows: [string, string | undefined][]): string {
-  return `<table style="border-collapse:collapse;font-size:14px">${rows
-    .filter(([, v]) => v)
-    .map(
-      ([k, v]) =>
-        `<tr><td style="padding:6px 12px 6px 0;color:#6b7a90;vertical-align:top">${esc(k)}</td><td style="padding:6px 0;white-space:pre-wrap">${esc(v!)}</td></tr>`,
-    )
-    .join("")}</table>`;
 }
