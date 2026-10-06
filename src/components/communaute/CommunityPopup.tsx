@@ -6,7 +6,8 @@ import { useEffect, useState } from "react";
 import { MicDoodle, Sparkle } from "@/components/ui/Doodles";
 
 /* Invitation à la communauté : petite carte qui glisse en bas de l'écran,
-   une fois par visiteur (mémorisé 30 jours dans le navigateur). Ne bloque pas la page. */
+   une fois par visiteur (mémorisé 30 jours dans le navigateur). Ne bloque pas la page.
+   Pour la revoir : ajouter « ?invitation » à l'adresse, ex. liebeneloquence.com/?invitation */
 
 const STORAGE_KEY = "leq-popup-communaute";
 const DELAY_MS = 2500;
@@ -37,7 +38,9 @@ export function CommunityPopup({ price, availability }: { price: string; availab
   const excluded = EXCLUDED.some((p) => pathname.startsWith(p));
 
   useEffect(() => {
-    if (excluded || alreadySeen()) return;
+    // « ?invitation » dans l'adresse : affiche la carte même si elle a déjà été vue (pour tester)
+    const force = new URLSearchParams(window.location.search).has("invitation");
+    if (excluded || (!force && alreadySeen())) return;
     const t = window.setTimeout(() => {
       setOpen(true);
       remember();

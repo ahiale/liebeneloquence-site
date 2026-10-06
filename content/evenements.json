@@ -35,23 +35,64 @@
     "title": "Convaincre en entretien",
     "dateLabel": "Date bientôt annoncée",
     "startsAt": null,
-    "timeLabel": "18h à 20h (2 heures)",
-    "location": null,
-    "priceLabel": null,
+    "timeLabel": "18h30 à 20h30 (2 heures)",
+    "location": "En ligne, sur Google Meet",
+    "priceLabel": "24,99 €",
     "badge": "Nouveau",
     "image": "/evenements/masterclass-entretien.jpg",
-    "summary": "Une masterclass à deux voix pour réussir vos entretiens : Ruth vous aide à travailler le fond de votre discours, Rebecca la forme et la prise de parole.",
+    "summary": "Une masterclass à deux voix pour réussir vos entretiens : Ruth vous aide à construire le fond de votre discours, Rebecca à travailler la forme et votre prise de parole.",
     "description": [
-      "Un entretien se joue autant sur ce que l'on dit que sur la manière de le dire. Cette masterclass réunit deux expertises complémentaires pour vous préparer sur les deux tableaux.",
-      "Ruth travaille avec vous le fond : votre parcours, vos réponses, les messages à faire passer. Rebecca travaille la forme : la voix, la posture, la gestion du stress et l'assurance face au recruteur."
+      "Un entretien se joue autant sur ce que l'on dit que sur la manière de le dire. Cette masterclass réunit deux expertises complémentaires pour vous préparer sur les deux tableaux, en deux heures, en ligne.",
+      "Au programme : de la méthode, des exemples concrets, des mises en situation et des études de cas. Vous repartez avec des fiches pratiques et des ressources pour préparer vos prochains entretiens en toute confiance."
     ],
     "program": [
-      "Le fond, avec Ruth : construire son discours et ses réponses",
-      "La forme, avec Rebecca : voix, posture et assurance face au recruteur"
+      "18h30 · Accueil et objectifs de la soirée",
+      "18h40 · Le fond avec Ruth : construire son discours et ses réponses",
+      "19h20 · La forme avec Rebecca : voix, posture et gestion du stress",
+      "20h00 · Mises en situation et études de cas",
+      "20h20 · Questions et ressources à emporter"
     ],
-    "audience": [],
+    "audience": [
+      "Étudiants et jeunes diplômés",
+      "Candidats à un stage ou une alternance",
+      "Personnes en reconversion",
+      "Toute personne qui prépare un entretien"
+    ],
     "registrationUrl": "https://buy.stripe.com/5kQdR8ceAeUY2ze9zB2B202",
-    "registrationLabel": "Je réserve ma place"
+    "registrationLabel": "Je réserve ma place",
+    "speakers": [
+      {
+        "name": "Ruth",
+        "role": "Le fond",
+        "image": null,
+        "focus": [
+          "Décrypter l'offre et l'entreprise pour cibler ses arguments",
+          "Construire une présentation claire de son parcours en deux minutes",
+          "Préparer les questions incontournables : motivation, forces, axes d'amélioration",
+          "Valoriser ses expériences avec des exemples concrets",
+          "Préparer ses propres questions au recruteur"
+        ]
+      },
+      {
+        "name": "Rebecca Lieben Ahiale",
+        "role": "La forme",
+        "image": "/formatrice.jpg",
+        "focus": [
+          "Soigner sa première impression : entrée, regard, sourire",
+          "Poser sa voix : débit, intonation, silences",
+          "Maîtriser sa posture et sa gestuelle, en présentiel comme en visio",
+          "Gérer le stress avant et pendant l'entretien",
+          "Répondre avec assurance aux questions déstabilisantes"
+        ]
+      }
+    ],
+    "includes": [
+      "Des fiches pratiques",
+      "Des conseils",
+      "Des ressources",
+      "Des mises en situation",
+      "Des études de cas"
+    ]
   },
   {
     "slug": "premier-rendez-vous-leq",

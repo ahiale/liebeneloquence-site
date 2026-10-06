@@ -45,6 +45,13 @@ export const EventSchema = z.object({
   program: z.array(z.string()),
   /** Public visé (liste), facultatif. */
   audience: z.array(z.string()),
+  /** Intervenants (facultatif) : nom, rôle, ce qu'ils travaillent, photo (/public/…). */
+  speakers: z
+    .array(z.object({ name: z.string(), role: z.string(), focus: z.array(z.string()), image: z.string().nullable() }))
+    .optional()
+    .default([]),
+  /** Ce que les participants reçoivent (facultatif). */
+  includes: z.array(z.string()).optional().default([]),
   /** Lien d'inscription : externe (Stripe, billetterie…) ou page du site (« /communaute#rejoindre ») ; sinon le bouton mène à la newsletter. */
   registrationUrl: z.union([z.string().url(), z.string().regex(/^\/[^\s]*$/, "lien interne commençant par /")]).nullable(),
   /** Texte du bouton d'inscription (défaut : « S'inscrire »). */

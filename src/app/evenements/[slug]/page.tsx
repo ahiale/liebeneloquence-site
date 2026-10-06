@@ -91,18 +91,70 @@ export default async function EvenementPage({ params }: Props) {
                 <p key={para} className="m-0 text-[16px] leading-[1.75] text-ink/80">{para}</p>
               ))}
             </div>
+            {event.speakers.length > 0 && (
+              <>
+                <h2 className="mt-12 mb-0 text-[26px] font-bold tracking-[-0.03em]">
+                  {event.speakers.length > 1 ? "Deux voix," : "Avec"} <span className="serif text-royal">{event.speakers.length > 1 ? "deux expertises." : event.speakers[0].name}</span>
+                </h2>
+                <div className="mt-5 grid gap-5 sm:grid-cols-2">
+                  {event.speakers.map((sp, i) => (
+                    <article key={sp.name} className="bubble flex flex-col p-6" style={{ transform: `rotate(${i % 2 ? 0.8 : -0.8}deg)` }}>
+                      <div className="flex items-center gap-3.5">
+                        {sp.image ? (
+                          <Image src={sp.image} alt={sp.name} width={56} height={56} className="h-14 w-14 shrink-0 rounded-full object-cover" style={{ objectPosition: "50% 20%" }} />
+                        ) : (
+                          <span aria-hidden="true" className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-gold text-[22px] font-bold text-ink">
+                            {sp.name.charAt(0)}
+                          </span>
+                        )}
+                        <div>
+                          <p className="m-0 text-[18px] font-bold tracking-[-0.015em]">{sp.name}</p>
+                          <p className="serif m-0 text-[20px] text-orange">{sp.role}</p>
+                        </div>
+                      </div>
+                      <ul className="mt-4 mb-0 grid list-none gap-2.5 p-0">
+                        {sp.focus.map((f) => (
+                          <li key={f} className="flex gap-2.5 text-[14.5px] leading-[1.5] text-ink/78">
+                            <Check />
+                            {f}
+                          </li>
+                        ))}
+                      </ul>
+                    </article>
+                  ))}
+                </div>
+              </>
+            )}
+            {event.includes.length > 0 && (
+              <>
+                <h2 className="mt-12 mb-0 text-[26px] font-bold tracking-[-0.03em]">
+                  Ce que vous <span className="serif text-royal">recevez</span>
+                </h2>
+                <ul className="mt-5 mb-0 flex list-none flex-wrap gap-2.5 p-0">
+                  {event.includes.map((inc) => (
+                    <li key={inc} className="rounded-full px-[18px] py-[9px] text-[14px] font-semibold text-ink" style={{ background: "linear-gradient(96deg,#FFBD59,#FF5E01)" }}>
+                      {inc}
+                    </li>
+                  ))}
+                </ul>
+              </>
+            )}
             {event.program.length > 0 && (
               <>
                 <h2 className="mt-12 mb-0 text-[26px] font-bold tracking-[-0.03em]">
                   Au <span className="serif text-royal">programme</span>
                 </h2>
                 <ol className="mt-5 mb-0 grid list-none gap-3 p-0">
-                  {event.program.map((step, i) => (
-                    <li key={step} className="flex items-start gap-4 rounded-[18px] bg-white p-4" style={{ boxShadow: "0 20px 40px -32px rgba(0,22,54,.6)" }}>
-                      <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gold text-[15px] font-bold">{i + 1}</span>
-                      <span className="pt-1.5 text-[15px] text-ink/80">{step}</span>
-                    </li>
-                  ))}
+                  {event.program.map((step, i) => {
+                    // « 18h30 · Accueil » : l'horaire s'affiche dans la pastille
+                    const timed = step.match(/^(\d{1,2}h\d{0,2})\s*·\s*(.+)$/);
+                    return (
+                      <li key={step} className="flex items-start gap-4 rounded-[18px] bg-white p-4" style={{ boxShadow: "0 20px 40px -32px rgba(0,22,54,.6)" }}>
+                        <span className={`flex h-9 shrink-0 items-center justify-center rounded-full bg-gold font-bold ${timed ? "min-w-[64px] px-3 text-[14px]" : "w-9 text-[15px]"}`}>{timed ? timed[1] : i + 1}</span>
+                        <span className="pt-1.5 text-[15px] text-ink/80">{timed ? timed[2] : step}</span>
+                      </li>
+                    );
+                  })}
                 </ol>
               </>
             )}

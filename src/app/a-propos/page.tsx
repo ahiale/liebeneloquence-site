@@ -191,13 +191,12 @@ export default function AProposPage() {
                 <Sparkle className="wiggle absolute" size={40} style={{ top: -16, right: -12 }} />
               </figure>
               <div className="py-4 text-center lg:py-6 lg:text-left">
-              <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#FFBD59" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                <path d="M16 3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2 1 1 0 0 1 1 1v1a2 2 0 0 1-2 2 1 1 0 0 0-1 1v2a1 1 0 0 0 1 1 6 6 0 0 0 6-6V5a2 2 0 0 0-2-2z" />
-                <path d="M5 3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2 1 1 0 0 1 1 1v1a2 2 0 0 1-2 2 1 1 0 0 0-1 1v2a1 1 0 0 0 1 1 6 6 0 0 0 6-6V5a2 2 0 0 0-2-2z" />
-              </svg>
-              <blockquote className="serif mx-auto mt-6 mb-0 max-w-[768px] leading-[1.35] text-white/88 lg:mx-0" style={{ fontSize: "clamp(22px, 3.4vw, 28px)" }}>
-                Aujourd&apos;hui, j&apos;ai les clés pour accompagner les gens dans leur prise de parole. J&apos;ai toujours quelque chose à dire sur le discours des autres, et les techniques pour le rendre meilleur.
+              <blockquote className="serif mx-auto mt-0 mb-0 max-w-[768px] leading-[1.3] text-gold lg:mx-0" style={{ fontSize: "clamp(24px, 3.6vw, 32px)" }}>
+                « Avant d&apos;être des êtres rationnels, nous sommes des êtres d&apos;émotion. »
               </blockquote>
+              <p className="mx-auto mt-5 mb-0 max-w-[560px] text-[16.5px] leading-[1.7] text-white/85 lg:mx-0">
+                Et moi, j&apos;ai appris à travailler sur ma rationalité et ma gestion des émotions en prise de parole. Et aujourd&apos;hui, je suis prête à partager tout ce que j&apos;ai appris avec vous.
+              </p>
               <p className="mt-6 mb-0 text-[13.6px] text-white/50">Rebecca Lieben Ahiale · Fondatrice de Lieben Éloquence</p>
               <div className="mt-9 flex flex-wrap justify-center gap-3 lg:justify-start">
                 <Link className="btn btn-p" href="/quiz">Découvrir mon profil d&apos;orateur</Link>
