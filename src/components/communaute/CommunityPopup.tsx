@@ -83,10 +83,10 @@ export function CommunityPopup({ price, availability }: { price: string; availab
           type="button"
           onClick={() => setView("open")}
           className="flex cursor-pointer items-center gap-2 rounded-full border-0 py-2 pr-4 pl-2.5 text-[14px] font-bold text-white"
-          style={{ background: "linear-gradient(165deg,rgba(11,48,112,.6),rgba(17,77,168,.5))", backdropFilter: "blur(14px) saturate(140%)", WebkitBackdropFilter: "blur(14px) saturate(140%)", border: "1px solid rgba(255,255,255,.3)", boxShadow: "0 14px 30px -12px rgba(0,22,54,.6)" }}
+          style={{ background: "linear-gradient(165deg,rgba(255,138,60,.9),rgba(255,94,1,.86))", backdropFilter: "blur(14px) saturate(140%)", WebkitBackdropFilter: "blur(14px) saturate(140%)", border: "1px solid rgba(255,255,255,.4)", boxShadow: "0 14px 30px -12px rgba(0,22,54,.6)" }}
         >
-          <MicDoodle width={22} height={28} body="#FF5E01" stand="#FF5E01" />
-          Rejoindre la <span className="serif font-normal text-orange">LEQ&apos;FAM</span>
+          <MicDoodle width={22} height={28} body="#fff" stand="#001636" />
+          Rejoindre la <span className="serif font-normal text-ink">LEQ&apos;FAM</span>
         </button>
         <button
           type="button"
@@ -109,27 +109,27 @@ export function CommunityPopup({ price, availability }: { price: string; availab
       onClick={(e) => e.target === e.currentTarget && dialog.current?.close()}
       className="community-popup m-auto w-[min(420px,calc(100vw-40px))] overflow-visible border-0 bg-transparent p-0"
     >
-      <div className="relative rounded-[28px] px-7 pt-10 pb-7 text-center text-white" style={{ background: "linear-gradient(165deg,rgba(11,48,112,.55) 0%,rgba(17,77,168,.45) 100%)", backdropFilter: "blur(18px) saturate(140%)", WebkitBackdropFilter: "blur(18px) saturate(140%)", boxShadow: "0 40px 80px -30px rgba(0,0,0,.55), inset 0 1px 0 rgba(255,255,255,.25)", border: "1px solid rgba(255,255,255,.28)" }}>
-        <MicDoodle className="absolute" width={58} height={74} body="#FF5E01" stand="#FF5E01" style={{ top: -46, left: "50%", marginLeft: -29 }} />
-        <button type="button" onClick={() => dialog.current?.close()} aria-label="Fermer" className="absolute top-3.5 right-3.5 grid h-9 w-9 cursor-pointer place-items-center rounded-full border-0 bg-white/12 text-white hover:bg-white/25 focus-visible:outline-white">
+      <div className="relative rounded-[28px] px-7 pt-10 pb-7 text-center text-white" style={{ background: "linear-gradient(165deg,rgba(255,138,60,.86) 0%,rgba(255,94,1,.82) 100%)", backdropFilter: "blur(18px) saturate(140%)", WebkitBackdropFilter: "blur(18px) saturate(140%)", boxShadow: "0 40px 80px -30px rgba(0,0,0,.55), inset 0 1px 0 rgba(255,255,255,.35)", border: "1px solid rgba(255,255,255,.4)" }}>
+        <MicDoodle className="absolute" width={58} height={74} body="#fff" stand="#001636" style={{ top: -46, left: "50%", marginLeft: -29 }} />
+        <button type="button" onClick={() => dialog.current?.close()} aria-label="Fermer" className="absolute top-3.5 right-3.5 grid h-9 w-9 cursor-pointer place-items-center rounded-full border-0 bg-white/20 text-white hover:bg-white/35 focus-visible:outline-white">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" aria-hidden="true">
             <path d="M18 6 6 18M6 6l12 12" />
           </svg>
         </button>
 
         {availability && (
-          <span className="inline-block rounded-full bg-white/12 px-3 py-1 text-[10.5px] font-bold tracking-[.14em] text-white uppercase">{availability}</span>
+          <span className="inline-block rounded-full bg-white/20 px-3 py-1 text-[10.5px] font-bold tracking-[.14em] text-white uppercase">{availability}</span>
         )}
         <p id="invitation-communaute" className="mt-3 mb-0 text-[28px] leading-[1.1] font-bold tracking-[-0.03em]">
-          Rejoignez la <span className="serif font-normal text-orange">LEQ&apos;FAM</span> !
+          Rejoignez la <span className="serif font-normal text-ink">LEQ&apos;FAM</span> !
         </p>
-        <p className="mx-auto mt-2.5 mb-0 max-w-[300px] text-[15px] leading-[1.55] text-white/80">
+        <p className="mx-auto mt-2.5 mb-0 max-w-[300px] text-[15px] leading-[1.55] text-white/90">
           La communauté pour s&apos;entraîner à l&apos;oral ensemble, pour {price} par mois.
         </p>
-        <Link href={href} onClick={finish} className="btn mt-5 w-full bg-orange text-white hover:brightness-110">
+        <Link href={href} onClick={finish} className="btn mt-5 w-full bg-white text-ink hover:-translate-y-0.5">
           {availability ? "Je m'inscris sur la liste" : "Je découvre"}
         </Link>
-        <button type="button" onClick={() => dialog.current?.close()} className="mt-3 cursor-pointer border-0 bg-transparent text-[13.5px] text-white/60 underline hover:text-white">
+        <button type="button" onClick={() => dialog.current?.close()} className="mt-3 cursor-pointer border-0 bg-transparent text-[13.5px] text-white/75 underline hover:text-white">
           Plus tard
         </button>
       </div>
