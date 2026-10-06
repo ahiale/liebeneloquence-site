@@ -6,19 +6,18 @@ import { useEffect, useRef, useState } from "react";
 import { Heart, MicDoodle, Sparkle } from "@/components/ui/Doodles";
 
 /* Invitation à la communauté : carte au centre de l'écran, fond flouté,
-   une fois par visiteur (mémorisé 30 jours dans le navigateur). Fermeture : croix, Échap, clic à côté.
+   une fois par visite (mémorisé le temps de la visite, puis réaffiché à la visite suivante).
+   Fermeture : croix, Échap, clic à côté.
    Pour la revoir : ajouter « ?invitation » à l'adresse, ex. liebeneloquence.com/?invitation */
 
 const STORAGE_KEY = "leq-popup-communaute";
 const DELAY_MS = 2500;
-const REMEMBER_DAYS = 30;
 /** Pages où l'invitation gênerait (parcours d'achat, page communauté elle-même, pages légales). */
 const EXCLUDED = ["/communaute", "/quiz", "/grand-oral", "/mentions-legales", "/confidentialite", "/cookies", "/apercus-mails"];
 
 function alreadySeen(): boolean {
   try {
-    const at = Number(localStorage.getItem(STORAGE_KEY));
-    return Boolean(at) && Date.now() - at < REMEMBER_DAYS * 86_400_000;
+    return sessionStorage.getItem(STORAGE_KEY) === "1";
   } catch {
     return true; // stockage indisponible : on ne dérange pas
   }
@@ -26,7 +25,7 @@ function alreadySeen(): boolean {
 
 function remember() {
   try {
-    localStorage.setItem(STORAGE_KEY, String(Date.now()));
+    sessionStorage.setItem(STORAGE_KEY, "1");
   } catch {
     /* rien */
   }
