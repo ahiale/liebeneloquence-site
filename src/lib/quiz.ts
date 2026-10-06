@@ -66,14 +66,47 @@ export const PROFILES: Record<ProfileId, { name: string; img: string; desc: stri
   improvisateur: { name: "L’Improvisateur", img: img("zap"), desc: "Vous êtes à l’aise dans l’imprévu et rebondissez sur tout. Votre défi : préparer sans perdre votre spontanéité." },
 };
 
+/* `exercise` n'apparaît que dans la fiche envoyée par mail (texte à valider par Rebecca). */
 const POINTS = {
-  structure: { title: "Structurer son discours", desc: "Un plan clair, une accroche et une chute mémorables." },
-  nonverbal: { title: "Voix et non-verbal", desc: "Poser sa voix, ancrer son corps, occuper l’espace." },
-  impro: { title: "Improvisation", desc: "Répondre aux questions avec calme et assurance." },
-  confiance: { title: "Confiance et légitimité", desc: "Croire en la valeur de ce que vous avez à dire." },
-  trac: { title: "Gestion du trac", desc: "Transformer la pression en énergie positive." },
-  ethos: { title: "Toucher son public", desc: "Allier logos, pathos et ethos pour convaincre." },
+  structure: {
+    title: "Structurer son discours",
+    desc: "Un plan clair, une accroche et une chute mémorables.",
+    exercise: "Avant de parler, résumez votre message en une seule phrase, puis trouvez trois idées pour le soutenir. Entraînez-vous chaque jour sur un sujet du quotidien, en une minute chrono.",
+  },
+  nonverbal: {
+    title: "Voix et non-verbal",
+    desc: "Poser sa voix, ancrer son corps, occuper l’espace.",
+    exercise: "Pieds ancrés à largeur d’épaules, mains à hauteur du nombril : lisez un texte à voix haute en marquant une vraie pause à chaque point. Enregistrez-vous et réécoutez.",
+  },
+  impro: {
+    title: "Improvisation",
+    desc: "Répondre aux questions avec calme et assurance.",
+    exercise: "Demandez à un proche un mot au hasard et parlez-en pendant 60 secondes sans vous arrêter. Une fois par jour pendant une semaine.",
+  },
+  confiance: {
+    title: "Confiance et légitimité",
+    desc: "Croire en la valeur de ce que vous avez à dire.",
+    exercise: "Notez trois situations où votre parole a été utile à quelqu’un. Relisez-les avant chaque prise de parole importante.",
+  },
+  trac: {
+    title: "Gestion du trac",
+    desc: "Transformer la pression en énergie positive.",
+    exercise: "La respiration carrée : inspirez 4 secondes, bloquez 4, expirez 4, bloquez 4. Trois cycles juste avant de prendre la parole.",
+  },
+  ethos: {
+    title: "Toucher son public",
+    desc: "Allier logos, pathos et ethos pour convaincre.",
+    exercise: "Pour chacun de vos arguments, ajoutez une image ou une courte histoire personnelle. Testez votre discours sur un proche et demandez-lui ce qu’il a retenu.",
+  },
 };
+
+/* Recommandation de pack (textes de la maquette, non affichés sur la page). */
+const PACK_WHY = {
+  Senghor: "Pour poser les bases de la culture oratoire et prendre confiance.",
+  Cicéron: "Pour structurer vos discours et apprendre à convaincre.",
+  Socrate: "Le parcours complet pour travailler le trac, le non-verbal et l’improvisation.",
+} as const;
+const EXAM_NOTE = "Un oral d’examen arrive ? Regardez aussi l’offre Grand Oral.";
 
 const LEVELS = [
   { name: "Orateur en éveil", width: "33%", desc: "Vous posez les premières bases. Chaque séance vous fera gagner en aisance." },
@@ -87,9 +120,12 @@ export type QuizResult = {
   profileId: ProfileId;
   profile: (typeof PROFILES)[ProfileId];
   level: (typeof LEVELS)[number];
-  points: { title: string; desc: string }[];
-  /** Pack conseillé (non affiché dans la maquette, transmis à Rebecca). */
+  points: { title: string; desc: string; exercise: string }[];
+  /** Pack conseillé (non affiché sur la page, envoyé dans la fiche par mail). */
   pack: (typeof PACK_NAMES)[number];
+  packWhy: string;
+  /** Mention Grand Oral si l'objectif est un examen. */
+  examNote: string | null;
 };
 
 /** Vrai si les 6 réponses sont valides. */
@@ -107,7 +143,7 @@ export function computeResult(a: Answer[]): QuizResult {
   const lv = Number(a[2] || 0) + Number(a[3] || 0);
   const levelIdx = lv <= 2 ? 0 : lv <= 4 ? 1 : 2;
 
-  const pts: { title: string; desc: string }[] = [];
+  const pts: { title: string; desc: string; exercise: string }[] = [];
   const frein = a[4] as keyof typeof POINTS | undefined;
   if (frein && POINTS[frein]) pts.push(POINTS[frein]);
   if (Number(a[3] || 0) <= 1) pts.push(POINTS.trac);
@@ -118,7 +154,16 @@ export function computeResult(a: Answer[]): QuizResult {
 
   const packIdx = points.length >= 3 && levelIdx < 2 ? 2 : levelIdx;
 
-  return { profileId: best, profile: PROFILES[best], level: LEVELS[levelIdx], points, pack: PACK_NAMES[packIdx] };
+  const pack = PACK_NAMES[packIdx];
+  return {
+    profileId: best,
+    profile: PROFILES[best],
+    level: LEVELS[levelIdx],
+    points,
+    pack,
+    packWhy: PACK_WHY[pack],
+    examNote: a[5] === "examen" ? EXAM_NOTE : null,
+  };
 }
 
 /** Réponses lisibles (question → réponse) pour le mail à Rebecca. */

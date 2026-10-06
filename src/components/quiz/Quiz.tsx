@@ -6,7 +6,7 @@ import { enregistrerQuiz, recevoirResultatQuiz } from "@/app/actions";
 import { SITE } from "@/config/site";
 import { IDLE } from "@/lib/forms";
 import { QUESTIONS, computeResult, type Answer } from "@/lib/quiz";
-import { Sparkle } from "@/components/ui/Doodles";
+import { Check, Sparkle } from "@/components/ui/Doodles";
 import { FieldError, fieldProps, FormError, FormSuccess, Honeypot, SubmitButton } from "@/components/ui/Form";
 
 type Step = "intro" | "q" | "result";
@@ -145,7 +145,7 @@ function Result({ answers, titleRef }: { answers: Answer[]; titleRef: React.RefO
       </h1>
 
       <div className="mt-10 flex flex-wrap items-stretch gap-[26px]">
-        <div className="sticker flex min-w-0 flex-col items-center p-[30px] text-center" style={{ flex: "1 1 320px", transform: "rotate(-1.5deg)" }}>
+        <div className="sticker flex min-w-0 flex-col items-center justify-center p-[30px] text-center" style={{ flex: "1 1 320px", transform: "rotate(-1.5deg)" }}>
           <div className="relative h-[120px] w-[120px]">
             <span className="halo absolute rounded-full" style={{ inset: "-18%", background: "radial-gradient(circle,rgba(255,189,89,.7),transparent 70%)" }} />
             {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -181,6 +181,39 @@ function Result({ answers, titleRef }: { answers: Answer[]; titleRef: React.RefO
               ))}
             </ul>
           </div>
+
+          {/* Fiche orateur par mail : apporte ce que la page n'affiche pas */}
+          <div className="relative rounded-[24px] p-6 text-white" style={{ background: "linear-gradient(165deg,#04193c,#0e3f8b)", boxShadow: "0 30px 60px -30px rgba(0,22,54,.9)", transform: "rotate(.6deg)" }}>
+            {state.status === "success" ? (
+              <FormSuccess title="C'est envoyé !">Votre fiche orateur vous attend dans votre boîte mail.</FormSuccess>
+            ) : (
+              <form action={action} className="relative grid gap-3" noValidate>
+                <Honeypot />
+                <input type="hidden" name="answers" value={JSON.stringify(answers)} />
+                <p className="m-0 text-[20px] font-bold tracking-[-0.02em]">
+                  Recevez votre <span className="serif text-gold">fiche orateur</span>
+                </p>
+                <ul className="m-0 grid list-none gap-1.5 p-0 text-[14px] text-white/85">
+                  <li className="flex gap-2"><Check color="#FFBD59" />Un exercice concret pour chaque point à travailler</li>
+                  <li className="flex gap-2"><Check color="#FFBD59" />Le pack que je vous conseille, selon votre profil</li>
+                </ul>
+                <div className="grid gap-3 sm:grid-cols-2">
+                  <label className="flabel">
+                    Prénom
+                    <input className="field" placeholder="Marie" autoComplete="given-name" required {...fieldProps(state, "prenom")} />
+                    <FieldError state={state} name="prenom" />
+                  </label>
+                  <label className="flabel">
+                    Email
+                    <input className="field" type="email" placeholder="vous@email.com" autoComplete="email" required {...fieldProps(state, "email")} />
+                    <FieldError state={state} name="email" />
+                  </label>
+                </div>
+                <FormError state={state} />
+                <SubmitButton>Recevoir ma fiche</SubmitButton>
+              </form>
+            )}
+          </div>
         </div>
       </div>
 
@@ -207,34 +240,6 @@ function Result({ answers, titleRef }: { answers: Answer[]; titleRef: React.RefO
         </div>
       </div>
 
-      {/* Ajout validé : recevoir son résultat par email (facultatif) */}
-      <div className="mx-auto mt-10 max-w-[560px] rounded-[26px] p-6 sm:p-7" style={{ background: "linear-gradient(168deg,#0e3f8b,#01143a)", boxShadow: "0 40px 80px -40px rgba(0,22,54,.9)" }}>
-        {state.status === "success" ? (
-          <FormSuccess title="C'est envoyé !">Votre résultat vous attend dans votre boîte mail.</FormSuccess>
-        ) : (
-          <form action={action} className="relative grid gap-4 sm:grid-cols-2" noValidate>
-            <Honeypot />
-            <input type="hidden" name="answers" value={JSON.stringify(answers)} />
-            <p className="m-0 text-[17px] font-semibold text-white sm:col-span-2">Recevoir mon résultat par email</p>
-            <label className="flabel">
-              Prénom
-              <input className="field" placeholder="Marie" autoComplete="given-name" required {...fieldProps(state, "prenom")} />
-              <FieldError state={state} name="prenom" />
-            </label>
-            <label className="flabel">
-              Email
-              <input className="field" type="email" placeholder="vous@email.com" autoComplete="email" required {...fieldProps(state, "email")} />
-              <FieldError state={state} name="email" />
-            </label>
-            <div className="sm:col-span-2">
-              <FormError state={state} />
-            </div>
-            <div className="sm:col-span-2">
-              <SubmitButton>Recevoir mon résultat</SubmitButton>
-            </div>
-          </form>
-        )}
-      </div>
     </section>
   );
 }

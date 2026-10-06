@@ -199,10 +199,16 @@ export async function recevoirResultatQuiz(_: FormState, data: FormData): Promis
   const { prenom, email: mail, answers } = parsed.data;
   if (!isComplete(answers)) return FAILURE;
   const result = computeResult(answers);
+  const packs = (await getPricing()).packs;
+  const pack = packs.find((pk) => pk.name === result.pack) ?? packs[0];
 
-  await record("quiz", { answers, profile: result.profileId, prenom, email: mail });
+  await record("quiz", { answers, profile: result.profileId, pack: result.pack, prenom, email: mail });
   try {
-    await notify(T.quizAdmin({ result, answers: describeAnswers(answers), prenom, email: mail }), T.quizClient({ result, prenom }), mail);
+    await notify(
+      T.quizAdmin({ result, answers: describeAnswers(answers), prenom, email: mail }),
+      T.quizClient({ result, prenom, pack: { name: pack.name, sessions: pack.sessions, price: formatPrice(pack.price) } }),
+      mail,
+    );
     return { status: "success" };
   } catch (e) {
     console.error(e);

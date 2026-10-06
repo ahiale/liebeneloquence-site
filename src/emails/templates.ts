@@ -132,12 +132,6 @@ export function newsletterClient(d: Newsletter): Email {
    Quiz d'orateur
    ------------------------------------------------------------------------- */
 
-const resultHtml = (r: QuizResult) =>
-  p(`Votre profil : <strong>${esc(r.profile.name)}</strong>`) +
-  p(esc(r.profile.desc)) +
-  p(`Votre niveau : <strong>${esc(r.level.name)}</strong>. ${esc(r.level.desc)}`) +
-  p(`Vos points à travailler :<br>${r.points.map((pt) => `• <strong>${esc(pt.title)}</strong> : ${esc(pt.desc)}`).join("<br>")}`);
-
 export function quizAdmin(d: { result: QuizResult; answers: [string, string][]; prenom?: string; email?: string }): Email {
   return {
     subject: `Quiz d'orateur : ${d.result.profile.name}${d.prenom ? ` (${d.prenom})` : ""}`,
@@ -157,21 +151,33 @@ export function quizAdmin(d: { result: QuizResult; answers: [string, string][]; 
   };
 }
 
-export function quizClient(d: { result: QuizResult; prenom: string }): Email {
+/** Fiche orateur envoyée par mail : ce que la page n'affiche pas (exercices, pack conseillé). */
+export function quizClient(d: { result: QuizResult; prenom: string; pack: { name: string; sessions: number; price: string } }): Email {
+  const r = d.result;
+  const h2 = (t: string) => `<h2 style="font-size:17px;margin:28px 0 10px;color:#114DA8">${t}</h2>`;
+  const exercises = r.points
+    .map(
+      (pt, i) =>
+        `<div style="margin:0 0 12px;padding:14px 16px;border-radius:12px;background:#F6F8FC;border-left:4px solid #FFBD59"><p style="margin:0 0 6px;font-size:15px"><strong>${i + 1}. ${esc(pt.title)}</strong></p><p style="margin:0;font-size:14.5px;line-height:1.6">${esc(pt.exercise)}</p></div>`,
+    )
+    .join("");
   return {
-    subject: `Votre profil d'orateur : ${d.result.profile.name}`,
+    subject: `Votre fiche orateur : ${r.profile.name}`,
     html: layout(
-      "Votre résultat au quiz d'orateur",
-      hello(d.prenom) +
-        resultHtml(d.result) +
-        p("Pour aller plus loin, réservez votre séance diagnostic de 30 minutes, offerte :") +
-        button(SITE.calendly, "Réserver ma séance") +
+      `Votre fiche orateur, ${esc(d.prenom)}`,
+      p(`Vous êtes <strong>${esc(r.profile.name)}</strong>, niveau <strong>${esc(r.level.name.toLowerCase())}</strong>. ${esc(r.profile.desc)}`) +
+        h2("Votre plan d'entraînement") +
+        p("Un exercice concret pour chacun de vos points à travailler. Quelques minutes par jour suffisent pour sentir la différence.") +
+        exercises +
+        h2("Le pack que je vous conseille") +
+        p(`<strong>${esc(d.pack.name)}</strong> · ${d.pack.sessions} séances · ${esc(d.pack.price)}<br>${esc(r.packWhy)}`) +
+        (r.examNote ? p(`${esc(r.examNote)} <a href="${SITE.url}/grand-oral" style="color:#114DA8">Découvrir l'offre Grand Oral</a>`) : "") +
+        p("Le plus simple pour démarrer : une séance diagnostic de 30 minutes, offerte, pour faire le point ensemble sur vos objectifs.") +
+        button(SITE.calendly, "Réserver ma séance offerte") +
         signature,
     ),
   };
 }
-
-/* ------------------------------------------------------------------------- */
 
 function formatDate(iso: string): string {
   const d = new Date(`${iso}T12:00:00`);

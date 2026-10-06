@@ -1,4 +1,5 @@
 import "server-only";
+import { mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 import nodemailer, { type Transporter } from "nodemailer";
 import { SITE } from "@/config/site";
@@ -49,6 +50,7 @@ export async function sendMail(mail: Mail): Promise<void> {
   const smtp = getTransport();
 
   if (!smtp) {
+    await savePreview(mail);
     console.info(
       `[mail non envoyé : SMTP_PASSWORD absent]\nÀ : ${mail.to}\nObjet : ${mail.subject}\nPièces jointes : ${(mail.attachments ?? []).map((a) => a.name).join(", ") || "aucune"}\n${mail.html.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim()}`,
     );
@@ -66,6 +68,19 @@ export async function sendMail(mail: Mail): Promise<void> {
       path: path.join(process.cwd(), "assets", a.file),
     })),
   });
+}
+
+/** Sans SMTP (développement) : enregistre le mail en page web dans data/apercus-mails/ pour le relire. */
+async function savePreview(mail: Mail): Promise<void> {
+  try {
+    const dir = path.join(process.env.DATA_DIR || path.join(process.cwd(), "data"), "apercus-mails");
+    await mkdir(dir, { recursive: true });
+    const slug = mail.subject.normalize("NFD").replace(/[^\w]+/g, "-").replace(/^-|-$/g, "").toLowerCase().slice(0, 60);
+    const file = path.join(dir, `${new Date().toISOString().replace(/[:.]/g, "-")}-${slug}.html`);
+    await writeFile(file, `<!doctype html><meta charset="utf-8"><title>${esc(mail.subject)}</title><p style="font:13px Arial;color:#6b7a90">À : ${esc(mail.to)} · Objet : ${esc(mail.subject)}</p><hr>${mail.html}`, "utf8");
+  } catch {
+    /* aperçu facultatif */
+  }
 }
 
 /** Échappe le texte saisi par l'utilisateur avant de l'insérer dans un mail HTML. */
