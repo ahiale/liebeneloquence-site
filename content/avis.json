@@ -27,18 +27,18 @@
     "date": "2026-10-06"
   },
   {
-    "id": "etudiante-medecine",
-    "status": "draft",
-    "author": "[Prénom]",
-    "role": "Étudiante en médecine",
+    "id": "thomas-medecine",
+    "status": "published",
+    "author": "Thomas",
+    "role": "Étudiant en médecine",
     "rating": 5,
     "text": "Rebecca m'a fait revoir les bases de l'éloquence et de la prise de parole en public, avec des techniques que je ne connaissais pas encore. Je les utilise maintenant à chaque oral.",
     "date": "2026-10-06"
   },
   {
-    "id": "entrepreneur-pitch",
-    "status": "draft",
-    "author": "[Prénom]",
+    "id": "thomas-pitch",
+    "status": "published",
+    "author": "Thomas",
     "role": "Entrepreneur, pitch d'un produit",
     "rating": 5,
     "text": "Rebecca m'a aidé à préparer le pitch de mon produit : un message plus clair, plus percutant, et beaucoup plus d'aisance pour le présenter.",
