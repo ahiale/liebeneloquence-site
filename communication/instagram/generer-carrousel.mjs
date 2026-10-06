@@ -159,7 +159,7 @@ const slides = [
     h("div", { fontSize: 96, fontWeight: 700, letterSpacing: -3, lineHeight: 1 }, "êtes-vous ?"),
     h("div", { marginTop: 50, justifyContent: "center" },
       ...await Promise.all(["book", "bulb", "mic", "users", "zap"].map(async (n) => img(await quizIcon(n), 130, 130, { margin: "0 10px" })))),
-    h("div", { marginTop: 50, fontSize: 36, lineHeight: 1.4, color: "rgba(255,255,255,.92)", maxWidth: 820, justifyContent: "center" }, "6 questions, 2 minutes. Recevez votre fiche orateur : vos forces, vos exercices et un conseil pour le jour J."),
+    h("div", { marginTop: 50, fontSize: 36, lineHeight: 1.4, color: "rgba(255,255,255,.92)", maxWidth: 820, justifyContent: "center" }, "6 questions, 2 minutes. Recevez votre fiche orateur : vos forces et vos exercices."),
   )),
 
   // 6. Interventions et services

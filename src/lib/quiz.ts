@@ -61,42 +61,37 @@ export const QUESTIONS: QuizQuestion[] = [
 
 export type ProfileId = "conteur" | "stratege" | "tribun" | "diplomate" | "improvisateur";
 
-/* `forces` et `conseil` n'apparaissent que dans la fiche orateur envoyée par mail (textes à valider par Rebecca). */
-export const PROFILES: Record<ProfileId, { name: string; img: string; desc: string; forces: string[]; conseil: string }> = {
+/* `forces` n'apparaît que dans la fiche orateur envoyée par mail. */
+export const PROFILES: Record<ProfileId, { name: string; img: string; desc: string; forces: string[] }> = {
   conteur: {
     name: "Le Conteur",
     img: img("book"),
     desc: "Vous captez l’attention par les histoires et les images. Votre public se souvient de vous. Votre défi : mettre ce talent au service d’un message clair.",
     forces: ["Vous captez l’attention", "Vous rendez les idées concrètes", "On se souvient de vous"],
-    conseil: "Avant de raconter, fixez votre message en une seule phrase : chaque histoire doit y mener.",
   },
   stratege: {
     name: "Le Stratège",
     img: img("bulb"),
     desc: "Vous construisez avant de parler et vos arguments tiennent debout. Votre défi : toucher autant que convaincre, et oser l’émotion.",
     forces: ["Vos idées sont structurées", "Vos arguments tiennent debout", "Vous préparez avec rigueur"],
-    conseil: "Ouvrez par une image ou une courte histoire avant vos arguments : on retient d’abord ce qui nous touche.",
   },
   tribun: {
     name: "Le Tribun",
     img: img("mic"),
     desc: "Vous avez de l’énergie et de la présence. Quand vous parlez, la salle se réveille. Votre défi : canaliser cette force et structurer votre propos.",
     forces: ["Votre énergie est communicative", "Vous avez une vraie présence", "Vous osez prendre la parole"],
-    conseil: "Marquez un silence de deux secondes avant votre première phrase : votre énergie n’en aura que plus d’impact.",
   },
   diplomate: {
     name: "Le Diplomate",
     img: img("users"),
     desc: "Vous écoutez, vous nuancez, vous rassemblez. On vous fait confiance. Votre défi : affirmer votre voix et prendre davantage de place.",
     forces: ["Vous savez écouter", "Vous apportez de la nuance", "On vous fait confiance"],
-    conseil: "Annoncez clairement votre position dès le début, puis nuancez : votre voix comptera davantage.",
   },
   improvisateur: {
     name: "L’Improvisateur",
     img: img("zap"),
     desc: "Vous êtes à l’aise dans l’imprévu et rebondissez sur tout. Votre défi : préparer sans perdre votre spontanéité.",
     forces: ["Vous êtes à l’aise dans l’imprévu", "Vous rebondissez sur tout", "Vous restez spontané"],
-    conseil: "Préparez mot pour mot votre introduction et votre conclusion : pour le reste, faites confiance à votre aisance.",
   },
 };
 

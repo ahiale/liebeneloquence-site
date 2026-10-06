@@ -39,7 +39,7 @@ const ORANGE = "#FF5E01";
 
 export async function renderFicheOrateur(r: QuizResult, prenom: string): Promise<Buffer> {
   const icon = svgUri(await readFile(path.join(QUIZ_IMG_DIR, path.basename(r.profile.img)), "utf8"));
-  const height = 1360 + r.points.length * 215;
+  const height = 1240 + r.points.length * 215;
 
   const image = new ImageResponse(
     (
@@ -68,10 +68,10 @@ export async function renderFicheOrateur(r: QuizResult, prenom: string): Promise
         </div>
 
         {/* Profil */}
-        <div style={{ display: "flex", marginTop: 56, fontSize: 28, color: "rgba(255,255,255,.85)" }}>{`Le profil de ${prenom}`}</div>
-        <div style={{ display: "flex", fontFamily: "Melodrame", fontStyle: "italic", fontSize: 118, color: GOLD, lineHeight: 1.05, marginTop: 6 }}>{r.profile.name}</div>
+        <div style={{ display: "flex", marginTop: 64, fontSize: 28, letterSpacing: 1, color: "rgba(255,255,255,.85)" }}>{`Le profil de ${prenom}`}</div>
+        <div style={{ display: "flex", fontFamily: "Melodrame", fontStyle: "italic", fontSize: 118, color: GOLD, lineHeight: 1.15, marginTop: 18, paddingBottom: 12 }}>{r.profile.name}</div>
 
-        <div style={{ display: "flex", alignItems: "center", marginTop: 36, background: "#fff", borderRadius: 32, padding: 32, color: NAVY }}>
+        <div style={{ display: "flex", alignItems: "center", marginTop: 48, background: "#fff", borderRadius: 32, padding: 32, color: NAVY }}>
           <div style={{ display: "flex", width: 150, height: 150, borderRadius: 75, background: "radial-gradient(circle, rgba(255,189,89,.75), rgba(255,189,89,0) 70%)", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
             <img src={icon} width={130} height={130} />
           </div>
@@ -85,7 +85,7 @@ export async function renderFicheOrateur(r: QuizResult, prenom: string): Promise
         </div>
         <div style={{ display: "flex", flexWrap: "wrap", marginTop: 14 }}>
           {r.profile.forces.map((f) => (
-            <div key={f} style={{ display: "flex", alignItems: "center", marginRight: 12, marginBottom: 12, padding: "12px 22px", borderRadius: 999, background: "linear-gradient(96deg, #FFBD59, #FF5E01)", color: NAVY, fontSize: 23, fontWeight: 600 }}>
+            <div key={f} style={{ display: "flex", alignItems: "center", marginRight: 12, marginBottom: 12, padding: "12px 22px", borderRadius: 999, border: "2px dashed rgba(255,255,255,.55)", color: "#fff", fontSize: 23, fontWeight: 600 }}>
               {f}
             </div>
           ))}
@@ -118,15 +118,6 @@ export async function renderFicheOrateur(r: QuizResult, prenom: string): Promise
             </div>
           </div>
         ))}
-
-        {/* Conseil pour le jour J */}
-        <div style={{ display: "flex", flexDirection: "column", marginTop: 34, borderRadius: 28, padding: "26px 30px", background: "#FFF6D6", color: NAVY }}>
-          <div style={{ display: "flex", alignItems: "baseline" }}>
-            <div style={{ display: "flex", fontSize: 30, fontWeight: 700 }}>Votre conseil pour le</div>
-            <div style={{ display: "flex", fontFamily: "Melodrame", fontStyle: "italic", fontSize: 38, color: ORANGE, marginLeft: 10 }}>jour J</div>
-          </div>
-          <div style={{ display: "flex", marginTop: 10, fontSize: 25, lineHeight: 1.45, color: "rgba(0,22,54,.82)" }}>{r.profile.conseil}</div>
-        </div>
 
         {/* Pied */}
         <div style={{ display: "flex", marginTop: "auto", paddingTop: 30, justifyContent: "space-between", alignItems: "center", borderTop: "1px solid rgba(255,255,255,.2)" }}>

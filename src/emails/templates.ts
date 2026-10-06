@@ -268,7 +268,7 @@ export function quizClient(d: { result: QuizResult; prenom: string }): Email {
       reason: "Vous recevez ce mail car vous avez demandé votre fiche orateur sur liebeneloquence.com.",
       body:
         hello(d.prenom) +
-        p(`Merci d'avoir fait le quiz ! Vous êtes <strong>${esc(r.profile.name)}</strong>, niveau <strong>${esc(r.level.name.toLowerCase())}</strong>. Voici votre fiche orateur : vos forces, un exercice concret pour chacun de vos points à travailler et votre conseil pour le jour J. Elle est aussi en pièce jointe, pour la garder ou la partager.`) +
+        p(`Merci d'avoir fait le quiz ! Vous êtes <strong>${esc(r.profile.name)}</strong>, niveau <strong>${esc(r.level.name.toLowerCase())}</strong>. Voici votre fiche orateur : vos forces et un exercice concret pour chacun de vos points à travailler. Elle est aussi en pièce jointe, pour la garder ou la partager.`) +
         `<img src="cid:fiche" width="528" alt="Votre fiche orateur : ${esc(r.profile.name)}" style="display:block;width:100%;max-width:528px;height:auto;border:0;border-radius:18px;margin:8px 0 24px">` +
         h2("Envie d'aller plus loin ?") +
         p("Réservez votre séance diagnostic de 30 minutes, offerte : on fait le point ensemble sur votre profil et vos objectifs.") +

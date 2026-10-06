@@ -9,6 +9,18 @@ import { Icon, type IconName } from "@/components/ui/Icons";
 
 type Props = { params: Promise<{ slug: string }> };
 
+/** Icône de « Ce que vous recevez », choisie d'après le texte. */
+function includeIcon(text: string): IconName {
+  const t = text.toLowerCase();
+  if (t.includes("fiche")) return "fileChart";
+  if (t.includes("conseil")) return "lightbulb";
+  if (t.includes("ressource")) return "book";
+  if (t.includes("situation")) return "mic";
+  if (t.includes("cas")) return "briefcase";
+  if (t.includes("attestation") || t.includes("certific")) return "award";
+  return "zap";
+}
+
 export async function generateStaticParams() {
   return (await getEvents()).map((e) => ({ slug: e.slug }));
 }
@@ -130,9 +142,12 @@ export default async function EvenementPage({ params }: Props) {
                 <h2 className="mt-12 mb-0 text-[26px] font-bold tracking-[-0.03em]">
                   Ce que vous <span className="serif text-royal">recevez</span>
                 </h2>
-                <ul className="mt-5 mb-0 flex list-none flex-wrap gap-2.5 p-0">
+                <ul className="mt-5 mb-0 grid list-none gap-3 p-0 sm:grid-cols-2">
                   {event.includes.map((inc) => (
-                    <li key={inc} className="rounded-full px-[18px] py-[9px] text-[14px] font-semibold text-ink" style={{ background: "linear-gradient(96deg,#FFBD59,#FF5E01)" }}>
+                    <li key={inc} className="flex items-center gap-3.5 rounded-[18px] bg-white p-4 text-[15.5px] font-semibold text-ink" style={{ boxShadow: "0 20px 40px -32px rgba(0,22,54,.6)" }}>
+                      <span className="tile rounded-full text-ink" style={{ background: "linear-gradient(96deg,#FFBD59,#FF5E01)" }}>
+                        <Icon name={includeIcon(inc)} />
+                      </span>
                       {inc}
                     </li>
                   ))}

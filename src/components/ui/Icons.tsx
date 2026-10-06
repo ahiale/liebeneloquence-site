@@ -16,7 +16,10 @@ type IconName =
   | "chat"
   | "calendar"
   | "clock"
-  | "ticket";
+  | "ticket"
+  | "lightbulb"
+  | "book"
+  | "briefcase";
 
 const PATHS: Record<IconName, React.ReactNode> = {
   target: (
@@ -90,6 +93,19 @@ const PATHS: Record<IconName, React.ReactNode> = {
     <>
       <circle cx="12" cy="12" r="10" />
       <path d="M12 6v6l4 2" />
+    </>
+  ),
+  lightbulb: (
+    <>
+      <path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5" />
+      <path d="M9 18h6M10 22h4" />
+    </>
+  ),
+  book: <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20" />,
+  briefcase: (
+    <>
+      <rect x="2" y="7" width="20" height="14" rx="2" />
+      <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" />
     </>
   ),
   ticket: (
