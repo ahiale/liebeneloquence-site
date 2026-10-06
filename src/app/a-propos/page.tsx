@@ -5,7 +5,6 @@ import { Container, Eyebrow, SectionTitle } from "@/components/ui/Section";
 import { ButtonLink } from "@/components/ui/Button";
 import { Reveal } from "@/components/ui/Reveal";
 import { Header } from "@/components/layout/Header";
-import { Footer } from "@/components/layout/Footer";
 import { InstagramIcon, LinkedinIcon } from "@/components/ui/BrandIcons";
 import { MILESTONES, EXPERTISES, FACTS } from "@/data/parcours";
 import { SITE } from "@/data/site";
@@ -19,7 +18,7 @@ export const metadata: Metadata = {
 export default function AProposPage() {
   return (
     <>
-      <Header cta={{ label: "Découvrir les offres", href: "/#offres" }} />
+      <Header />
 
       <main>
         {/* Séquence sombre continue : hero, chiffres clés et parcours. */}
@@ -244,7 +243,6 @@ export default function AProposPage() {
         </section>
       </main>
 
-      <Footer />
     </>
   );
 }

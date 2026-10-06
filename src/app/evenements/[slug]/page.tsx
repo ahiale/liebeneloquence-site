@@ -17,7 +17,6 @@ import { Container, Eyebrow } from "@/components/ui/Section";
 import { ButtonLink } from "@/components/ui/Button";
 import { Reveal } from "@/components/ui/Reveal";
 import { Header } from "@/components/layout/Header";
-import { Footer } from "@/components/layout/Footer";
 import { EVENTS, getEvent } from "@/data/events";
 import { SITE } from "@/data/site";
 
@@ -63,7 +62,7 @@ export default async function EventPage({
 
   return (
     <>
-      <Header cta={{ label: "Faire le quiz", href: "/quiz" }} />
+      <Header />
 
       <main className="bg-night pt-32 pb-24 sm:pt-40">
         <Container>
@@ -195,7 +194,6 @@ export default async function EventPage({
         </Container>
       </main>
 
-      <Footer />
     </>
   );
 }

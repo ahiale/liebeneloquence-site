@@ -7,7 +7,7 @@ export default function NotFound() {
   return (
     <main className="bg-night flex min-h-screen flex-col items-center justify-center py-24">
       <Container className="max-w-xl text-center">
-        <Logo size="lg" />
+        <Logo size={30} />
         <p className="mt-10 font-serif text-7xl italic text-orange">404</p>
         <h1 className="h-section mt-6 text-3xl sm:text-4xl">
           Cette page reste sans voix.

@@ -1,80 +1,26 @@
 @import "tailwindcss";
+@import "../design/tokens.css";
 
-/* ============================================================================
-   LIEBEN ÉLOQUENCE — Système de design
-   Typographie : SF Pro Display (fallback Inter) + didone italique (accents)
-   Palette     : #001636  #114DA8  #FFBD59  #FF5E01  #2E1106
-   ========================================================================== */
-
-@theme {
-  /* --- Encres (fonds sombres) ------------------------------------------- */
-  --color-ink: #001636;
-  --color-ink-950: #000d21;
-  --color-ink-900: #01143a;
-  --color-ink-800: #041c47;
-  --color-ink-700: #072454;
-  --color-ink-600: #0b3070;
-
-  /* --- Bleu roi ---------------------------------------------------------- */
-  --color-royal: #114da8;
-  --color-royal-600: #0e3f8b;
-  --color-royal-400: #3d74cd;
-  --color-royal-200: #9dbcec;
-
-  /* --- Accents chauds ---------------------------------------------------- */
-  --color-gold: #ffbd59;
-  --color-gold-300: #ffd08a;
-  --color-orange: #ff5e01;
-  --color-orange-700: #cc4a00;
-  --color-ember: #2e1106;
-  --color-ember-600: #4d1d09;
-
-  /* --- Neutres clairs ---------------------------------------------------- */
-  --color-cream: #f6f8fc;
-  --color-mist: #e5ebf7;
-  --color-steel: #8ea2c2;
-
-  /* --- Sémantique -------------------------------------------------------- */
-  --color-success: #2fbd6e;
-  --color-success-300: #6fe0a4;
-
-  /* --- Typographie ------------------------------------------------------- */
-  --font-display: "SF Pro Display", var(--font-inter), -apple-system,
-    BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
-  --font-serif: var(--font-bodoni), "Bodoni Moda", "Playfair Display", Didot,
-    Georgia, serif;
-
-  /* --- Rythme ------------------------------------------------------------ */
-  --radius-card: 24px;
-  --radius-panel: 34px;
-  --radius-field: 14px;
-}
-
-/* ============================================================================
-   Base
-   ========================================================================== */
-
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-}
+@layer base {
+/* Base du site : le design lui-même est dans src/design/tokens.css */
 
 html {
   scroll-behavior: smooth;
-  /* compense le header fixe lors des ancres */
-  scroll-padding-top: 6rem;
+  scroll-padding-top: 1.5rem;
 }
 
 body {
   margin: 0;
   background: var(--color-ink);
   color: #eaf0fb;
-  font-family: var(--font-display);
-  font-synthesis-weight: none;
+  font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
   overflow-x: hidden;
+}
+
+a {
+  color: inherit;
 }
 
 ::selection {
@@ -85,233 +31,32 @@ body {
 :focus-visible {
   outline: 2px solid var(--color-gold);
   outline-offset: 3px;
-  border-radius: 4px;
 }
 
-/* ============================================================================
-   Typographie utilitaire
-   ========================================================================== */
-
-/* Mot mis en valeur : didone italique orange (charte LEQ) */
-.accent {
-  font-family: var(--font-serif);
-  font-style: italic;
-  font-weight: 500;
-  color: var(--color-orange);
-  letter-spacing: -0.01em;
+details summary::-webkit-details-marker {
+  display: none;
 }
 
-.accent-gold {
-  font-family: var(--font-serif);
-  font-style: italic;
-  font-weight: 500;
-  color: var(--color-gold);
-}
-
-/* Sur-titre de section */
-.eyebrow {
-  font-size: 0.7rem;
-  line-height: 1;
-  letter-spacing: 0.3em;
-  text-transform: uppercase;
+/* Lien d'évitement pour la navigation au clavier */
+.skip-link {
+  position: absolute;
+  left: 16px;
+  top: -60px;
+  z-index: 100;
+  border-radius: 999px;
+  background: var(--color-gold);
+  color: var(--color-ink);
+  padding: 10px 18px;
   font-weight: 600;
 }
-
-/* Titre de section : SF Pro Display très serré, comme la maquette */
-.h-section {
-  font-weight: 700;
-  letter-spacing: -0.035em;
-  line-height: 1.02;
-}
-
-.text-warm {
-  background: linear-gradient(96deg, var(--color-gold), var(--color-orange));
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-}
-
-/* ============================================================================
-   Fonds
-   ========================================================================== */
-
-/* Nuit LEQ : bleu profond, halo roi à droite, braise à gauche */
-.bg-night {
-  background:
-    radial-gradient(1100px 620px at 82% -8%, rgba(17, 77, 168, 0.5), transparent 62%),
-    radial-gradient(760px 520px at 2% 4%, rgba(77, 29, 9, 0.55), transparent 58%),
-    var(--color-ink);
-}
-
-/* Nuit + voile violet (sections « constat » et « transparence ») */
-.bg-night-violet {
-  background:
-    radial-gradient(900px 560px at 96% 34%, rgba(112, 38, 138, 0.5), transparent 62%),
-    radial-gradient(800px 520px at 4% 76%, rgba(17, 77, 168, 0.45), transparent 60%),
-    linear-gradient(168deg, #041229 0%, #06183a 52%, #170a2c 100%);
-}
-
-/* Fond du quiz */
-.bg-quiz {
-  background:
-    radial-gradient(880px 620px at 88% 16%, rgba(112, 38, 138, 0.48), transparent 62%),
-    radial-gradient(820px 620px at 6% 92%, rgba(17, 77, 168, 0.6), transparent 62%),
-    radial-gradient(620px 420px at 2% 2%, rgba(77, 29, 9, 0.5), transparent 60%),
-    linear-gradient(166deg, #05091a 0%, #061436 48%, #123a86 100%);
-}
-
-/* Fond braise (offre Grand Oral) */
-.bg-ember {
-  background:
-    radial-gradient(900px 560px at 88% 44%, rgba(150, 30, 90, 0.35), transparent 62%),
-    radial-gradient(760px 520px at 8% 4%, rgba(160, 70, 20, 0.42), transparent 60%),
-    linear-gradient(170deg, #1a0b04 0%, #150704 55%, #23060f 100%);
-}
-
-/* Fond clair (offres, témoignages, newsletter) */
-.bg-light {
-  background:
-    radial-gradient(680px 420px at 92% 6%, rgba(17, 77, 168, 0.14), transparent 64%),
-    radial-gradient(560px 400px at 4% 96%, rgba(17, 77, 168, 0.1), transparent 62%),
-    var(--color-cream);
-}
-
-/* Fond acier (interventions en école) */
-.bg-steel {
-  background: linear-gradient(178deg, #8fa2c1 0%, #a9b8d0 46%, #c8d3e4 100%);
-}
-
-/* ============================================================================
-   Surfaces
-   ========================================================================== */
-
-/* Carte de verre sur fond sombre */
-.surface {
-  background: linear-gradient(
-    180deg,
-    rgba(255, 255, 255, 0.075),
-    rgba(255, 255, 255, 0.025)
-  );
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(10px);
-}
-
-.surface-hover {
-  transition:
-    border-color 0.25s ease,
-    transform 0.25s ease,
-    background 0.25s ease;
-}
-.surface-hover:hover {
-  border-color: rgba(255, 189, 89, 0.4);
-  transform: translateY(-3px);
-}
-
-/* Grand panneau arrondi (constat, méthode) */
-.panel {
-  background: linear-gradient(
-    180deg,
-    rgba(255, 255, 255, 0.06),
-    rgba(255, 255, 255, 0.015)
-  );
-  border: 1px solid rgba(255, 255, 255, 0.09);
-  border-radius: var(--radius-panel);
-  box-shadow: 0 50px 120px -60px rgba(0, 0, 0, 0.9);
-}
-
-/* Carte claire (offres, témoignages) */
-.card-light {
-  background: #ffffff;
-  border: 1px solid rgba(0, 22, 54, 0.07);
-  box-shadow: 0 30px 60px -45px rgba(0, 22, 54, 0.55);
-}
-
-/* ============================================================================
-   Ombres & lueurs
-   ========================================================================== */
-
-.glow-warm {
-  box-shadow: 0 18px 45px -18px rgba(255, 94, 1, 0.6);
-}
-.glow-royal {
-  box-shadow: 0 18px 45px -18px rgba(17, 77, 168, 0.75);
-}
-
-/* ============================================================================
-   Champs de formulaire
-   ========================================================================== */
-
-.field {
-  width: 100%;
-  border-radius: var(--radius-field);
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  background: rgba(255, 255, 255, 0.06);
-  padding: 0.8rem 1rem;
-  font-size: 0.9rem;
-  color: #fff;
-  transition:
-    border-color 0.2s ease,
-    background 0.2s ease;
-}
-.field::placeholder {
-  color: rgba(255, 255, 255, 0.4);
-}
-.field:focus {
-  outline: none;
-  border-color: var(--color-gold);
-  background: rgba(255, 255, 255, 0.09);
-}
-.field option {
-  background: #06224f;
-  color: #fff;
-}
-
-.field-label {
-  display: block;
-  margin-bottom: 0.4rem;
-  font-size: 0.78rem;
-  color: rgba(255, 255, 255, 0.62);
-}
-
-/* ============================================================================
-   Animations
-   ========================================================================== */
-
-@keyframes fadeUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.reveal {
-  animation: fadeUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
-}
-
-@keyframes floaty {
-  0%,
-  100% {
-    transform: translateY(0) rotate(0deg);
-  }
-  50% {
-    transform: translateY(-14px) rotate(-2deg);
-  }
-}
-.floaty {
-  animation: floaty 7s ease-in-out infinite;
+.skip-link:focus {
+  top: 16px;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.001ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.001ms !important;
-    scroll-behavior: auto !important;
+  html {
+    scroll-behavior: auto;
   }
+}
+
 }

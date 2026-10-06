@@ -1,0 +1,41 @@
+/**
+ * Coordonnées et liens externes du site, réunis à un seul endroit.
+ * Les valeurs entre crochets sont à compléter avant la mise en ligne.
+ */
+export const SITE = {
+  name: "Lieben Éloquence",
+  shortName: "LEQ",
+  url: "https://liebeneloquence.com",
+  email: "formationn@liebeneloquence.com",
+  phone: "06 67 46 67 01",
+  founder: "Rebecca Lieben Ahiale",
+
+  calendly: "https://calendly.com/formationn-liebeneloquence/30min",
+  /** Liens de paiement Stripe (à créer dans le tableau de bord Stripe). */
+  stripeGrandOral: "[LIEN STRIPE GRAND ORAL]",
+  stripeLeqfam: "[LIEN STRIPE LEQ'FAM]",
+
+  instagram: "https://www.instagram.com/",
+  linkedin: "https://www.linkedin.com/",
+} as const;
+
+export const NAV = [
+  { label: "Méthode", href: "/#methode" },
+  { label: "Formations", href: "/#offres" },
+  { label: "Grand Oral", href: "/grand-oral" },
+  { label: "Autres produits", href: "/autres-produits" },
+  { label: "Événements", href: "/evenements" },
+  { label: "À propos", href: "/a-propos" },
+] as const;
+
+export const FOOTER_LINKS = [
+  { label: "Mentions légales", href: "/mentions-legales" },
+  { label: "Confidentialité", href: "/confidentialite" },
+  { label: "Cookies", href: "/cookies" },
+  { label: "Contact", href: "/autres-produits#contact" },
+  { label: "Instagram", href: SITE.instagram, external: true },
+  { label: "LinkedIn", href: SITE.linkedin, external: true },
+] as const;
+
+/** Vrai si le lien est encore un emplacement « [À COMPLÉTER] ». */
+export const isPlaceholder = (href: string) => href.startsWith("[");

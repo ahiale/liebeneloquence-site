@@ -1,68 +1,40 @@
-import type { Metadata } from "next";
-import { Inter, Bodoni_Moda } from "next/font/google";
+import type { Metadata, Viewport } from "next";
+import { melodrame, sfPro } from "@/design/fonts";
+import { Footer } from "@/components/layout/Footer";
+import { SITE } from "@/config/site";
 import "./globals.css";
 
-/* SF Pro Display est servie en priorité via la pile système (cf. globals.css).
-   Inter prend le relais hors écosystème Apple : même largeur apparente,
-   même sobriété. */
-const inter = Inter({
-  subsets: ["latin"],
-  variable: "--font-inter",
-  display: "swap",
-});
-
-/* Didone italique : les mots mis en valeur de la charte
-   (« PLAIRE, CONVAINCRE, IMPACTER », « GRAND ORAL », « école »…). */
-const bodoni = Bodoni_Moda({
-  subsets: ["latin"],
-  style: ["normal", "italic"],
-  weight: ["400", "500", "600", "700"],
-  variable: "--font-bodoni",
-  display: "swap",
-});
-
-const SITE = "https://lieben-eloquence.fr";
-
 export const metadata: Metadata = {
-  metadataBase: new URL(SITE),
+  metadataBase: new URL(SITE.url),
   title: {
-    default: "Lieben Éloquence — Parlez pour plaire, convaincre, impacter",
+    default: "Lieben Éloquence · Parlez pour plaire, convaincre, impacter",
     template: "%s · Lieben Éloquence",
   },
   description:
-    "Formations et coaching en prise de parole. Lycéens, étudiants, professionnels : diagnostic offert, parcours structuré et suivi personnalisé pour prendre la parole avec impact.",
-  keywords: [
-    "prise de parole en public",
-    "éloquence",
-    "Grand Oral",
-    "coaching oral",
-    "formation prise de parole",
-    "art oratoire",
-  ],
-  authors: [{ name: "Rebecca Lieben Ahiale" }],
+    "Formations et coaching en prise de parole pour lycéens, étudiants et professionnels. Séance diagnostic offerte, en visio ou en présentiel.",
+  keywords: ["prise de parole en public", "éloquence", "Grand Oral", "coaching oral", "formation prise de parole", "art oratoire"],
+  authors: [{ name: SITE.founder }],
   openGraph: {
     type: "website",
     locale: "fr_FR",
-    siteName: "Lieben Éloquence",
-    title: "Lieben Éloquence — Formations en prise de parole",
-    description:
-      "Diagnostic offert, parcours sur mesure et suivi. Devenez l'orateur que vous voulez être.",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "Lieben Éloquence",
-    description:
-      "Formations et coaching en prise de parole pour tous les profils.",
+    siteName: SITE.name,
+    title: "Lieben Éloquence · Formations en prise de parole",
+    description: "Parlez pour plaire, convaincre, impacter. Séance diagnostic offerte.",
   },
   robots: { index: true, follow: true },
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{ children: React.ReactNode }>) {
+export const viewport: Viewport = {
+  themeColor: "#001636",
+};
+
+export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="fr" className={`${inter.variable} ${bodoni.variable}`}>
-      <body>{children}</body>
+    <html lang="fr" className={`${sfPro.variable} ${melodrame.variable}`}>
+      <body>
+        {children}
+        <Footer />
+      </body>
     </html>
   );
 }

@@ -2,7 +2,6 @@
 
 import { useCallback, useMemo, useState } from "react";
 import { BackHeader } from "@/components/layout/BackHeader";
-import { FooterMinimal } from "@/components/layout/Footer";
 import { QuizIntro } from "./QuizIntro";
 import { QuizQuestion } from "./QuizQuestion";
 import { QuizResult } from "./QuizResult";
@@ -90,7 +89,6 @@ export function QuizApp() {
         </div>
       </main>
 
-      <FooterMinimal />
     </div>
   );
 }

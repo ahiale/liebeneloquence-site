@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { Header } from "@/components/layout/Header";
-import { Footer } from "@/components/layout/Footer";
 import { EvenementsPage } from "@/components/pages/Evenements";
 
 export const metadata: Metadata = {
@@ -12,11 +11,10 @@ export const metadata: Metadata = {
 export default function Page() {
   return (
     <>
-      <Header cta={{ label: "Faire le quiz", href: "/quiz" }} />
+      <Header />
       <main>
         <EvenementsPage />
       </main>
-      <Footer />
     </>
   );
 }

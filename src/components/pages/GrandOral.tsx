@@ -22,7 +22,6 @@ import { Container, Eyebrow } from "@/components/ui/Section";
 import { ButtonLink } from "@/components/ui/Button";
 import { Reveal } from "@/components/ui/Reveal";
 import { BackHeader } from "@/components/layout/BackHeader";
-import { Footer } from "@/components/layout/Footer";
 import { GRAND_ORAL } from "@/data/packs";
 import { SITE } from "@/data/site";
 
@@ -331,7 +330,6 @@ export function GrandOralPage() {
         </Container>
       </section>
 
-      <Footer />
     </>
   );
 }

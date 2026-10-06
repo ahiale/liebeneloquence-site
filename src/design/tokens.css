@@ -1,0 +1,443 @@
+/* ============================================================================
+   LIEBEN ÉLOQUENCE : système de design partagé (site vitrine + futur SaaS)
+   Tout ce fichier est indépendant du site : couleurs, typographie, fonds,
+   surfaces, boutons, champs et animations repris de la maquette V2.
+   Les polices sont déclarées dans `fonts.ts` (variables --font-sf, --font-melodrame).
+   ========================================================================== */
+
+@theme {
+  /* --- Palette de la charte -------------------------------------------- */
+  --color-ink: #001636; /* bleu nuit */
+  --color-ink-900: #01143a;
+  --color-ink-800: #04193c;
+  --color-ink-700: #072454; /* pied de page */
+  --color-ink-600: #0b3070;
+  --color-royal: #114da8; /* bleu roi */
+  --color-royal-600: #0e3f8b;
+  --color-royal-400: #2a64c4;
+  --color-royal-200: #9dbcec;
+  --color-gold: #ffbd59; /* jaune */
+  --color-orange: #ff5e01; /* orange */
+  --color-orange-700: #cc4a00; /* orange lisible sur fond clair */
+  --color-ember: #2e1106; /* brun */
+
+  /* --- Neutres ----------------------------------------------------------- */
+  --color-cloud: #e8effa;
+  --color-cream: #f6f8fc;
+  --color-peach: #fff1e3;
+  --color-postit: #fff6d6;
+  --color-success: #2fbd6e;
+
+  /* --- Typographie -------------------------------------------------------- */
+  --font-sans: var(--font-sf), -apple-system, BlinkMacSystemFont, "Segoe UI",
+    system-ui, sans-serif;
+  --font-serif: var(--font-melodrame), "Bodoni Moda", Didot, Georgia, serif;
+
+  /* --- Rythme ------------------------------------------------------------- */
+  --radius-card: 26px;
+  --radius-panel: 34px;
+  --radius-field: 14px;
+}
+
+@layer components {
+/* ============================================================================
+   Typographie
+   ========================================================================== */
+
+/* Accent italique (Mélodrame) : « PLAIRE », « réellement. », « école »… */
+.serif {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: 0;
+}
+
+.eyebrow {
+  margin: 0;
+  font-size: 11px;
+  line-height: 1;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: var(--color-gold);
+}
+
+.h2 {
+  margin: 16px 0 0;
+  font-size: 52px;
+  font-weight: 700;
+  letter-spacing: -0.035em;
+  line-height: 1.02;
+}
+
+.wrap {
+  width: 100%;
+  max-width: 1152px;
+  margin: 0 auto;
+  padding: 0 32px;
+}
+
+/* ============================================================================
+   Fonds
+   ========================================================================== */
+
+.bg-hero {
+  background:
+    radial-gradient(700px 520px at 78% 42%, rgba(255, 255, 255, 0.3), transparent 65%),
+    radial-gradient(900px 520px at 90% 0%, rgba(61, 116, 205, 0.6), transparent 62%),
+    linear-gradient(160deg, #0b3070 0%, #114da8 55%, #2a64c4 100%);
+}
+.bg-sky {
+  background:
+    radial-gradient(700px 480px at 12% 10%, rgba(255, 255, 255, 0.22), transparent 62%),
+    radial-gradient(800px 520px at 92% 90%, rgba(255, 189, 89, 0.18), transparent 62%),
+    linear-gradient(170deg, #2a64c4 0%, #1a57b8 45%, #114da8 100%);
+}
+.bg-night {
+  background:
+    radial-gradient(1100px 620px at 82% -8%, rgba(17, 77, 168, 0.5), transparent 62%),
+    radial-gradient(760px 520px at 2% 4%, rgba(77, 29, 9, 0.4), transparent 58%),
+    #001636;
+}
+.bg-light {
+  background:
+    radial-gradient(680px 420px at 92% 6%, rgba(17, 77, 168, 0.14), transparent 64%),
+    radial-gradient(560px 400px at 4% 96%, rgba(17, 77, 168, 0.1), transparent 62%),
+    linear-gradient(180deg, #ffffff 0%, #f6f8fc 50%, #e8effa 100%);
+}
+.bg-steel {
+  background:
+    radial-gradient(700px 420px at 90% 10%, rgba(255, 189, 89, 0.25), transparent 62%),
+    linear-gradient(178deg, #c9d6ec 0%, #dfe8f6 50%, #eef3fb 100%);
+}
+.bg-warm {
+  background:
+    radial-gradient(820px 560px at 86% 42%, rgba(17, 77, 168, 0.38), transparent 62%),
+    radial-gradient(600px 420px at 0% 0%, rgba(255, 189, 89, 0.22), transparent 60%),
+    linear-gradient(175deg, #fbf8f4 0%, #ede7e1 55%, #d5ddeb 100%);
+}
+.bg-ember {
+  background:
+    radial-gradient(800px 500px at 90% 10%, rgba(255, 94, 1, 0.28), transparent 62%),
+    radial-gradient(700px 500px at 0% 100%, rgba(17, 77, 168, 0.4), transparent 62%),
+    linear-gradient(165deg, #2e1106 0%, #0b1d3f 55%, #001636 100%);
+}
+
+/* ============================================================================
+   Surfaces
+   ========================================================================== */
+
+.panel {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.015));
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: var(--radius-panel);
+  box-shadow: 0 50px 120px -60px rgba(0, 0, 0, 0.9);
+}
+.card-light {
+  background: #fff;
+  color: var(--color-ink);
+  border: 1px solid rgba(0, 22, 54, 0.07);
+  box-shadow: 0 30px 60px -45px rgba(0, 22, 54, 0.55);
+}
+.sticker {
+  background: #fff;
+  color: var(--color-ink);
+  border: 1px solid rgba(0, 22, 54, 0.08);
+  border-radius: 24px;
+  box-shadow: 0 26px 50px -30px rgba(0, 22, 54, 0.5);
+  transition: transform 0.25s ease;
+}
+.sticker:hover {
+  transform: rotate(0) translateY(-4px) !important;
+}
+.bubble {
+  position: relative;
+  background: #fff;
+  color: var(--color-ink);
+  border-radius: 28px;
+  padding: 26px 28px;
+  box-shadow: 0 24px 50px -34px rgba(0, 22, 54, 0.55);
+  border: 2px solid var(--color-ink);
+  transition: transform 0.25s ease;
+}
+.bubble:hover {
+  transform: rotate(0deg) translateY(-4px) !important;
+}
+.postit {
+  position: relative;
+  background: var(--color-postit);
+  color: var(--color-ink);
+  border-radius: 6px 6px 22px 6px;
+  padding: 34px 28px 28px;
+  box-shadow: 0 22px 40px -26px rgba(0, 0, 0, 0.6);
+  transition: transform 0.25s ease;
+}
+.postit:hover {
+  transform: rotate(0) translateY(-4px) !important;
+}
+.lift {
+  transition: transform 0.25s ease;
+}
+.lift:hover {
+  transform: translateY(-4px);
+}
+.tile {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 13px;
+  flex-shrink: 0;
+}
+
+/* ============================================================================
+   Boutons
+   ========================================================================== */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border-radius: 999px;
+  font-weight: 600;
+  white-space: nowrap;
+  text-decoration: none;
+  padding: 14px 28px;
+  font-size: 15px;
+  border: 0;
+  cursor: pointer;
+  font-family: inherit;
+  transition:
+    transform 0.2s ease,
+    filter 0.2s ease,
+    background 0.2s ease;
+}
+.btn:disabled,
+.btn[aria-disabled="true"] {
+  opacity: 0.4;
+  pointer-events: none;
+}
+.btn-sm {
+  padding: 10px 20px;
+  font-size: 14px;
+}
+/* Principal : dégradé jaune → orange */
+.btn-p {
+  background: linear-gradient(96deg, #ffbd59, #ff5e01);
+  color: var(--color-ink);
+  box-shadow: 0 16px 38px -16px rgba(255, 94, 1, 0.75);
+}
+.btn-p:hover {
+  filter: brightness(1.1);
+  transform: translateY(-2px);
+}
+/* Verre sur fond sombre */
+.btn-g {
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+}
+.btn-g:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+/* Bleu roi plein */
+.btn-royal {
+  background: var(--color-royal);
+  color: #fff;
+}
+.btn-royal:hover {
+  transform: translateY(-2px);
+}
+/* Contour sur fond clair */
+.btn-o {
+  border: 1.5px solid rgba(0, 22, 54, 0.25);
+  background: #fff;
+  color: var(--color-ink);
+}
+.btn-o:hover {
+  border-color: var(--color-ink);
+}
+
+/* ============================================================================
+   Champs de formulaire (fond sombre)
+   ========================================================================== */
+
+.flabel {
+  display: block;
+  font-size: 12.5px;
+  color: rgba(255, 255, 255, 0.7);
+}
+.field {
+  display: block;
+  width: 100%;
+  margin-top: 6px;
+  border-radius: var(--radius-field);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(255, 255, 255, 0.07);
+  padding: 13px 16px;
+  font: inherit;
+  font-size: 14px;
+  color: #fff;
+  transition: border-color 0.2s ease;
+}
+.field::placeholder {
+  color: rgba(255, 255, 255, 0.42);
+}
+.field:focus {
+  outline: none;
+  border-color: var(--color-gold);
+}
+.field option {
+  color: var(--color-ink);
+  background: #fff;
+}
+.field[aria-invalid="true"] {
+  border-color: #ff8a65;
+}
+/* Pastille de choix (profil, pack…) */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  min-height: 42px;
+  padding: 8px 16px;
+  border-radius: 999px;
+  border: 1.5px solid rgba(255, 255, 255, 0.25);
+  font-size: 14px;
+  font-weight: 600;
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.chip:hover {
+  border-color: var(--color-gold);
+}
+input:checked + .chip,
+.chip[aria-pressed="true"] {
+  background: var(--color-orange);
+  border-color: var(--color-orange);
+}
+input:focus-visible + .chip {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 3px;
+}
+
+/* ============================================================================
+   Animations (désactivées si l'utilisateur réduit les animations)
+   ========================================================================== */
+
+.floaty {
+  animation: floaty 7s ease-in-out infinite;
+}
+@keyframes floaty {
+  0%, 100% { transform: translateY(0) rotate(0); }
+  50% { transform: translateY(-12px) rotate(-2deg); }
+}
+.wiggle {
+  animation: wiggle 3.5s ease-in-out infinite;
+  transform-origin: center;
+}
+@keyframes wiggle {
+  0%, 100% { transform: rotate(-8deg) scale(1); }
+  50% { transform: rotate(8deg) scale(1.08); }
+}
+.bob {
+  animation: bob 4s ease-in-out infinite;
+}
+@keyframes bob {
+  0%, 100% { transform: translateY(0) rotate(-6deg); }
+  50% { transform: translateY(-8px) rotate(4deg); }
+}
+.draw path {
+  stroke-dasharray: 1400;
+  stroke-dashoffset: 1400;
+  animation: draw 2.2s ease 0.3s forwards;
+}
+@keyframes draw {
+  to { stroke-dashoffset: 0; }
+}
+.pulse2 {
+  animation: pulse2 2.2s ease-in-out infinite;
+}
+@keyframes pulse2 {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(255, 94, 1, 0.5); }
+  50% { box-shadow: 0 0 0 10px rgba(255, 94, 1, 0); }
+}
+.pop {
+  animation: pop 0.5s cubic-bezier(0.2, 0.9, 0.3, 1.3) both;
+}
+@keyframes pop {
+  from { opacity: 0; transform: translateY(18px) scale(0.97); }
+  to { opacity: 1; transform: none; }
+}
+.halo {
+  animation: halo 3s ease-in-out infinite;
+}
+@keyframes halo {
+  0%, 100% { opacity: 0.55; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.08); }
+}
+.grow {
+  animation: grow 1.1s ease-out both;
+}
+@keyframes grow {
+  from { width: 0; }
+}
+.marquee {
+  display: flex;
+  gap: 24px;
+  width: max-content;
+  animation: marquee 38s linear infinite;
+}
+.marquee:hover,
+.marquee:focus-within {
+  animation-play-state: paused;
+}
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+.pack-ill {
+  display: inline-block;
+  animation: bob 4s ease-in-out infinite;
+}
+.pack:hover .pack-ill {
+  animation: wiggle 1s ease-in-out infinite;
+}
+.road-dash {
+  animation: roadmove 1.6s linear infinite;
+}
+@keyframes roadmove {
+  to { stroke-dashoffset: -32; }
+}
+
+/* ============================================================================
+   Mobile
+   ========================================================================== */
+
+@media (max-width: 760px) {
+  .wrap { padding: 0 20px; }
+  .h2 { font-size: 38px; }
+  .hide-sm { display: none !important; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .floaty, .wiggle, .bob, .pulse2, .halo, .marquee, .road-dash, .pop, .grow,
+  .pack-ill, .pack:hover .pack-ill {
+    animation: none !important;
+  }
+  .draw path {
+    animation: none;
+    stroke-dashoffset: 0;
+  }
+  /* Carrousel figé : défilement manuel, sans la copie */
+  .marquee-viewport {
+    overflow-x: auto;
+  }
+  .marquee-copy {
+    display: none !important;
+  }
+}
+
+} /* fin @layer components */

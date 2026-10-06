@@ -1,38 +1,30 @@
-import { Header } from "@/components/layout/Header";
-import { Footer } from "@/components/layout/Footer";
-import { Hero } from "@/components/landing/Hero";
-import { Constat } from "@/components/landing/Constat";
-import { Vision } from "@/components/landing/Vision";
-import { Apports } from "@/components/landing/Apports";
-import { Methode } from "@/components/landing/Methode";
-import { Offres } from "@/components/landing/Offres";
-import { Ecoles } from "@/components/landing/Ecoles";
-import { Transparence } from "@/components/landing/Transparence";
-import { Temoignages } from "@/components/landing/Temoignages";
-import { QuiSuisJe } from "@/components/landing/QuiSuisJe";
+import { getPricing, getReviews } from "@/content";
+import { Hero } from "@/components/home/Hero";
+import { Constat } from "@/components/home/Constat";
+import { Apports } from "@/components/home/Apports";
+import { Methode } from "@/components/home/Methode";
+import { Offres } from "@/components/home/Offres";
+import { Ecoles } from "@/components/home/Ecoles";
+import { Transparence } from "@/components/home/Transparence";
+import { Temoignages } from "@/components/home/Temoignages";
+import { QuiSuisJe } from "@/components/home/QuiSuisJe";
 
-export default function HomePage() {
+export default async function HomePage() {
+  const [pricing, reviews] = await Promise.all([getPricing(), getReviews()]);
+
   return (
     <>
-      <Header />
+      <Hero />
       <main>
-        {/* Un seul dégradé « nuit » sur toute la séquence sombre : évite les
-            raccords visibles entre sections. */}
-        <div className="bg-night">
-          <Hero />
-          <Constat />
-          <Vision />
-          <Apports />
-          <Methode />
-        </div>
-
-        <Offres />
+        <Constat />
+        <Apports />
+        <Methode />
+        <Offres pricing={pricing} />
         <Ecoles />
         <Transparence />
-        <Temoignages />
+        <Temoignages reviews={reviews} />
         <QuiSuisJe />
       </main>
-      <Footer />
     </>
   );
 }

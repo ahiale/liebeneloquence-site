@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Container, Eyebrow } from "@/components/ui/Section";
 import { Header } from "@/components/layout/Header";
-import { Footer } from "@/components/layout/Footer";
 import { SITE } from "@/data/site";
 
 export const metadata: Metadata = {
@@ -65,7 +64,6 @@ export default function MentionsLegalesPage() {
           </p>
         </Container>
       </main>
-      <Footer />
     </>
   );
 }

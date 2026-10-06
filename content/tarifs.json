@@ -1,0 +1,73 @@
+{
+  "currency": "EUR",
+  "packs": [
+    {
+      "id": "senghor",
+      "name": "Senghor",
+      "sessions": 3,
+      "level": "Pack découverte",
+      "price": 89,
+      "installments": 3,
+      "features": [
+        "Culture oratoire & concepts de base",
+        "Comprendre son public",
+        "L'art de se vendre et du storytelling",
+        "Suivi post-formation"
+      ],
+      "featured": false,
+      "badge": null
+    },
+    {
+      "id": "ciceron",
+      "name": "Cicéron",
+      "sessions": 5,
+      "level": "Intermédiaire",
+      "price": 149,
+      "installments": 3,
+      "features": [
+        "Tout le pack Senghor (optionnel)",
+        "Structurer et rédiger un discours",
+        "Les bases du logos, pathos, ethos",
+        "Quiz & ressources inclus"
+      ],
+      "featured": false,
+      "badge": null
+    },
+    {
+      "id": "socrate",
+      "name": "Socrate",
+      "sessions": 7,
+      "level": "Parcours complet",
+      "price": 225,
+      "installments": 4,
+      "features": [
+        "Tout le pack Cicéron (optionnel)",
+        "Gestion du trac et de l'improvisation",
+        "Maîtrise du non-verbal & variation vocale",
+        "Autre sujet au choix"
+      ],
+      "featured": true,
+      "badge": "Le plus complet"
+    }
+  ],
+  "grandOral": {
+    "price": 120,
+    "sessions": 5,
+    "sessionDuration": "50 min",
+    "installments": 4,
+    "features": [
+      "Structuration du discours",
+      "Maîtrise du fond & de la forme",
+      "Verbal & non-verbal",
+      "Mise en situation réelle",
+      "Préparation aux questions du jury",
+      "Relecture & feedback personnalisé"
+    ]
+  },
+  "leqfam": {
+    "monthlyPrice": 3.99,
+    "availability": "Bientôt disponible · fin octobre",
+    "partnerMonthlyPrice": 1.99,
+    "partnerDurationMonths": 6
+  }
+}
