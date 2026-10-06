@@ -1,11 +1,65 @@
 [
   {
-    "id": "modele-avis",
+    "id": "sophie-concours-eloquence",
     "status": "draft",
-    "author": "Prénom N.",
-    "role": "Profil, ville",
+    "author": "Sophie",
+    "role": "Finaliste d'un concours d'éloquence",
     "rating": 5,
-    "text": "Texte de l'avis, tel que la personne l'a écrit.",
+    "text": "Grâce à l'accompagnement de Rebecca, je suis arrivée en finale de mon concours d'éloquence et j'ai remporté le prix Coup de cœur du jury. Elle a su me faire travailler mon texte et ma présence sur scène. Merci !",
+    "date": "2026-10-06"
+  },
+  {
+    "id": "olivia-soutenance",
+    "status": "draft",
+    "author": "Olivia",
+    "role": "Étudiante, préparation de soutenance",
+    "rating": 5,
+    "text": "Pour ma soutenance, nous avons travaillé sur plusieurs points : la structure, le rythme, la façon de répondre aux questions. C'était génial, je me suis sentie prête le jour J.",
+    "date": "2026-10-06"
+  },
+  {
+    "id": "rowena-concours-beaute",
+    "status": "draft",
+    "author": "Rowena",
+    "role": "Candidate à un concours de beauté",
+    "rating": 5,
+    "text": "Rebecca m'a accompagnée dans la préparation de mon discours pour un concours de beauté. Elle m'a aidée à trouver mon message et à le porter avec assurance. J'ai vraiment apprécié l'expérience !",
+    "date": "2026-10-06"
+  },
+  {
+    "id": "etudiante-medecine",
+    "status": "draft",
+    "author": "[Prénom]",
+    "role": "Étudiante en médecine",
+    "rating": 5,
+    "text": "Rebecca m'a fait revoir les bases de l'éloquence et de la prise de parole en public, avec des techniques que je ne connaissais pas encore. Je les utilise maintenant à chaque oral.",
+    "date": "2026-10-06"
+  },
+  {
+    "id": "entrepreneur-pitch",
+    "status": "draft",
+    "author": "[Prénom]",
+    "role": "Entrepreneur, pitch d'un produit",
+    "rating": 5,
+    "text": "Rebecca m'a aidé à préparer le pitch de mon produit : un message plus clair, plus percutant, et beaucoup plus d'aisance pour le présenter.",
+    "date": "2026-10-06"
+  },
+  {
+    "id": "eub-negociation",
+    "status": "draft",
+    "author": "Eub",
+    "role": "Entrepreneur, stratégie de négociation",
+    "rating": 5,
+    "text": "Rebecca m'a accompagné dans la préparation de ma stratégie de négociation. Une préparation sérieuse et efficace : tout s'est très bien passé.",
+    "date": "2026-10-06"
+  },
+  {
+    "id": "yolo-maif",
+    "status": "draft",
+    "author": "Yolo",
+    "role": "Formation en entreprise, MAIF",
+    "rating": 5,
+    "text": "Rebecca est très pédagogue. Sa formation était claire, concrète et agréable à suivre : on repart avec des outils qu'on peut appliquer tout de suite.",
     "date": "2026-10-06"
   }
 ]
