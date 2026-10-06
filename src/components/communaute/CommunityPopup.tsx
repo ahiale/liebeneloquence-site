@@ -2,17 +2,16 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
-import { Heart, Sparkle } from "@/components/ui/Doodles";
-import { WaitlistForm } from "./WaitlistForm";
+import { useEffect, useState } from "react";
+import { MicDoodle, Sparkle } from "@/components/ui/Doodles";
 
-/* Pop-up « Rejoindre la communauté », affiché une fois par visiteur
-   quelques secondes après son arrivée. Mémorisé dans le navigateur 30 jours. */
+/* Invitation à la communauté : petite carte qui glisse en bas de l'écran,
+   une fois par visiteur (mémorisé 30 jours dans le navigateur). Ne bloque pas la page. */
 
 const STORAGE_KEY = "leq-popup-communaute";
-const DELAY_MS = 6000;
+const DELAY_MS = 2500;
 const REMEMBER_DAYS = 30;
-/** Pages où le pop-up gênerait (parcours d'achat, page communauté elle-même, pages légales). */
+/** Pages où l'invitation gênerait (parcours d'achat, page communauté elle-même, pages légales). */
 const EXCLUDED = ["/communaute", "/quiz", "/grand-oral", "/mentions-legales", "/confidentialite", "/cookies", "/apercus-mails"];
 
 function alreadySeen(): boolean {
@@ -34,68 +33,49 @@ function remember() {
 
 export function CommunityPopup({ price, availability }: { price: string; availability: string | null }) {
   const pathname = usePathname();
-  const dialog = useRef<HTMLDialogElement>(null);
-  const [mounted, setMounted] = useState(false);
+  const [open, setOpen] = useState(false);
   const excluded = EXCLUDED.some((p) => pathname.startsWith(p));
 
   useEffect(() => {
     if (excluded || alreadySeen()) return;
     const t = window.setTimeout(() => {
-      setMounted(true);
-      requestAnimationFrame(() => dialog.current?.showModal());
+      setOpen(true);
       remember();
     }, DELAY_MS);
     return () => window.clearTimeout(t);
   }, [excluded]);
 
-  if (!mounted) return null;
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false);
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [open]);
 
-  const close = () => dialog.current?.close();
+  if (!open || excluded) return null;
 
   return (
-    <dialog
-      ref={dialog}
-      aria-labelledby="popup-communaute-titre"
-      className="community-popup m-auto w-[min(560px,calc(100vw-32px))] overflow-visible border-0 bg-transparent p-0 text-white"
-      onClick={(e) => e.target === e.currentTarget && close()}
-    >
-      <div className="bg-hero relative rounded-[28px] p-6 sm:p-8" style={{ boxShadow: "0 50px 100px -30px rgba(0,0,0,.8)", border: "1px solid rgba(255,255,255,.2)" }}>
-        <Sparkle className="wiggle absolute" size={40} style={{ top: -18, left: -10 }} />
-        <Heart className="wiggle absolute" size={30} style={{ bottom: -12, right: 24 }} />
-        <button type="button" onClick={close} aria-label="Fermer" className="absolute top-4 right-4 grid h-10 w-10 cursor-pointer place-items-center rounded-full border border-white/25 bg-white/12 text-white hover:bg-white/20">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
+    <aside role="dialog" aria-labelledby="invitation-communaute" className="community-toast fixed right-4 bottom-4 left-4 z-50 sm:left-auto sm:w-[380px]" style={{ marginBottom: "env(safe-area-inset-bottom, 0px)" }}>
+      <div className="relative rounded-[24px] bg-white p-5 pr-12 text-ink" style={{ boxShadow: "6px 6px 0 #FFBD59, 0 30px 60px -20px rgba(0,22,54,.55)", border: "2px solid #001636" }}>
+        <MicDoodle className="bob absolute" width={48} height={62} stand="#FF5E01" style={{ top: -40, left: 14 }} />
+        <Sparkle className="wiggle absolute" size={30} style={{ top: -16, right: 44 }} />
+        <button type="button" onClick={() => setOpen(false)} aria-label="Fermer" className="absolute top-3 right-3 grid h-9 w-9 cursor-pointer place-items-center rounded-full border-0 bg-cloud text-ink hover:bg-ink hover:text-white">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" aria-hidden="true">
             <path d="M18 6 6 18M6 6l12 12" />
           </svg>
         </button>
 
-        {availability && (
-          <span className="inline-flex items-center rounded-full bg-white px-3.5 py-1.5 text-[10.5px] font-bold tracking-[.16em] text-orange uppercase">{availability}</span>
-        )}
-        <h2 id="popup-communaute-titre" className="mt-4 mb-0 pr-10 leading-[1.05] font-bold tracking-[-0.035em]" style={{ fontSize: "clamp(30px, 6vw, 40px)" }}>
-          Rejoignez la communauté <span className="serif text-gold">LEQ&apos;FAM</span>
-        </h2>
-        <p className="mt-3 mb-0 text-[15.5px] leading-[1.65] text-white/88">
-          La communauté dédiée à l&apos;éloquence, aux soft skills et à la prise de parole. Des lives chaque semaine, des défis, de l&apos;entraide et le Grand Prix LEQ, pour {price} par mois.
+        <p id="invitation-communaute" className="mt-3 mb-0 text-[21px] leading-[1.15] font-bold tracking-[-0.02em]">
+          Rejoignez la <span className="serif font-normal text-orange">LEQ&apos;FAM</span> !
         </p>
-
-        {availability ? (
-          <WaitlistForm className="mt-5" />
-        ) : (
-          <Link href="/communaute" onClick={close} className="btn btn-p mt-6 w-full">
-            Rejoindre la LEQ&apos;FAM
-          </Link>
-        )}
-
-        <p className="mt-4 mb-0 text-center text-[13.5px]">
-          <Link href="/communaute" onClick={close} className="text-white/80 underline hover:text-white">
-            Découvrir la communauté
-          </Link>
-          <span className="text-white/40"> · </span>
-          <button type="button" onClick={close} className="cursor-pointer border-0 bg-transparent text-[13.5px] text-white/60 underline hover:text-white">
-            Plus tard
-          </button>
+        <p className="mt-1.5 mb-0 text-[14px] leading-[1.5] text-ink/70">
+          La communauté pour s&apos;entraîner à l&apos;oral ensemble, pour {price} par mois.
+          {availability && <span className="mt-1 block text-[12px] font-semibold tracking-[.08em] text-orange uppercase">{availability}</span>}
         </p>
+        <Link href={availability ? "/communaute#rejoindre" : "/communaute"} onClick={() => setOpen(false)} className="btn btn-p btn-sm mt-3.5">
+          {availability ? "Je m'inscris sur la liste" : "Je découvre"}
+        </Link>
       </div>
-    </dialog>
+    </aside>
   );
 }

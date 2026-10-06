@@ -24,7 +24,7 @@ export function EventCard({ event }: { event: LeqEvent }) {
         {event.title && <p className="mt-1 mb-0 text-[15px] font-semibold text-ink/70">{event.dateLabel}</p>}
         <p className="mt-2 mb-0 flex-1 text-[15px] leading-[1.6] text-ink/70">{event.summary}</p>
         <span className="btn btn-p mt-5" aria-hidden="true">
-          {event.registrationUrl ? "S'inscrire" : "En savoir plus"}
+          {event.registrationUrl ? (event.registrationLabel ?? "S'inscrire") : "En savoir plus"}
         </span>
       </div>
     </article>

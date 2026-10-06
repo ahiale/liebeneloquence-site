@@ -1,17 +1,7 @@
 import { Heart, Sparkle, SpeechBubble, Squiggle } from "@/components/ui/Doodles";
 
-const DOMAINES = [
-  "Grand Oral BAC",
-  "Oral de BTS",
-  "Concours d'éloquence",
-  "Entretien d'embauche",
-  "Soutenance",
-  "Pitch d'un projet",
-  "Négociation",
-  "Tout type d'oral",
-  "Prise de parole en cours",
-  "Animation d'atelier",
-];
+/* 5 situations phares (la phrase d'introduction se termine par « et bien plus encore »). */
+const DOMAINES = ["Grand Oral BAC", "Soutenance", "Entretien d'embauche", "Pitch d'un projet", "Concours d'éloquence"];
 
 const CHIFFRES = [
   { value: "75", unit: "%", text: "des gens craignent de parler en public", circle: "#FFBD59" },

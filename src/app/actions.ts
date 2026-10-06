@@ -4,6 +4,7 @@ import { z } from "zod";
 import { ADMIN_EMAIL, sendMail, type Mail } from "@/lib/mail";
 import { record } from "@/lib/store";
 import { HONEYPOT, type FormState } from "@/lib/forms";
+import { tooManyRequests } from "@/lib/rate-limit";
 import { computeResult, isComplete, type Answer } from "@/lib/quiz";
 import { getPricing } from "@/content";
 import { formatPrice } from "@/lib/format";
@@ -30,6 +31,8 @@ function invalid(error: z.ZodError): FormState {
 }
 
 const isBot = (data: FormData) => Boolean(data.get(HONEYPOT));
+
+const TOO_MANY: FormState = { status: "error", message: "Trop d'envois en peu de temps. Merci de réessayer dans quelques minutes." };
 
 const FAILURE: FormState = {
   status: "error",
@@ -64,6 +67,7 @@ const DevisSchema = z.object({
 
 export async function demanderDevis(_: FormState, data: FormData): Promise<FormState> {
   if (isBot(data)) return { status: "success" };
+  if (await tooManyRequests("devis")) return TOO_MANY;
   const parsed = DevisSchema.safeParse(Object.fromEntries(data));
   if (!parsed.success) return invalid(parsed.error);
   const d = parsed.data;
@@ -96,6 +100,7 @@ const GrandOralSchema = z.object({
 
 export async function reserverGrandOral(_: FormState, data: FormData): Promise<FormState> {
   if (isBot(data)) return { status: "success" };
+  if (await tooManyRequests("grand-oral")) return TOO_MANY;
   const parsed = GrandOralSchema.safeParse(Object.fromEntries(data));
   if (!parsed.success) return invalid(parsed.error);
   const d = parsed.data;
@@ -125,6 +130,7 @@ const ContactSchema = z.object({
 
 export async function envoyerContact(_: FormState, data: FormData): Promise<FormState> {
   if (isBot(data)) return { status: "success" };
+  if (await tooManyRequests("contact")) return TOO_MANY;
   const parsed = ContactSchema.safeParse(Object.fromEntries(data));
   if (!parsed.success) return invalid(parsed.error);
   const d = parsed.data;
@@ -153,6 +159,7 @@ const NewsletterSchema = z.object({
 
 export async function inscrireNewsletter(_: FormState, data: FormData): Promise<FormState> {
   if (isBot(data)) return { status: "success" };
+  if (await tooManyRequests("newsletter")) return TOO_MANY;
   const parsed = NewsletterSchema.safeParse(Object.fromEntries(data));
   if (!parsed.success) return invalid(parsed.error);
   const d = parsed.data;
@@ -176,6 +183,7 @@ const ListeAttenteSchema = z.object({ prenom: required("Prénom"), email });
 
 export async function rejoindreListeAttente(_: FormState, data: FormData): Promise<FormState> {
   if (isBot(data)) return { status: "success" };
+  if (await tooManyRequests("liste-attente")) return TOO_MANY;
   const parsed = ListeAttenteSchema.safeParse(Object.fromEntries(data));
   if (!parsed.success) return invalid(parsed.error);
   const d = parsed.data;
@@ -220,6 +228,7 @@ const QuizMailSchema = z.object({
 /** Envoie le résultat du quiz à la personne qui le demande. */
 export async function recevoirResultatQuiz(_: FormState, data: FormData): Promise<FormState> {
   if (isBot(data)) return { status: "success" };
+  if (await tooManyRequests("quiz")) return TOO_MANY;
   const parsed = QuizMailSchema.safeParse(Object.fromEntries(data));
   if (!parsed.success) return invalid(parsed.error);
   const { prenom, email: mail, answers } = parsed.data;

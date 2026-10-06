@@ -139,9 +139,15 @@ export default async function EvenementPage({ params }: Props) {
               ))}
             </dl>
             {event.registrationUrl ? (
-              <a className="btn btn-p mt-7 w-full" href={event.registrationUrl} target="_blank" rel="noreferrer noopener">
-                S&apos;inscrire
-              </a>
+              event.registrationUrl.startsWith("/") ? (
+                <Link className="btn btn-p mt-7 w-full" href={event.registrationUrl}>
+                  {event.registrationLabel ?? "S'inscrire"}
+                </Link>
+              ) : (
+                <a className="btn btn-p mt-7 w-full" href={event.registrationUrl} target="_blank" rel="noreferrer noopener">
+                  {event.registrationLabel ?? "S'inscrire"}
+                </a>
+              )
             ) : (
               <Link className="btn btn-p mt-7 w-full" href="/evenements#newsletter">
                 Être prévenu

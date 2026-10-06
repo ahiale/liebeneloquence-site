@@ -45,8 +45,10 @@ export const EventSchema = z.object({
   program: z.array(z.string()),
   /** Public visé (liste), facultatif. */
   audience: z.array(z.string()),
-  /** Lien d'inscription externe ; sinon le bouton mène à la newsletter. */
-  registrationUrl: z.string().url().nullable(),
+  /** Lien d'inscription : externe (Stripe, billetterie…) ou page du site (« /communaute#rejoindre ») ; sinon le bouton mène à la newsletter. */
+  registrationUrl: z.union([z.string().url(), z.string().regex(/^\/[^\s]*$/, "lien interne commençant par /")]).nullable(),
+  /** Texte du bouton d'inscription (défaut : « S'inscrire »). */
+  registrationLabel: z.string().nullable().optional(),
 });
 export type LeqEvent = z.infer<typeof EventSchema>;
 

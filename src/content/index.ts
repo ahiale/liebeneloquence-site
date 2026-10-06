@@ -40,6 +40,7 @@ const PRICING = parse(PricingSchema, pricingJson, "tarifs.json");
 /** Événements publiés, du plus proche au plus lointain (dates inconnues en dernier). */
 export async function getEvents(): Promise<LeqEvent[]> {
   return EVENTS.filter((e) => e.status === "published").sort((a, b) => {
+    if (!a.startsAt && !b.startsAt) return 0; // dates inconnues : ordre du fichier
     if (!a.startsAt) return 1;
     if (!b.startsAt) return -1;
     return a.startsAt.localeCompare(b.startsAt);

@@ -1,7 +1,61 @@
 [
   {
-    "slug": "premier-rendez-vous-leq",
+    "slug": "lancement-communaute-leqfam",
     "status": "published",
+    "type": "Lancement",
+    "title": "Lancement de la communauté LEQ'FAM",
+    "dateLabel": "Fin octobre 2026",
+    "startsAt": null,
+    "timeLabel": null,
+    "location": "En ligne, sur Discord",
+    "priceLabel": "3,99 € / mois",
+    "badge": "Bientôt",
+    "image": "/evenements/lancement-leqfam.jpg",
+    "summary": "La LEQ'FAM ouvre ses portes : la communauté dédiée à l'éloquence, aux soft skills et à la prise de parole. Inscrivez-vous sur la liste d'attente pour être prévenu·e en premier.",
+    "description": [
+      "La toute première communauté francophone en ligne dédiée à la prise de parole en public, à l'éloquence et aux soft skills ouvre ses portes fin octobre.",
+      "Un espace bienveillant, ouvert à tous sans condition d'âge ou de pays, où l'on s'entraîne, débat, progresse et se cultive ensemble. Pas besoin d'être expert, ni d'avoir déjà fait de la compétition : que vous partiez de zéro ou que vous ayez de l'expérience, vous avez votre place ici."
+    ],
+    "program": [
+      "Des lives collectifs chaque semaine",
+      "Des entraînements et des défis",
+      "Une vraie entraide entre membres",
+      "Le Grand Prix LEQ chaque trimestre, avec une dotation de 200 €"
+    ],
+    "audience": [
+      "Ouvert à tous, sans condition d'âge ou de pays"
+    ],
+    "registrationUrl": "/communaute#rejoindre",
+    "registrationLabel": "Rejoindre la liste d'attente"
+  },
+  {
+    "slug": "masterclass-convaincre-en-entretien",
+    "status": "published",
+    "type": "Masterclass",
+    "title": "Convaincre en entretien",
+    "dateLabel": "Date bientôt annoncée",
+    "startsAt": null,
+    "timeLabel": "18h à 20h (2 heures)",
+    "location": null,
+    "priceLabel": null,
+    "badge": "Nouveau",
+    "image": "/evenements/masterclass-entretien.jpg",
+    "summary": "Une masterclass à deux voix pour réussir vos entretiens : Ruth vous aide à travailler le fond de votre discours, Rebecca la forme et la prise de parole.",
+    "description": [
+      "Un entretien se joue autant sur ce que l'on dit que sur la manière de le dire. Cette masterclass réunit deux expertises complémentaires pour vous préparer sur les deux tableaux.",
+      "Ruth travaille avec vous le fond : votre parcours, vos réponses, les messages à faire passer. Rebecca travaille la forme : la voix, la posture, la gestion du stress et l'assurance face au recruteur."
+    ],
+    "program": [
+      "Le fond, avec Ruth : construire son discours et ses réponses",
+      "La forme, avec Rebecca : voix, posture et assurance face au recruteur"
+    ],
+    "audience": [],
+    "registrationUrl": "https://buy.stripe.com/5kQdR8ceAeUY2ze9zB2B202",
+    "registrationLabel": "Je réserve ma place"
+  },
+  {
+    "slug": "premier-rendez-vous-leq",
+    "status": "draft",
     "type": null,
     "title": null,
     "dateLabel": "Décembre 2026",

@@ -323,13 +323,19 @@ input:focus-visible + .chip {
   outline-offset: 3px;
 }
 
-/* Pop-up communauté */
-.community-popup::backdrop {
-  background: rgba(0, 13, 33, 0.72);
-  backdrop-filter: blur(4px);
+/* Invitation communauté : glisse depuis le bas */
+.community-toast {
+  animation: toast-in 0.55s cubic-bezier(0.2, 0.9, 0.3, 1.25) both;
 }
-.community-popup[open] {
-  animation: pop 0.45s cubic-bezier(0.2, 0.9, 0.3, 1.3) both;
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(40px) rotate(2deg);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
 }
 
 /* Texte long (pages légales) */
@@ -563,7 +569,7 @@ input:focus-visible + .chip {
 
 @media (prefers-reduced-motion: reduce) {
   .bubble, .sticker, .postit, .card-light, .yearcard, .badge, .reveal,
-  .floaty, .wiggle, .bob, .pulse2, .halo, .marquee, .road-dash, .pop, .grow,
+  .floaty, .wiggle, .bob, .pulse2, .halo, .marquee, .road-dash, .pop, .grow, .community-toast,
   .pack-ill, .pack:hover .pack-ill {
     animation: none !important;
   }

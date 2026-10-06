@@ -179,18 +179,30 @@ export default function AProposPage() {
 
         <section className="bg-night py-20 sm:py-[104px]">
           <div className="wrap">
-            <div className="panel px-6 py-14 text-center sm:px-12 sm:py-16">
+            <div className="panel grid items-center gap-10 overflow-hidden p-5 sm:p-8 lg:grid-cols-[1fr_1.15fr] lg:gap-12 lg:p-10">
+              {/* Sur scène au Mondial de la Parole */}
+              <figure className="relative m-0">
+                <div className="relative overflow-hidden rounded-[26px]" style={{ aspectRatio: "4 / 3", boxShadow: "0 40px 80px -40px rgba(0,0,0,.9)" }}>
+                  <Image src="/images/mondial-de-la-parole.jpg" alt="Rebecca Lieben Ahiale sur scène au Mondial de la Parole, devant le Pont du Gard" fill sizes="(max-width: 1024px) 90vw, 520px" style={{ objectFit: "cover", objectPosition: "45% 30%" }} />
+                </div>
+                <figcaption className="bob absolute -bottom-4 left-5 rounded-[16px] bg-white px-3.5 py-2 text-[13px] font-bold text-ink" style={{ boxShadow: "4px 4px 0 #FF5E01" }}>
+                  Mondial de la Parole · <span className="serif text-orange">Pont du Gard</span>
+                </figcaption>
+                <Sparkle className="wiggle absolute" size={40} style={{ top: -16, right: -12 }} />
+              </figure>
+              <div className="py-4 text-center lg:py-6 lg:text-left">
               <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#FFBD59" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                 <path d="M16 3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2 1 1 0 0 1 1 1v1a2 2 0 0 1-2 2 1 1 0 0 0-1 1v2a1 1 0 0 0 1 1 6 6 0 0 0 6-6V5a2 2 0 0 0-2-2z" />
                 <path d="M5 3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2 1 1 0 0 1 1 1v1a2 2 0 0 1-2 2 1 1 0 0 0-1 1v2a1 1 0 0 0 1 1 6 6 0 0 0 6-6V5a2 2 0 0 0-2-2z" />
               </svg>
-              <blockquote className="serif mx-auto mt-7 mb-0 max-w-[768px] leading-[1.35] text-white/88" style={{ fontSize: "clamp(22px, 4vw, 30px)" }}>
+              <blockquote className="serif mx-auto mt-6 mb-0 max-w-[768px] leading-[1.35] text-white/88 lg:mx-0" style={{ fontSize: "clamp(22px, 3.4vw, 28px)" }}>
                 Aujourd&apos;hui, j&apos;ai les clés pour accompagner les gens dans leur prise de parole. J&apos;ai toujours quelque chose à dire sur le discours des autres, et les techniques pour le rendre meilleur.
               </blockquote>
               <p className="mt-6 mb-0 text-[13.6px] text-white/50">Rebecca Lieben Ahiale · Fondatrice de Lieben Éloquence</p>
-              <div className="mt-10 flex flex-wrap justify-center gap-3">
+              <div className="mt-9 flex flex-wrap justify-center gap-3 lg:justify-start">
                 <Link className="btn btn-p" href="/quiz">Découvrir mon profil d&apos;orateur</Link>
                 <Link className="btn btn-g" href="/#offres">Voir les formations</Link>
+              </div>
               </div>
             </div>
           </div>

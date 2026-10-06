@@ -8,7 +8,7 @@ export function SimpleHeader({ tone = "dark" }: { tone?: "dark" | "light" }) {
   return (
     <header>
       <div className="wrap flex flex-wrap items-center justify-between gap-6 py-5">
-        <Logo tone={light ? "ink" : "gold"} dot={light ? "#FF5E01" : "#fff"} />
+        <Logo tone={light ? "dark" : "light"} />
         <Link href="/" className={`btn btn-sm ${light ? "btn-o" : "btn-g"}`}>
           {light && <ArrowLeft />} Retour à l&apos;accueil
         </Link>
