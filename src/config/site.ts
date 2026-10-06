@@ -12,7 +12,7 @@ export const SITE = {
 
   calendly: "https://calendly.com/formationn-liebeneloquence/30min",
   /** Liens de paiement Stripe (à créer dans le tableau de bord Stripe). */
-  stripeGrandOral: "[LIEN STRIPE GRAND ORAL]",
+  stripeGrandOral: "https://buy.stripe.com/dRm7sKguQ8wA4Hm5jl2B203",
   stripeLeqfam: "[LIEN STRIPE LEQ'FAM]",
 
   instagram: "https://www.instagram.com/becca_lieben/",
