@@ -1,0 +1,115 @@
+import { timingSafeEqual } from "node:crypto";
+import { readAll, type Collection } from "@/lib/store";
+import { computeResult, describeAnswers, PROFILES, type Answer, type ProfileId } from "@/lib/quiz";
+
+/**
+ * Données des formulaires pour le tableau de bord Excel (LEQ-donnees.xlsx).
+ * Accès réservé : en-tête « X-LEQ-Cle » égal à la variable DATA_API_KEY du serveur.
+ * Feuilles : liste-attente, newsletter, demandes, quiz (quiz réalisés), fiches (fiches orateur demandées).
+ * Réponse : { columns: string[], rows: (string | null)[][] }, colonnes fixes par feuille.
+ */
+export const dynamic = "force-dynamic";
+
+type Row = Record<string, unknown>;
+type Table = { columns: string[]; rows: (string | null)[][] };
+
+const str = (v: unknown) => (v === undefined || v === null || v === "" ? null : String(v));
+
+/** Date au format ISO, heure de Paris, sans fuseau (lisible directement par Excel). */
+function paris(iso: unknown): string | null {
+  if (typeof iso !== "string") return null;
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return null;
+  return d.toLocaleString("sv-SE", { timeZone: "Europe/Paris" }).replace(" ", "T");
+}
+
+/** Réponses lisibles, niveau et nom du profil à partir d'une ligne du quiz. */
+function quizDetails(l: Row) {
+  const answers = Array.isArray(l.answers) ? (l.answers as Answer[]) : [];
+  let level = typeof l.level === "string" ? l.level : undefined;
+  let readable: string | null = null;
+  try {
+    level ??= computeResult(answers).level.name;
+    readable = describeAnswers(answers).map(([, a]) => a).join(" | ");
+  } catch {}
+  return { profile: str(PROFILES[l.profile as ProfileId]?.name ?? l.profile), level: str(level), pack: str(l.pack), readable };
+}
+
+/** Garde la première ligne de chaque email (les anciennes inscriptions en double). */
+function firstPerEmail(lines: Row[]): Row[] {
+  const seen = new Set<string>();
+  return lines.filter((l) => {
+    const k = String(l.email ?? "").trim().toLowerCase();
+    if (!k) return true;
+    if (seen.has(k)) return false;
+    seen.add(k);
+    return true;
+  });
+}
+
+const TYPES: Record<string, string> = { devis: "Devis", "grand-oral": "Grand Oral", contact: "Contact" };
+
+type Sheet = Collection | "fiches";
+
+const BUILDERS: Record<Sheet, (lines: Row[]) => Table> = {
+  "liste-attente": (lines) => ({
+    columns: ["Date", "Prénom", "Email"],
+    rows: firstPerEmail(lines).map((l) => [paris(l.createdAt), str(l.prenom), str(l.email)]),
+  }),
+  newsletter: (lines) => ({
+    columns: ["Date", "Nom", "Email", "Profil", "Thématique"],
+    rows: firstPerEmail(lines).map((l) => [paris(l.createdAt), str(l.nom), str(l.email), str(l.profil), str(l.thematique)]),
+  }),
+  demandes: (lines) => ({
+    columns: ["Date", "Type", "Prénom", "Nom", "Email", "Structure", "Demande", "Profil", "Oral", "Date de l'oral", "Message"],
+    rows: lines.map((l) => [
+      paris(l.createdAt),
+      str(TYPES[String(l.type)] ?? l.type),
+      str(l.prenom),
+      str(l.nom),
+      str(l.email),
+      str(l.structure),
+      str(l.demande),
+      str(l.profil),
+      str(l.oral),
+      str(l.date),
+      str(l.message ?? l.attentes),
+    ]),
+  }),
+  // Chaque quiz terminé écrit une ligne sans email : ce sont les quiz réalisés.
+  quiz: (lines) => ({
+    columns: ["Date", "Profil", "Niveau", "Pack conseillé", "Réponses"],
+    rows: lines
+      .filter((l) => !l.email)
+      .map((l) => {
+        const q = quizDetails(l);
+        return [paris(l.createdAt), q.profile, q.level, q.pack, q.readable];
+      }),
+  }),
+  // La demande de fiche orateur écrit une seconde ligne, avec prénom et email.
+  fiches: (lines) => ({
+    columns: ["Date", "Prénom", "Email", "Profil", "Niveau", "Pack conseillé", "Réponses"],
+    rows: firstPerEmail(lines.filter((l) => l.email)).map((l) => {
+      const q = quizDetails(l);
+      return [paris(l.createdAt), str(l.prenom), str(l.email), q.profile, q.level, q.pack, q.readable];
+    }),
+  }),
+};
+
+function authorized(req: Request): boolean {
+  const key = process.env.DATA_API_KEY;
+  const given = req.headers.get("x-leq-cle");
+  if (!key || key.length < 32 || !given) return false;
+  const a = Buffer.from(key);
+  const b = Buffer.from(given);
+  return a.length === b.length && timingSafeEqual(a, b);
+}
+
+export async function GET(req: Request, { params }: { params: Promise<{ collection: string }> }) {
+  if (!authorized(req)) return new Response("Not found", { status: 404 });
+  const { collection } = await params;
+  const build = Object.hasOwn(BUILDERS, collection) ? BUILDERS[collection as Sheet] : undefined;
+  if (!build) return new Response("Not found", { status: 404 });
+  const table = build(await readAll(collection === "fiches" ? "quiz" : (collection as Collection)));
+  return Response.json(table, { headers: { "Cache-Control": "no-store", "X-Robots-Tag": "noindex" } });
+}

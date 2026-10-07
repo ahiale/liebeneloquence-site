@@ -14,3 +14,6 @@ data
 .next-build
 !deploy/.env.example
 tsconfig.tsbuildinfo
+
+# Tableaux de bord (contiennent des données personnelles et la clé d’accès)
+*.xlsx

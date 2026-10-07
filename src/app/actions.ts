@@ -2,7 +2,7 @@
 
 import { z } from "zod";
 import { ADMIN_EMAIL, sendMail, type Mail } from "@/lib/mail";
-import { record } from "@/lib/store";
+import { hasEmail, record } from "@/lib/store";
 import { HONEYPOT, type FormState } from "@/lib/forms";
 import { tooManyRequests } from "@/lib/rate-limit";
 import { computeResult, isComplete, type Answer } from "@/lib/quiz";
@@ -33,6 +33,9 @@ function invalid(error: z.ZodError): FormState {
 const isBot = (data: FormData) => Boolean(data.get(HONEYPOT));
 
 const TOO_MANY: FormState = { status: "error", message: "Trop d'envois en peu de temps. Merci de réessayer dans quelques minutes." };
+
+/** Inscription refusée car l'email est déjà enregistré. */
+const already = (message: string): FormState => ({ status: "error", message });
 
 const FAILURE: FormState = {
   status: "error",
@@ -164,6 +167,7 @@ export async function inscrireNewsletter(_: FormState, data: FormData): Promise<
   if (!parsed.success) return invalid(parsed.error);
   const d = parsed.data;
 
+  if (await hasEmail("newsletter", d.email)) return already("Cette adresse est déjà inscrite à la newsletter.");
   await record("newsletter", { ...d, consent: "formulaire newsletter du site" });
   await addToNewsletterList(d).catch((e) => console.error(e));
   try {
@@ -188,6 +192,7 @@ export async function rejoindreListeAttente(_: FormState, data: FormData): Promi
   if (!parsed.success) return invalid(parsed.error);
   const d = parsed.data;
 
+  if (await hasEmail("liste-attente", d.email)) return already("Cette adresse est déjà sur la liste d'attente. Vous serez prévenu·e dès l'ouverture.");
   await record("liste-attente", { ...d, consent: "formulaire liste d'attente LEQ'FAM" });
   try {
     await confirm(T.listeAttenteClient(d), d.email);
@@ -235,6 +240,7 @@ export async function recevoirResultatQuiz(_: FormState, data: FormData): Promis
   if (!isComplete(answers)) return FAILURE;
   const result = computeResult(answers);
 
+  if (await hasEmail("quiz", mail)) return already("Votre fiche orateur a déjà été envoyée à cette adresse. Pensez à vérifier vos spams.");
   await record("quiz", { answers, profile: result.profileId, pack: result.pack, prenom, email: mail });
   try {
     const fiche = await renderFicheOrateur(result, prenom);

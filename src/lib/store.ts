@@ -1,5 +1,5 @@
 import "server-only";
-import { appendFile, mkdir } from "node:fs/promises";
+import { appendFile, mkdir, readFile } from "node:fs/promises";
 import path from "node:path";
 
 /**
@@ -25,4 +25,29 @@ export async function record(collection: Collection, data: Record<string, unknow
     // L'enregistrement ne doit jamais empêcher l'envoi du mail.
     console.error(`Enregistrement ${collection} impossible`, e);
   }
+}
+
+/** Relit toute une collection (les lignes illisibles sont ignorées). */
+export async function readAll(collection: Collection): Promise<Record<string, unknown>[]> {
+  let raw = "";
+  try {
+    raw = await readFile(path.join(DATA_DIR, `${collection}.jsonl`), "utf8");
+  } catch {
+    return [];
+  }
+  return raw.split("\n").flatMap((line) => {
+    try {
+      return line.trim() ? [JSON.parse(line)] : [];
+    } catch {
+      return [];
+    }
+  });
+}
+
+export const sameEmail = (a: unknown, b: unknown) =>
+  typeof a === "string" && typeof b === "string" && a.trim().toLowerCase() === b.trim().toLowerCase();
+
+/** Vrai si cet email figure déjà dans la collection (pour éviter les inscriptions en double). */
+export async function hasEmail(collection: Collection, email: string): Promise<boolean> {
+  return (await readAll(collection)).some((l) => sameEmail(l.email, email));
 }
