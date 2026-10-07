@@ -25,7 +25,19 @@ $Feuilles = @(
 
 $NAVY = 0x361600; $ORANGE = 0x015EFF; $GOLD = 0x59BDFF; $CLOUD = 0xFAEFE8; $GREY = 0x856B5B   # couleurs BGR d'Excel
 
-$xl = New-Object -ComObject Excel.Application
+# Microsoft Excel de préférence (WPS Office, s'il est installé, intercepte « Excel.Application »)
+$exe = @("$env:ProgramFiles\Microsoft Office\root\Office16\EXCEL.EXE", "${env:ProgramFiles(x86)}\Microsoft Office\root\Office16\EXCEL.EXE") | Where-Object { Test-Path $_ } | Select-Object -First 1
+if ($exe) {
+  Start-Process $exe -ArgumentList "/automation" | Out-Null
+  $xl = $null
+  for ($i = 0; $i -lt 30 -and -not $xl; $i++) {
+    Start-Sleep -Milliseconds 700
+    try { $xl = [Runtime.InteropServices.Marshal]::GetActiveObject("Excel.Application") } catch {}
+    if ($xl -and $xl.Path -notlike "*Microsoft Office*") { $xl = $null }  # une instance WPS ouverte : on attend Excel
+  }
+}
+if (-not $xl) { Write-Host "Microsoft Excel introuvable : fermez WPS Office puis relancez ce script."; exit 1 }
+Write-Host "Tableur utilisé : $($xl.Name) $($xl.Version)"
 $xl.DisplayAlerts = $false
 $xl.Visible = $false
 $wb = $xl.Workbooks.Add()
@@ -62,8 +74,8 @@ foreach ($f in $Feuilles) {
   $nb = $qt.ResultRange.Columns.Count
   $entete = $ws.Range($ws.Cells.Item(4, 1), $ws.Cells.Item(4, $nb))
   $entete.Font.Bold = $true; $entete.Font.Color = 0xFFFFFF; $entete.Interior.Color = $NAVY
-  $ws.Columns.Item(1).NumberFormat = "dd/mm/yyyy hh:mm"
-  $ws.Range("A1:A2").NumberFormat = "General"
+  $ws.Columns.Item(1).NumberFormatLocal = "jj/mm/aaaa hh:mm"
+  $ws.Range("A1:A2").NumberFormatLocal = "Standard"
   $ws.Range($ws.Cells.Item(4, 2), $ws.Cells.Item(4, $nb)).EntireColumn.AutoFit() | Out-Null
   $ws.Columns.Item(1).ColumnWidth = 18
   for ($c = 1; $c -le $nb; $c++) { if ($ws.Columns.Item($c).ColumnWidth -gt 60) { $ws.Columns.Item($c).ColumnWidth = 60 } }
@@ -101,7 +113,7 @@ function Carte($cell, $label, $formule, $sous) {
 # Formules en français (FormulaLocal) : cet Excel refuse certaines fonctions écrites en anglais.
 Carte "B7" "Liste d'attente"   "=NB(D_Attente)"     '="+" & NB.SI(D_Attente;">="&AUJOURDHUI()-7) & " ces 7 derniers jours"'
 Carte "D7" "Fiches orateur"    "=NB(D_Fiches)"      '="+" & NB.SI(D_Fiches;">="&AUJOURDHUI()-7) & " ces 7 derniers jours"'
-Carte "F7" "Quiz réalisés"     "=NB(D_Quiz)"        '=SIERREUR(TEXTE(NB(D_Fiches)/NB(D_Quiz);"0 %");"0 %") & " ont demandé leur fiche"'
+Carte "F7" "Quiz réalisés"     "=NB(D_Quiz)"        '=SIERREUR(TEXTE(NB(D_Fiches)/NB(D_Quiz);"0%");"0%") & " ont demandé leur fiche"'
 Carte "H7" "Demandes"          "=NB(D_Demandes)"    '=NB.SI(Dem_Type;"Devis") & " devis · " & NB.SI(Dem_Type;"Grand Oral") & " Grand Oral · " & NB.SI(Dem_Type;"Contact") & " contact"'
 Carte "B12" "Newsletter"       "=NB(D_Newsletter)"  '="+" & NB.SI(D_Newsletter;">="&AUJOURDHUI()-7) & " ces 7 derniers jours"'
 Carte "D12" "Dernière inscription" '=MAX(D_Attente;D_Fiches;D_Demandes;D_Newsletter)' '="toutes listes confondues"'

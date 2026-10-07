@@ -65,7 +65,7 @@ L'historique complet est visible avec `git log --oneline`.
 
 ## Les données des formulaires
 
-**Le tableau de bord** `LEQ-donnees.xlsx` est dans le dossier `leqsaas-main` (celui qui contient le projet). Ouvrez-le avec Excel : il se met à jour tout seul à l'ouverture, puis toutes les 5 minutes tant qu'il est ouvert. Pour forcer : *Données → Actualiser tout*.
+**Le tableau de bord** `LEQ-donnees.xlsx` est dans le dossier `leqsaas-main` (celui qui contient le projet). Ouvrez-le avec **Microsoft Excel** (clic droit → *Ouvrir avec* → *Excel*) : sur cet ordinateur, le double-clic ouvre WPS Office, qui ne sait pas actualiser les données. Dans Excel, il se met à jour tout seul à l'ouverture, puis toutes les 5 minutes tant qu'il est ouvert. Pour forcer : *Données → Actualiser tout*.
 
 | Onglet | Contenu |
 | --- | --- |
@@ -104,7 +104,7 @@ Dans `communication/` :
 
 **Le plus simple :** ouvrez le `.pptx`, dupliquez la diapositive qui vous intéresse (clic droit → *Dupliquer*), remplacez les textes. Pour exporter une publication en image : *Fichier → Exporter → PNG*.
 
-**Polices.** Installez les polices du dossier `LEQ-maquette-v2/polices` (double-clic → *Installer*). Sur cet ordinateur, 18 graisses de SF Pro sont installées sous le même nom et PowerPoint peut afficher le texte normal en très gras. Si c'est le cas : *Paramètres Windows → Personnalisation → Polices*, cherchez « SF Pro Display » et désinstallez les graisses inutiles (Black, Heavy, Thin, Ultralight, Light et leurs italiques) en gardant Regular, Medium, Semibold, Bold et Italic. Puis redémarrez PowerPoint.
+**Polices.** Installez les polices du dossier `LEQ-maquette-v2/polices` (double-clic → *Installer*). Sur cet ordinateur, 18 graisses de SF Pro sont installées sous le même nom : certains logiciels (WPS Office notamment) affichent alors le texte normal en très gras. Ouvrez les modèles avec Microsoft PowerPoint (clic droit → *Ouvrir avec*). Si le texte reste trop gras : *Paramètres Windows → Personnalisation → Polices*, cherchez « SF Pro Display » et désinstallez les graisses inutiles (Black, Heavy, Thin, Ultralight, Light et leurs italiques) en gardant Regular, Medium, Semibold, Bold et Italic. Puis redémarrez PowerPoint.
 
 **Canva.** *Créer un design → Importer* le fichier `.pptx`. Canva n'a pas SF Pro ni Relationship of Mélodrame : avec Canva Pro, importez-les dans le *Brand Kit* (*Marque → Polices*) ; sinon Canva les remplace par une police proche.
 
