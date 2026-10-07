@@ -20,7 +20,7 @@ export function Footer() {
             ),
           )}
         </nav>
-        <p className="m-0 text-xs text-white/45">© 2026 Lieben Éloquence · Tous droits réservés</p>
+        <p className="m-0 text-xs text-white/65">© 2026 Lieben Éloquence · Tous droits réservés</p>
       </div>
     </footer>
   );

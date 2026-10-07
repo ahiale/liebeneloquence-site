@@ -2,6 +2,8 @@ import Link from "next/link";
 import { Header } from "@/components/layout/Header";
 import { Heart, MicDoodle, Sparkle } from "@/components/ui/Doodles";
 
+export const metadata = { title: "Page introuvable", robots: { index: false }, alternates: { canonical: null } };
+
 export default function NotFound() {
   return (
     <div className="bg-hero min-h-[80vh]">

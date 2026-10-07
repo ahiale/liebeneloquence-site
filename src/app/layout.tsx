@@ -6,26 +6,26 @@ import { SITE } from "@/config/site";
 import { getPricing } from "@/content";
 import { formatPrice } from "@/lib/format";
 import { CommunityPopup } from "@/components/communaute/CommunityPopup";
+import { JsonLd, KEYWORDS, pageMeta, siteGraph } from "@/lib/seo";
+import { DISTINCTIONS } from "@/components/home/QuiSuisJe";
 import "./globals.css";
 
-export const metadata: Metadata = {
-  metadataBase: new URL(SITE.url),
-  title: {
-    default: "Lieben Éloquence · Parlez pour plaire, convaincre, impacter",
-    template: "%s · Lieben Éloquence",
-  },
+const HOME = pageMeta({
+  title: "Coaching prise de parole et formation éloquence · Lieben Éloquence",
   description:
-    "Formations et coaching en prise de parole pour lycéens, étudiants et professionnels. Séance diagnostic offerte, en visio ou en présentiel.",
-  keywords: ["prise de parole en public", "éloquence", "Grand Oral", "coaching oral", "formation prise de parole", "art oratoire"],
-  authors: [{ name: SITE.founder }],
-  openGraph: {
-    type: "website",
-    locale: "fr_FR",
-    siteName: SITE.name,
-    title: "Lieben Éloquence · Formations en prise de parole",
-    description: "Parlez pour plaire, convaincre, impacter. Séance diagnostic offerte.",
-  },
-  robots: { index: true, follow: true },
+    "Coaching prise de parole et formation éloquence : packs individuels, préparation au Grand Oral, à l'oral de BTS et aux soutenances. Diagnostic offert.",
+  path: "/",
+  absolute: true,
+});
+
+export const metadata: Metadata = {
+  ...HOME,
+  metadataBase: new URL(SITE.url),
+  title: { default: "Coaching prise de parole et formation éloquence · Lieben Éloquence", template: "%s · Lieben Éloquence" },
+  keywords: KEYWORDS,
+  authors: [{ name: SITE.founder, url: `${SITE.url}/a-propos` }],
+  creator: SITE.founder,
+  robots: { index: true, follow: true, "max-image-preview": "large" },
 };
 
 export const viewport: Viewport = {
@@ -33,16 +33,18 @@ export const viewport: Viewport = {
 };
 
 export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  const { leqfam } = await getPricing();
+  const pricing = await getPricing();
+  const { leqfam } = pricing;
   return (
     <html lang="fr" className={`${sfPro.variable} ${melodrame.variable}`}>
       <body>
+        <JsonLd data={siteGraph(pricing, DISTINCTIONS)} />
         {children}
         <Footer />
         <CommunityPopup price={formatPrice(leqfam.monthlyPrice)} availability={leqfam.availability} />
         {/* Mesure d'audience Umami (sans cookie), active seulement si configurée au build */}
         {process.env.UMAMI_WEBSITE_ID && (
-          <Script src={process.env.UMAMI_SCRIPT_URL || "https://stats.liebeneloquence.com/script.js"} data-website-id={process.env.UMAMI_WEBSITE_ID} strategy="afterInteractive" />
+          <Script src={process.env.UMAMI_SCRIPT_URL || "https://stats.liebeneloquence.com/script.js"} data-website-id={process.env.UMAMI_WEBSITE_ID} strategy="lazyOnload" />
         )}
       </body>
     </html>

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { eventLd, JsonLd, pageMeta } from "@/lib/seo";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -28,12 +29,12 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const event = await getEvent((await params).slug);
   if (!event) return {};
-  return {
+  return pageMeta({
     title: event.title ? `${event.title} · ${event.dateLabel}` : `Événement LEQ · ${event.dateLabel}`,
     description: event.summary,
-    alternates: { canonical: `/evenements/${event.slug}` },
-    openGraph: event.image ? { images: [event.image] } : undefined,
-  };
+    path: `/evenements/${event.slug}`,
+    image: event.image,
+  });
 }
 
 export default async function EvenementPage({ params }: Props) {
@@ -47,22 +48,11 @@ export default async function EvenementPage({ params }: Props) {
     { icon: "ticket", label: "Tarif", value: event.priceLabel },
   ];
 
-  // Données structurées pour Google (uniquement si la date est connue)
-  const jsonLd = event.startsAt
-    ? {
-        "@context": "https://schema.org",
-        "@type": "Event",
-        name: event.title ?? `Événement LEQ ${event.dateLabel}`,
-        startDate: event.startsAt,
-        description: event.summary,
-        location: event.location ? { "@type": "Place", name: event.location, address: event.location } : undefined,
-        organizer: { "@type": "Organization", name: "Lieben Éloquence", url: "https://liebeneloquence.com" },
-      }
-    : null;
+  const jsonLd = eventLd(event);
 
   return (
     <>
-      {jsonLd && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />}
+      {jsonLd && <JsonLd data={jsonLd} />}
       <div className="bg-hero">
         <Header />
         <section className="wrap pt-6 pb-20 sm:pt-10 sm:pb-24">
@@ -85,7 +75,7 @@ export default async function EvenementPage({ params }: Props) {
               <Sparkle className="wiggle hide-sm absolute z-[2]" size={44} style={{ top: -22, right: -10 }} />
               <div className="relative overflow-hidden rounded-[26px] border-4 border-white bg-cloud" style={{ aspectRatio: "16 / 10", boxShadow: "0 30px 60px -20px rgba(0,22,54,.6)" }}>
                 {event.image ? (
-                  <Image src={event.image} alt="" fill priority sizes="(max-width: 760px) 90vw, 460px" style={{ objectFit: "cover" }} />
+                  <Image src={event.image} alt={`Visuel de l'événement ${event.title ?? "LEQ"}`} fill priority sizes="(max-width: 760px) 90vw, 460px" style={{ objectFit: "cover" }} />
                 ) : (
                   <span className="flex h-full items-center justify-center text-[13px] font-semibold text-ink/50">Photo de l&apos;événement</span>
                 )}

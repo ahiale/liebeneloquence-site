@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { pageMeta } from "@/lib/seo";
 import Link from "next/link";
 import { Suspense } from "react";
 import { getPricing } from "@/content";
@@ -10,11 +11,11 @@ import { Icon, type IconName } from "@/components/ui/Icons";
 import { ContactForm } from "@/components/autres-services/ContactForm";
 import { DEMANDES } from "@/lib/options";
 
-export const metadata: Metadata = {
-  title: "Autres services",
-  description: "La communauté LEQ'FAM, des discours sur mesure, l'animation de vos événements, le coaching concours d'éloquence et bientôt une application mobile.",
-  alternates: { canonical: "/autres-services" },
-};
+export const metadata: Metadata = pageMeta({
+  title: "Coaching concours d'éloquence, discours et animation",
+  description: "Coaching pour concours d'éloquence, discours sur mesure, animation d'événements et communauté LEQ'FAM : demandez votre devis à Lieben Éloquence.",
+  path: "/autres-services",
+});
 
 const LEQFAM_POINTS = [
   "Des lives collectifs chaque semaine",

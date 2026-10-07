@@ -8,7 +8,7 @@ export function Logo({ size = 24, tone = "light" }: { size?: number; tone?: "lig
   return (
     <Link
       href="/"
-      aria-label="Lieben Éloquence, retour à l'accueil"
+      aria-label="LEQ. Lieben Éloquence, retour à l'accueil"
       style={{ fontSize: size, color: tone === "light" ? "#FFFFFF" : "#001636" }}
       className="font-extrabold tracking-[-0.04em] no-underline"
     >

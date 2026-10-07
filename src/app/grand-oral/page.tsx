@@ -1,15 +1,16 @@
 import type { Metadata } from "next";
+import { pageMeta } from "@/lib/seo";
 import { getPricing } from "@/content";
 import { formatAmount } from "@/lib/format";
 import { SimpleHeader } from "@/components/layout/SimpleHeader";
 import { Sparkle, SpeechBubble } from "@/components/ui/Doodles";
 import { GrandOralForm } from "@/components/grand-oral/GrandOralForm";
 
-export const metadata: Metadata = {
-  title: "Offre Grand Oral",
-  description: "5 séances intensives pour réussir le Grand Oral du bac, un oral de BTS, une soutenance ou un pitch face à un jury.",
-  alternates: { canonical: "/grand-oral" },
-};
+export const metadata: Metadata = pageMeta({
+  title: "Préparation Grand Oral, oral de BTS et soutenance",
+  description: "5 séances intensives de 50 min pour préparer le Grand Oral du bac, un oral de BTS, une soutenance ou un pitch : structure, voix, posture et questions du jury.",
+  path: "/grand-oral",
+});
 
 const ORAUX_CIBLES = ["Grand Oral BAC", "Oral de BTS", "Concours d'éloquence", "Soutenance", "Pitch", "Tout type d'oral"];
 

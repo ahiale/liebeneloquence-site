@@ -1,12 +1,14 @@
 import type { Metadata } from "next";
+import { pageMeta } from "@/lib/seo";
 import Link from "next/link";
 import { LEGAL, SITE } from "@/config/site";
 import { LegalPage } from "@/components/layout/LegalPage";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMeta({
   title: "Politique de confidentialité",
-  alternates: { canonical: "/confidentialite" },
-};
+  description: "Comment Lieben Éloquence collecte, utilise et protège vos données personnelles, et comment exercer vos droits (RGPD).",
+  path: "/confidentialite",
+});
 
 const TRAITEMENTS = [
   ["Demande de devis", "Nom, établissement, email, message", "Répondre à la demande et envoyer la brochure", "Mesures précontractuelles", "3 ans après le dernier contact"],

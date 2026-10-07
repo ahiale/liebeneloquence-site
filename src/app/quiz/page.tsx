@@ -1,13 +1,14 @@
 import type { Metadata } from "next";
+import { pageMeta } from "@/lib/seo";
 import { SimpleHeader } from "@/components/layout/SimpleHeader";
 import { Sparkle } from "@/components/ui/Doodles";
 import { Quiz } from "@/components/quiz/Quiz";
 
-export const metadata: Metadata = {
-  title: "Quiz : quel type d'orateur êtes-vous ?",
-  description: "6 questions, 2 minutes : découvrez votre profil d'orateur, votre niveau et vos points à travailler.",
-  alternates: { canonical: "/quiz" },
-};
+export const metadata: Metadata = pageMeta({
+  title: "Quiz gratuit : quel orateur êtes-vous ?",
+  description: "6 questions, 2 minutes : découvrez gratuitement votre profil d'orateur, votre niveau et vos points à travailler en prise de parole.",
+  path: "/quiz",
+});
 
 export default function QuizPage() {
   return (

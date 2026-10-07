@@ -1,12 +1,14 @@
 import type { Metadata } from "next";
+import { pageMeta } from "@/lib/seo";
 import Link from "next/link";
 import { LEGAL, SITE } from "@/config/site";
 import { LegalPage } from "@/components/layout/LegalPage";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMeta({
   title: "Mentions légales",
-  alternates: { canonical: "/mentions-legales" },
-};
+  description: "Mentions légales du site liebeneloquence.com : éditrice, hébergeur, propriété intellectuelle et médiation de la consommation.",
+  path: "/mentions-legales",
+});
 
 export default function MentionsLegalesPage() {
   return (

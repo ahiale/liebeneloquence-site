@@ -1,11 +1,13 @@
 import type { Metadata } from "next";
+import { pageMeta } from "@/lib/seo";
 import Link from "next/link";
 import { LegalPage } from "@/components/layout/LegalPage";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMeta({
   title: "Gestion des cookies",
-  alternates: { canonical: "/cookies" },
-};
+  description: "Aucun cookie publicitaire sur liebeneloquence.com : détail des stockages techniques et de la mesure d'audience sans cookie.",
+  path: "/cookies",
+});
 
 export default function CookiesPage() {
   return (

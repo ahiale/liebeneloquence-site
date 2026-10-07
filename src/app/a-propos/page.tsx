@@ -1,15 +1,16 @@
 import type { Metadata } from "next";
+import { pageMeta } from "@/lib/seo";
 import Image from "next/image";
 import Link from "next/link";
 import { SITE } from "@/config/site";
 import { Header } from "@/components/layout/Header";
 import { DrawUnderline, Heart, MicDoodle, Sparkle } from "@/components/ui/Doodles";
 
-export const metadata: Metadata = {
-  title: "À propos",
-  description: "Rebecca Lieben Ahiale, oratrice, jurée et formatrice en prise de parole depuis 2019 : parcours, distinctions et expériences.",
-  alternates: { canonical: "/a-propos" },
-};
+export const metadata: Metadata = pageMeta({
+  title: "Rebecca Lieben Ahiale, formatrice en prise de parole",
+  description: "Oratrice, jurée et formatrice en éloquence depuis 2019 : vice-championne du Mondial de la Parole, présidente d'Eloquentia Toulon. Parcours et distinctions.",
+  path: "/a-propos",
+});
 
 const CHIFFRES = [
   { value: "2019", label: "premier concours d'éloquence" },

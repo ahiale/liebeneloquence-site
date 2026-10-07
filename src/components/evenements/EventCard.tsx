@@ -8,7 +8,7 @@ export function EventCard({ event }: { event: LeqEvent }) {
   return (
     <article className="sticker relative flex flex-col overflow-hidden p-0">
       <div className="relative flex items-center justify-center bg-cloud text-[13px] font-semibold text-ink/50" style={{ aspectRatio: "16 / 10" }}>
-        {event.image ? <Image src={event.image} alt="" fill sizes="380px" style={{ objectFit: "cover" }} /> : "Photo de l'événement"}
+        {event.image ? <Image src={event.image} alt={`Visuel de l'événement ${event.title ?? "LEQ"}`} fill sizes="380px" style={{ objectFit: "cover" }} /> : "Photo de l'événement"}
         {event.badge && (
           <span className="absolute top-3.5 left-3.5 rounded-full bg-orange px-3 py-1 text-[11px] font-bold tracking-[.12em] text-white uppercase">{event.badge}</span>
         )}

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { pageMeta } from "@/lib/seo";
 import Link from "next/link";
 import { getPricing } from "@/content";
 import { SITE, paymentHref } from "@/config/site";
@@ -8,11 +9,11 @@ import { BubbleTail, DrawUnderline, Heart, Sparkle } from "@/components/ui/Doodl
 import { Icon, type IconName } from "@/components/ui/Icons";
 import { WaitlistForm } from "@/components/communaute/WaitlistForm";
 
-export const metadata: Metadata = {
-  title: "La communauté LEQ'FAM",
+export const metadata: Metadata = pageMeta({
+  title: "LEQ'FAM, la communauté de la prise de parole",
   description: "La première communauté francophone en ligne dédiée à la prise de parole en public, à l'éloquence et aux soft skills. Sur Discord, 3,99 € par mois.",
-  alternates: { canonical: "/communaute" },
-};
+  path: "/communaute",
+});
 
 const ENSEMBLE: { icon: IconName; title: string; text: string; rotate: number }[] = [
   { icon: "video", title: "Des lives chaque semaine", text: "Sur des thématiques choisies par la communauté : prise de parole, storytelling, gestion du trac, improvisation, culture générale, avec des invités surprise réguliers.", rotate: -1.2 },

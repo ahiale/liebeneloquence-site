@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { faqLd, JsonLd, pageMeta } from "@/lib/seo";
 import { getEvents } from "@/content";
 import { Header } from "@/components/layout/Header";
 import { DrawUnderline, Heart, Sparkle, SpeechBubble } from "@/components/ui/Doodles";
@@ -6,11 +7,11 @@ import { Check } from "@/components/ui/Doodles";
 import { EventCard } from "@/components/evenements/EventCard";
 import { NewsletterForm } from "@/components/evenements/NewsletterForm";
 
-export const metadata: Metadata = {
-  title: "Événements & actualités",
-  description: "Ateliers, conférences et formations collectives LEQ pour progresser à chaque prise de parole. Inscrivez-vous à la newsletter.",
-  alternates: { canonical: "/evenements" },
-};
+export const metadata: Metadata = pageMeta({
+  title: "Ateliers et masterclass de prise de parole",
+  description: "Ateliers, masterclass et formations collectives en prise de parole et en éloquence, en ligne ou en présentiel. Prochaines dates, inscriptions et FAQ.",
+  path: "/evenements",
+});
 
 const TICKETS = [
   { kind: "Atelier", title: "L'art de captiver", color: "#114DA8", anim: "floaty", style: { left: "4%", top: "12%", transform: "rotate(-8deg)" } },
@@ -55,6 +56,7 @@ export default async function EvenementsPage() {
 
   return (
     <>
+      <JsonLd data={faqLd(FAQ.flatMap((g): readonly (readonly [string, string])[] => g.items))} />
       <div className="bg-hero">
         <Header />
         <section className="pt-8 pb-20 sm:pt-12 sm:pb-[88px]">

@@ -9,6 +9,8 @@ import { Transparence } from "@/components/home/Transparence";
 import { Temoignages } from "@/components/home/Temoignages";
 import { QuiSuisJe } from "@/components/home/QuiSuisJe";
 
+export const metadata = { alternates: { canonical: "/" } };
+
 export default async function HomePage() {
   const [pricing, reviews] = await Promise.all([getPricing(), getReviews()]);
 
