@@ -31,6 +31,18 @@ Copier un bloc de `evenements.json`. Le `slug` devient l'adresse de la page : `/
 
 Ces noms de champs sont ceux que reprendra le futur SaaS.
 
+## Événement gratuit avec inscription (rendez-vous mensuel…)
+
+Pour un événement gratuit en visio, mettez `"registrationUrl": null` et ajoutez :
+
+```json
+"signup": { "meetingUrl": "https://meet.google.com/xxx-xxxx-xxx", "durationMinutes": 60 }
+```
+
+La page affiche alors un formulaire (prénom, nom, email, comment nous avez-vous connus). Chaque inscrit reçoit aussitôt un mail avec le lien de la visio et un fichier pour l'ajouter à son agenda. Le lien n'est jamais affiché sur le site. Une même adresse ne peut pas s'inscrire deux fois au même événement, et le formulaire se ferme seul une fois l'événement passé. Les inscrits apparaissent dans l'onglet « Inscriptions événements » du tableau de bord Excel.
+
+Pour le rendez-vous du mois suivant : copiez le bloc du rendez-vous mensuel, changez le `slug` (par exemple `rendez-vous-mensuel-leq-novembre-2026`), la date (`dateLabel` et `startsAt`) et le lien Meet si besoin. Passez l'ancien en `"draft"`.
+
 ## Ouvrir la communauté LEQ'FAM
 
 Tant que `leqfam.availability` contient un texte dans `tarifs.json` (ex. « Bientôt disponible · fin octobre »), la page Communauté affiche une **liste d'attente**. Le jour du lancement :

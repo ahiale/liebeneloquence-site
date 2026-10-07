@@ -56,6 +56,15 @@ export const EventSchema = z.object({
   registrationUrl: z.union([z.string().url(), z.string().regex(/^\/[^\s]*$/, "lien interne commençant par /")]).nullable(),
   /** Texte du bouton d'inscription (défaut : « S'inscrire »). */
   registrationLabel: z.string().nullable().optional(),
+  /**
+   * Inscription gratuite par formulaire sur la page de l'événement (facultatif).
+   * Le lien de la visio est envoyé par mail aux inscrits, avec un fichier agenda ; il n'est jamais affiché sur le site.
+   */
+  signup: z
+    .object({ meetingUrl: z.string().url(), durationMinutes: z.number().int().positive().default(60) })
+    .nullable()
+    .optional()
+    .default(null),
 });
 export type LeqEvent = z.infer<typeof EventSchema>;
 

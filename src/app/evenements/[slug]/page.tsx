@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { eventLd, JsonLd, pageMeta } from "@/lib/seo";
+import { EventSignupForm } from "@/components/evenements/EventSignupForm";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -21,6 +22,9 @@ function includeIcon(text: string): IconName {
   if (t.includes("attestation") || t.includes("certific")) return "award";
   return "zap";
 }
+
+/** Régénérée toutes les heures : le formulaire d'inscription se ferme seul après l'événement. */
+export const revalidate = 3600;
 
 export async function generateStaticParams() {
   return (await getEvents()).map((e) => ({ slug: e.slug }));
@@ -49,6 +53,7 @@ export default async function EvenementPage({ params }: Props) {
   ];
 
   const jsonLd = eventLd(event);
+  const isPast = event.startsAt ? Date.parse(event.startsAt) + (event.signup?.durationMinutes ?? 120) * 60_000 < Date.now() : false;
 
   return (
     <>
@@ -195,7 +200,11 @@ export default async function EvenementPage({ params }: Props) {
                 </div>
               ))}
             </dl>
-            {event.registrationUrl ? (
+            {event.signup && !isPast ? (
+              <EventSignupForm slug={event.slug} label={event.registrationLabel ?? "Je m'inscris"} />
+            ) : event.signup ? (
+              <p className="mt-7 mb-0 rounded-[16px] bg-white/10 px-4 py-3 text-center text-[14px] text-white/85">Cet événement est terminé. Les prochaines dates arrivent bientôt !</p>
+            ) : event.registrationUrl ? (
               event.registrationUrl.startsWith("/") ? (
                 <Link className="btn btn-p mt-7 w-full" href={event.registrationUrl}>
                   {event.registrationLabel ?? "S'inscrire"}

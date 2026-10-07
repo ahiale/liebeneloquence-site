@@ -5,7 +5,8 @@ import { computeResult, describeAnswers, PROFILES, type Answer, type ProfileId }
 /**
  * Données des formulaires pour le tableau de bord Excel (LEQ-donnees.xlsx).
  * Accès réservé : paramètre « ?cle= » (ou en-tête « X-LEQ-Cle ») égal à DATA_API_KEY sur le serveur.
- * Feuilles : liste-attente, newsletter, demandes, quiz (quiz réalisés), fiches (fiches orateur demandées).
+ * Feuilles : liste-attente, newsletter, demandes, quiz (quiz réalisés), fiches (fiches orateur demandées),
+ * inscriptions (événements gratuits).
  * Réponse : CSV (séparateur « ; », UTF-8), colonnes fixes par feuille, la première est toujours la date.
  */
 export const dynamic = "force-dynamic";
@@ -75,6 +76,10 @@ const BUILDERS: Record<Sheet, (lines: Row[]) => Table> = {
       str(l.date),
       str(l.message ?? l.attentes),
     ]),
+  }),
+  inscriptions: (lines) => ({
+    columns: ["Date", "Événement", "Prénom", "Nom", "Email", "Comment nous a connus"],
+    rows: lines.map((l) => [paris(l.createdAt), str(l.eventTitle ?? l.event), str(l.prenom), str(l.nom), str(l.email), str(l.source)]),
   }),
   // Chaque quiz terminé écrit une ligne sans email : ce sont les quiz réalisés.
   quiz: (lines) => ({

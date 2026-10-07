@@ -2,16 +2,17 @@
 
 import { z } from "zod";
 import { ADMIN_EMAIL, sendMail, type Mail } from "@/lib/mail";
-import { hasEmail, record } from "@/lib/store";
+import { hasEmail, readAll, record, sameEmail } from "@/lib/store";
 import { HONEYPOT, type FormState } from "@/lib/forms";
 import { tooManyRequests } from "@/lib/rate-limit";
 import { computeResult, isComplete, type Answer } from "@/lib/quiz";
-import { getPricing } from "@/content";
+import { getEvent, getPricing } from "@/content";
+import { eventIcs } from "@/lib/ics";
 import { formatPrice } from "@/lib/format";
 import * as T from "@/emails/templates";
 import { renderFicheOrateur } from "@/emails/fiche-orateur";
 import { addToNewsletterList } from "@/lib/brevo";
-import { DEMANDES, ORAUX, PROFILS_GRAND_ORAL } from "@/lib/options";
+import { DEMANDES, ORAUX, PROFILS_GRAND_ORAL, SOURCES } from "@/lib/options";
 
 /* Actions serveur des formulaires du site. Chaque action :
    1. ignore silencieusement les robots (champ invisible rempli),
@@ -245,6 +246,57 @@ export async function recevoirResultatQuiz(_: FormState, data: FormData): Promis
   try {
     const fiche = await renderFicheOrateur(result, prenom);
     await confirm(T.quizClient({ result, prenom }), mail, [{ name: "fiche-orateur-LEQ.png", content: fiche, contentType: "image/png", cid: "fiche" }]);
+    return { status: "success" };
+  } catch (e) {
+    console.error(e);
+    return FAILURE;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Inscription à un événement gratuit (rendez-vous mensuel…)
+   ------------------------------------------------------------------------- */
+
+const InscriptionSchema = z.object({
+  slug: z.string().regex(/^[a-z0-9-]+$/),
+  prenom: required("Prénom"),
+  nom: required("Nom"),
+  email,
+  source: z.enum(SOURCES, { message: "Dites-nous comment vous nous avez connus" }),
+});
+
+export async function inscrireEvenement(_: FormState, data: FormData): Promise<FormState> {
+  if (isBot(data)) return { status: "success" };
+  if (await tooManyRequests("evenement")) return TOO_MANY;
+  const parsed = InscriptionSchema.safeParse(Object.fromEntries(data));
+  if (!parsed.success) return invalid(parsed.error);
+  const d = parsed.data;
+
+  const event = await getEvent(d.slug);
+  if (!event?.signup || !event.startsAt) return FAILURE;
+  if (Date.parse(event.startsAt) + event.signup.durationMinutes * 60_000 < Date.now()) {
+    return { status: "error", message: "Cet événement est terminé : les inscriptions sont closes." };
+  }
+  const title = event.title ?? "Événement LEQ";
+  if ((await readAll("inscriptions")).some((l) => l.event === d.slug && sameEmail(l.email, d.email))) {
+    return already("Vous êtes déjà inscrit·e à cet événement. Le lien vous a été envoyé par mail : pensez à vérifier vos spams.");
+  }
+
+  await record("inscriptions", { event: d.slug, eventTitle: title, prenom: d.prenom, nom: d.nom, email: d.email, source: d.source });
+  try {
+    const ics = eventIcs({
+      uid: `${d.slug}-${Date.now()}`,
+      title: `${title} · Lieben Éloquence`,
+      start: event.startsAt,
+      minutes: event.signup.durationMinutes,
+      description: `Lien Google Meet : ${event.signup.meetingUrl}`,
+      url: event.signup.meetingUrl,
+    });
+    await confirm(
+      T.inscriptionEvenementClient({ prenom: d.prenom, title, dateLabel: event.dateLabel, timeLabel: event.timeLabel, meetingUrl: event.signup.meetingUrl }),
+      d.email,
+      [{ name: "rendez-vous-LEQ.ics", content: Buffer.from(ics, "utf8"), contentType: "text/calendar; charset=utf-8; method=PUBLISH" }],
+    );
     return { status: "success" };
   } catch (e) {
     console.error(e);

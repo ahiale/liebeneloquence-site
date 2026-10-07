@@ -9,7 +9,8 @@ $Fichiers = @(
   @{ Nom = "newsletter";     Titre = "Inscriptions newsletter" },
   @{ Nom = "liste-attente";  Titre = "Liste d'attente LEQ'FAM" },
   @{ Nom = "demandes";       Titre = "Demandes (devis, Grand Oral, contact)" },
-  @{ Nom = "quiz";           Titre = "Résultats du quiz" }
+  @{ Nom = "quiz";           Titre = "Résultats du quiz" },
+  @{ Nom = "inscriptions";   Titre = "Inscriptions aux événements" }
 )
 
 $Dossier = Join-Path ([Environment]::GetFolderPath("UserProfile")) ("Downloads\LEQ-donnees-" + (Get-Date -Format "yyyy-MM-dd"))

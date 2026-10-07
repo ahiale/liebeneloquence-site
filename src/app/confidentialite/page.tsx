@@ -16,6 +16,7 @@ const TRAITEMENTS = [
   ["Formulaire de contact", "Nom, email, type de demande, message", "Répondre à la demande", "Intérêt légitime", "3 ans après le dernier contact"],
   ["Newsletter", "Nom, email, profil et thématique (facultatifs)", "Envoyer la newsletter", "Consentement", "Jusqu'à la désinscription"],
   ["Liste d'attente LEQ'FAM", "Prénom, email", "Prévenir de l'ouverture de la communauté", "Consentement", "Jusqu'à l'ouverture, puis 6 mois au plus"],
+  ["Inscription à un événement gratuit", "Prénom, nom, email, comment vous nous avez connus", "Vous envoyer le lien de l'événement et organiser la séance", "Consentement", "1 an après l'événement"],
   ["Quiz d'orateur", "Réponses au quiz ; prénom et email si vous demandez votre résultat", "Calculer et envoyer le résultat, améliorer l'offre", "Intérêt légitime ; consentement pour l'envoi par email", "1 an"],
 ];
 

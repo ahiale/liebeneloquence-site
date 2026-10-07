@@ -253,6 +253,31 @@ export function listeAttenteClient(d: { prenom: string }): Email {
 }
 
 /* ---------------------------------------------------------------------------
+   Inscription à un événement gratuit (rendez-vous mensuel…)
+   ------------------------------------------------------------------------- */
+
+/** Mail d'inscription : le lien de la visio, le récapitulatif et un fichier agenda joint. */
+export function inscriptionEvenementClient(d: { prenom: string; title: string; dateLabel: string; timeLabel: string | null; meetingUrl: string }): Email {
+  return {
+    subject: `Votre inscription : ${d.title}, ${d.dateLabel.charAt(0).toLowerCase()}${d.dateLabel.slice(1)}`,
+    html: layout({
+      title: "C'est noté,",
+      accent: "à très vite !",
+      preheader: `${d.dateLabel}${d.timeLabel ? `, ${d.timeLabel}` : ""} : voici votre lien pour nous rejoindre.`,
+      reason: "Vous recevez ce mail suite à votre inscription à un événement sur liebeneloquence.com. Pour vous désinscrire, répondez simplement à ce mail.",
+      body:
+        hello(d.prenom) +
+        p(`Votre inscription au <strong>${esc(d.title)}</strong> est bien enregistrée. Voici le lien pour nous rejoindre le jour J :`) +
+        box(rows([["Date", d.dateLabel], ["Horaires", d.timeLabel ?? undefined], ["Lieu", "En ligne, sur Google Meet"]])) +
+        button(d.meetingUrl, "Rejoindre le Google Meet") +
+        p("Gardez ce mail : le lien sera le même le jour J. Le fichier joint vous permet d'ajouter le rendez-vous à votre agenda en un clic, avec un rappel 30 minutes avant.") +
+        p("Venez avec toutes vos questions sur la prise de parole, l'éloquence ou vos blocages à l'oral : rien n'est préparé à l'avance, c'est un moment ouvert, entre nous.") +
+        signature,
+    }),
+  };
+}
+
+/* ---------------------------------------------------------------------------
    Quiz d'orateur
    ------------------------------------------------------------------------- */
 

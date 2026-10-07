@@ -1,5 +1,37 @@
 [
   {
+    "slug": "rendez-vous-mensuel-leq-octobre-2026",
+    "status": "published",
+    "type": "Rendez-vous mensuel",
+    "title": "Le rendez-vous mensuel LEQ",
+    "dateLabel": "Mardi 13 octobre 2026",
+    "startsAt": "2026-10-13T19:30:00+02:00",
+    "timeLabel": "19h30 à 20h30 (1 heure)",
+    "location": "En ligne, sur Google Meet",
+    "priceLabel": "Gratuit",
+    "badge": "Gratuit",
+    "image": "/evenements/couvertures/bulles-ciel.jpg",
+    "summary": "Une heure de discussion ouverte et gratuite pour poser toutes vos questions sur l'art oratoire, l'éloquence et vos blocages à l'oral.",
+    "description": [
+      "Le rendez-vous mensuel LEQ, c'est une heure de discussion ouverte, sans thème et sans rien de préparé à l'avance. Vous venez avec vos questions sur l'art oratoire, l'éloquence ou vos blocages, et j'y réponds, autant que possible pendant une heure.",
+      "Un examen ou une soutenance approche ? Un discours à préparer ? Vous avez du mal à tenir une conversation ? C'est le moment d'en parler, simplement, entre nous.",
+      "La participation est gratuite. Inscrivez-vous avec le formulaire : vous recevez aussitôt par mail le lien Google Meet pour nous rejoindre."
+    ],
+    "program": [],
+    "audience": [
+      "Vous avez bientôt un examen, un oral ou une soutenance",
+      "Vous préparez un discours",
+      "Vous vous sentez bloqué·e à l'oral ou en conversation",
+      "Vous êtes simplement curieux·se d'art oratoire et d'éloquence"
+    ],
+    "registrationUrl": null,
+    "registrationLabel": "Je m'inscris gratuitement",
+    "signup": {
+      "meetingUrl": "https://meet.google.com/bqk-cmws-vfd",
+      "durationMinutes": 60
+    }
+  },
+  {
     "slug": "lancement-communaute-leqfam",
     "status": "published",
     "type": "Lancement",

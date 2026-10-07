@@ -20,6 +20,7 @@ $Feuilles = @(
   @{ Feuille = "Fiches orateur";  Api = "fiches";        Table = "TFiches"; Noms = @{};     Titre = "Fiches orateur demandées";       Info = "Personnes qui ont laissé prénom et email pour recevoir leur fiche après le quiz." },
   @{ Feuille = "Quiz réalisés";   Api = "quiz";          Table = "TQuiz"; Noms = @{ Q_Profil = "B"; Q_Pack = "D" };       Titre = "Quiz réalisés";                  Info = "Chaque quiz terminé, anonyme (la personne a pu ensuite demander sa fiche ou non)." },
   @{ Feuille = "Demandes";        Api = "demandes";      Table = "TDemandes"; Noms = @{ Dem_Type = "B" };   Titre = "Demandes : devis, Grand Oral, contact"; Info = "Tous les formulaires qui vous sont aussi notifiés par mail." },
+  @{ Feuille = "Inscriptions événements"; Api = "inscriptions"; Table = "TInscriptions"; Noms = @{ Ins_Source = "F" }; Titre = "Inscriptions aux événements gratuits"; Info = "Une ligne par inscription (rendez-vous mensuel…), avec la façon dont la personne vous a connus." },
   @{ Feuille = "Newsletter";      Api = "newsletter";    Table = "TNewsletter"; Noms = @{}; Titre = "Inscriptions à la newsletter";   Info = "Une ligne par adresse." }
 )
 
@@ -116,7 +117,8 @@ Carte "D7" "Fiches orateur"    "=NB(D_Fiches)"      '="+" & NB.SI(D_Fiches;">="&
 Carte "F7" "Quiz réalisés"     "=NB(D_Quiz)"        '=SIERREUR(TEXTE(NB(D_Fiches)/NB(D_Quiz);"0%");"0%") & " ont demandé leur fiche"'
 Carte "H7" "Demandes"          "=NB(D_Demandes)"    '=NB.SI(Dem_Type;"Devis") & " devis · " & NB.SI(Dem_Type;"Grand Oral") & " Grand Oral · " & NB.SI(Dem_Type;"Contact") & " contact"'
 Carte "B12" "Newsletter"       "=NB(D_Newsletter)"  '="+" & NB.SI(D_Newsletter;">="&AUJOURDHUI()-7) & " ces 7 derniers jours"'
-Carte "D12" "Dernière inscription" '=MAX(D_Attente;D_Fiches;D_Demandes;D_Newsletter)' '="toutes listes confondues"'
+Carte "B17" "Inscrits aux événements" "=NB(D_Inscriptions)" '="+" & NB.SI(D_Inscriptions;">="&AUJOURDHUI()-7) & " ces 7 derniers jours"'
+Carte "D12" "Dernière inscription" '=MAX(D_Attente;D_Fiches;D_Demandes;D_Newsletter;D_Inscriptions)' '="toutes listes confondues"'
 $t.Range("D13").Font.Size = 20; $t.Range("D13").NumberFormatLocal = "jj/mm hh:mm"
 
 # Profils du quiz
@@ -134,37 +136,37 @@ for ($i = 0; $i -lt $packs.Count; $i++) {
 }
 
 # 14 derniers jours
-$t.Range("B19").Value2 = "Les 14 derniers jours"; $t.Range("B19").Font.Bold = $true; $t.Range("B19").Font.Color = $NAVY; $t.Range("B19").Font.Size = 13
-$entetes = @("Jour", "Quiz", "Fiches", "Liste d'attente", "Demandes", "Newsletter")
-for ($i = 0; $i -lt $entetes.Count; $i++) { $c = $t.Cells.Item(20, 2 + $i); $c.Value2 = $entetes[$i]; $c.Font.Bold = $true; $c.Font.Color = 0xFFFFFF; $c.Interior.Color = $NAVY }
-$tables = @("D_Quiz", "D_Fiches", "D_Attente", "D_Demandes", "D_Newsletter")
+$t.Range("B23").Value2 = "Les 14 derniers jours"; $t.Range("B23").Font.Bold = $true; $t.Range("B23").Font.Color = $NAVY; $t.Range("B23").Font.Size = 13
+$entetes = @("Jour", "Quiz", "Fiches", "Liste d'attente", "Demandes", "Newsletter", "Événements")
+for ($i = 0; $i -lt $entetes.Count; $i++) { $c = $t.Cells.Item(24, 2 + $i); $c.Value2 = $entetes[$i]; $c.Font.Bold = $true; $c.Font.Color = 0xFFFFFF; $c.Interior.Color = $NAVY }
+$tables = @("D_Quiz", "D_Fiches", "D_Attente", "D_Demandes", "D_Newsletter", "D_Inscriptions")
 for ($d = 0; $d -lt 14; $d++) {
-  $row = 21 + $d
+  $row = 25 + $d
   $t.Cells.Item($row, 2).FormulaLocal = "=AUJOURDHUI()-$(13 - $d)"
   $t.Cells.Item($row, 2).NumberFormatLocal = "jjj jj/mm"
   for ($k = 0; $k -lt $tables.Count; $k++) {
     $t.Cells.Item($row, 3 + $k).FormulaLocal = "=NB.SI.ENS($($tables[$k]);"">=""&`$B$row;$($tables[$k]);""<""&`$B$row+1)"
   }
-  if ($d % 2 -eq 1) { $t.Range("B$($row):G$($row)").Interior.Color = $CLOUD }
+  if ($d % 2 -eq 1) { $t.Range("B$($row):H$($row)").Interior.Color = $CLOUD }
 }
-$t.Range("C21:G34").HorizontalAlignment = -4108
+$t.Range("C25:H38").HorizontalAlignment = -4108
 
 # Graphiques
-$g1 = $t.ChartObjects().Add($t.Range("I19").Left + 10, $t.Range("I19").Top, 430, 270).Chart
+$g1 = $t.ChartObjects().Add($t.Range("J23").Left + 10, $t.Range("J23").Top, 430, 270).Chart
 $g1.ChartType = 51  # histogramme groupé
-$g1.SetSourceData($t.Range("B20:D34"))
+$g1.SetSourceData($t.Range("B24:D38"))
 $g1.HasTitle = $true; $g1.ChartTitle.Text = "Quiz et fiches par jour"
 $g1.SeriesCollection(1).Format.Fill.ForeColor.RGB = $NAVY
 $g1.SeriesCollection(2).Format.Fill.ForeColor.RGB = $ORANGE
 
-$g2 = $t.ChartObjects().Add($t.Range("B38").Left, $t.Range("B38").Top, 430, 230).Chart
+$g2 = $t.ChartObjects().Add($t.Range("B42").Left, $t.Range("B42").Top, 430, 230).Chart
 $g2.ChartType = 57  # barres
 $g2.SetSourceData($t.Range("F13:G17"))
 $g2.HasTitle = $true; $g2.ChartTitle.Text = "Profils obtenus au quiz"; $g2.HasLegend = $false
 $g2.SeriesCollection(1).Format.Fill.ForeColor.RGB = $GOLD
 
-$t.Range("B36").Value2 = "Astuce : dans chaque onglet, Données > Filtrer pour trier ou filtrer (par profil, par date…)."
-$t.Range("B36").Font.Color = $GREY; $t.Range("B36").Font.Italic = $true
+$t.Range("B40").Value2 = "Astuce : dans chaque onglet, Données > Filtrer pour trier ou filtrer (par profil, par date…)."
+$t.Range("B40").Font.Color = $GREY; $t.Range("B40").Font.Italic = $true
 $t.Activate(); $t.Range("A1").Select() | Out-Null
 
 if (Test-Path $Sortie) { Remove-Item $Sortie -Force }
