@@ -27,7 +27,7 @@ export default function CookiesPage() {
 
       <h2>Mémorisation technique</h2>
       <p>
-        Pour ne pas vous présenter plusieurs fois la fenêtre d&apos;invitation à la communauté LEQ&apos;FAM, le site enregistre dans votre navigateur qu'elle vous a été montrée (stockage de session, effacé à la fermeture de l'onglet). Cette information reste sur votre appareil, n&apos;est jamais transmise et ne sert à aucun suivi. Elle est exemptée de consentement car strictement nécessaire à ce fonctionnement.
+        Pour ne pas vous présenter plusieurs fois la fenêtre d&apos;invitation à la communauté LEQ&apos;FAM, le site enregistre dans votre navigateur qu'elle vous a été montrée (stockage de session, effacé à la fermeture de l'onglet). De même, vos réponses au quiz d&apos;orateur sont gardées dans votre navigateur pour vous réafficher votre résultat si vous revenez sur la page. Ces informations restent sur votre appareil, ne sont jamais transmises par ce biais et ne servent à aucun suivi. Elles sont exemptées de consentement car strictement nécessaires à ces fonctionnements.
       </p>
 
       <h2>Une question ?</h2>

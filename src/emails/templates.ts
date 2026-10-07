@@ -84,7 +84,7 @@ function layout({ title, accent, preheader, body, reason }: { title: string; acc
     <!-- Pied -->
     <tr><td align="center" style="padding:26px 24px 8px;font-family:${FONT};font-size:13px;line-height:1.7;color:${C.muted}">
       <strong style="color:${C.navy}">Lieben Éloquence</strong> · Formations et coaching en prise de parole<br>
-      <a href="mailto:${SITE.email}" style="color:${C.royal};text-decoration:none">${SITE.email}</a> · ${SITE.phone}<br>
+      <a href="mailto:${SITE.email}" style="color:${C.royal};text-decoration:none">${SITE.email}</a><br>
       <a href="${SITE.url}" style="color:${C.royal}">liebeneloquence.com</a> · <a href="${SITE.instagram}" style="color:${C.royal}">Instagram</a> · <a href="${SITE.linkedin}" style="color:${C.royal}">LinkedIn</a>
     </td></tr>
     <tr><td align="center" style="padding:6px 24px 0;font-family:${FONT};font-size:11.5px;line-height:1.6;color:#94a0b4">${esc(reason)}</td></tr>

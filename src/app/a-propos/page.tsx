@@ -182,7 +182,7 @@ export default function AProposPage() {
             <div className="panel grid items-center gap-10 overflow-hidden p-5 sm:p-8 lg:grid-cols-[1fr_1.15fr] lg:gap-12 lg:p-10">
               <figure className="relative m-0 mx-auto w-full max-w-[400px]">
                 <div className="relative overflow-hidden rounded-[26px]" style={{ aspectRatio: "4 / 5", boxShadow: "0 40px 80px -40px rgba(0,0,0,.9)" }}>
-                  <Image src="/formatrice.jpg" alt="Portrait de Rebecca Lieben Ahiale" fill sizes="(max-width: 1024px) 90vw, 400px" style={{ objectFit: "cover", objectPosition: "50% 20%" }} />
+                  <Image src="/images/rebecca/portrait-studio-lumineux.jpg" alt="Portrait de Rebecca Lieben Ahiale" fill sizes="(max-width: 1024px) 90vw, 400px" style={{ objectFit: "cover", objectPosition: "50% 20%" }} />
                 </div>
                 <Sparkle className="wiggle absolute" size={40} style={{ top: -16, right: -12 }} />
               </figure>

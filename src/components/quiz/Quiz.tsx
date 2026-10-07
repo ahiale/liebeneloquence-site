@@ -5,11 +5,32 @@ import { useActionState, useEffect, useRef, useState } from "react";
 import { enregistrerQuiz, recevoirResultatQuiz } from "@/app/actions";
 import { SITE } from "@/config/site";
 import { IDLE } from "@/lib/forms";
-import { QUESTIONS, computeResult, isAnswered, type Answer } from "@/lib/quiz";
+import { QUESTIONS, computeResult, isAnswered, isComplete, type Answer } from "@/lib/quiz";
 import { Check, Sparkle } from "@/components/ui/Doodles";
 import { FieldError, fieldProps, FormError, FormSuccess, Honeypot, SubmitButton } from "@/components/ui/Form";
 
 type Step = "intro" | "q" | "result";
+
+/* Le quiz ne se fait qu'une fois : le résultat est gardé dans le navigateur
+   et réaffiché si la personne revient sur la page. */
+const DONE_KEY = "leq-quiz-reponses";
+
+function loadDone(): Answer[] | null {
+  try {
+    const a = JSON.parse(localStorage.getItem(DONE_KEY) ?? "null");
+    return Array.isArray(a) && isComplete(a) ? a : null;
+  } catch {
+    return null;
+  }
+}
+
+function saveDone(a: Answer[]) {
+  try {
+    localStorage.setItem(DONE_KEY, JSON.stringify(a));
+  } catch {
+    /* rien */
+  }
+}
 
 export function Quiz() {
   const [step, setStep] = useState<Step>("intro");
@@ -20,6 +41,15 @@ export function Quiz() {
   const q = QUESTIONS[qi];
   const current = answers[qi];
   const answered = isAnswered(q, current);
+
+  // Quiz déjà fait sur ce navigateur : on affiche directement le résultat.
+  useEffect(() => {
+    const done = loadDone();
+    if (done) {
+      setAnswers(done);
+      setStep("result");
+    }
+  }, []);
 
   // Place le focus sur le titre à chaque changement d'écran (clavier, lecteur d'écran).
   useEffect(() => {
@@ -46,6 +76,7 @@ export function Quiz() {
     if (!answered) return;
     if (qi >= QUESTIONS.length - 1) {
       setStep("result");
+      saveDone(answers);
       void enregistrerQuiz(answers);
     } else setQi(qi + 1);
   };
@@ -129,17 +160,6 @@ export function Quiz() {
 
       {step === "result" && <Result answers={answers} titleRef={titleRef} />}
 
-      {step === "result" && (
-        <p className="mt-7 mb-0 text-center">
-          <button type="button" onClick={start} className="btn btn-g">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-              <path d="M3 12a9 9 0 1 0 3-6.7L3 8" />
-              <path d="M3 3v5h5" />
-            </svg>
-            Refaire le quiz
-          </button>
-        </p>
-      )}
     </main>
   );
 }

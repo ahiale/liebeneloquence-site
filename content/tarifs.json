@@ -9,9 +9,9 @@
       "price": 89,
       "installments": 3,
       "features": [
-        "Culture oratoire & concepts de base",
-        "Comprendre son public",
-        "L'art de se vendre et le storytelling",
+        "Les bases de l'éloquence",
+        "Captiver son public",
+        "Se présenter avec impact",
         "Suivi post-formation"
       ],
       "featured": false,
@@ -26,8 +26,8 @@
       "installments": 3,
       "features": [
         "Tout le pack Senghor (optionnel)",
-        "Structurer et rédiger un discours",
-        "Les bases du logos, du pathos et de l'ethos",
+        "Structurer son discours",
+        "Convaincre avec le logos, le pathos et l'ethos",
         "Quiz & ressources inclus"
       ],
       "featured": false,
@@ -42,9 +42,9 @@
       "installments": 4,
       "features": [
         "Tout le pack Cicéron (optionnel)",
-        "Gestion du trac et de l'improvisation",
-        "Maîtrise du non-verbal et de la variation vocale",
-        "Autre sujet au choix"
+        "Dompter le trac et improviser",
+        "Voix et langage corporel",
+        "Le sujet de votre choix"
       ],
       "featured": true,
       "badge": "Le plus complet"

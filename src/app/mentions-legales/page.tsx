@@ -18,11 +18,9 @@ export default function MentionsLegalesPage() {
       <ul>
         <li>SIREN : {LEGAL.siren}</li>
         <li>SIRET : {LEGAL.siret}</li>
-        <li>Adresse : {LEGAL.address}</li>
         <li>
           Email : <a href={`mailto:${SITE.email}`}>{SITE.email}</a>
         </li>
-        <li>Téléphone : {SITE.phone}</li>
       </ul>
       <p>Directrice de la publication : {LEGAL.owner}.</p>
 

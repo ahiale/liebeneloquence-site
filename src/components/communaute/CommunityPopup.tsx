@@ -74,7 +74,7 @@ export function CommunityPopup({ price, availability }: { price: string; availab
     save("done");
     setView("hidden");
   };
-  const href = availability ? "/communaute#rejoindre" : "/communaute";
+  const href = "/communaute";
 
   if (view === "mini")
     return (
@@ -127,7 +127,7 @@ export function CommunityPopup({ price, availability }: { price: string; availab
           La communauté pour s&apos;entraîner à l&apos;oral ensemble, pour {price} par mois.
         </p>
         <Link href={href} onClick={finish} className="btn mt-5 w-full bg-orange text-white hover:brightness-110">
-          {availability ? "Je m'inscris sur la liste" : "Je découvre"}
+          Découvrir la communauté
         </Link>
         <button type="button" onClick={() => dialog.current?.close()} className="mt-3 cursor-pointer border-0 bg-transparent text-[13.5px] text-white/60 underline hover:text-white">
           Plus tard
