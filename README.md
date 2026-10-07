@@ -12,6 +12,15 @@ npm run build    # vérifie que tout compile
 
 Sans configuration, les mails des formulaires ne partent pas : ils s'affichent dans le terminal.
 
+## Documentation
+
+| Guide | Pour… |
+| --- | --- |
+| [TRAVAILLER-EN-AUTONOMIE.md](TRAVAILLER-EN-AUTONOMIE.md) | modifier, vérifier, mettre en ligne, annuler ; tableau de bord des données ; modèles PowerPoint |
+| [OU-MODIFIER-LES-TEXTES.md](OU-MODIFIER-LES-TEXTES.md) | trouver le fichier de chaque texte du site, page par page |
+| [content/LISEZMOI.md](content/LISEZMOI.md) | ajouter un événement, un avis, changer un tarif |
+| [DEPLOIEMENT.md](DEPLOIEMENT.md) | installation du serveur (déjà faite) et dépannage |
+
 ## Où modifier quoi
 
 | Je veux changer… | Fichier |
@@ -22,7 +31,7 @@ Sans configuration, les mails des formulaires ne partent pas : ils s'affichent d
 | Les questions et profils du quiz | `src/lib/quiz.ts` |
 | Les listes de choix des formulaires | `src/lib/options.ts` |
 | Les couleurs, polices, boutons, animations | `src/design/` |
-| La photo de la formatrice | `public/formatrice.jpg` |
+| Les photos de la formatrice | `public/images/rebecca/` (photos non utilisées : `assets/photos-reserve/`) |
 | Les brochures envoyées avec les devis | `assets/brochures/` |
 
 ## Organisation du code
@@ -30,8 +39,13 @@ Sans configuration, les mails des formulaires ne partent pas : ils s'affichent d
 ```
 content/              contenus modifiables (format partagé avec le futur SaaS)
 assets/brochures/     PDF joints aux mails de devis
+assets/photos-reserve/ photos non publiées sur le site (banque d'images)
+communication/        modèles PowerPoint (atelier, publications) et carrousel Instagram, avec leurs scripts
+outils/               export CSV des données et création du tableau de bord Excel
+LEQ-maquette-v2/      maquettes d'origine et polices (référence de design)
 src/
-  app/                pages (une par dossier) et actions des formulaires (actions.ts)
+  app/                pages (une par dossier), actions des formulaires (actions.ts),
+                      pages d'erreur (not-found.tsx, error.tsx), api/donnees (données pour Excel)
   components/         sections et composants par page ; ui/ = composants réutilisables
   config/site.ts      coordonnées et liens externes
   content/            lecture des contenus (schema.ts = format, index.ts = accès)
