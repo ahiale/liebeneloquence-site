@@ -40,7 +40,7 @@ Dans le code, l'apostrophe s'écrit parfois `&apos;` (ex. `l&apos;éloquence`) :
 | Textes des mails automatiques | `src/emails/templates.ts` |
 | Fiche orateur (infographie envoyée avec le quiz) | `src/emails/fiche-orateur.tsx` |
 | Titre et description de chaque page dans Google | En haut de chaque `page.tsx`, bloc `metadata` |
-| Photos de la formatrice | `public/images/rebecca/` (remplacer un fichier en gardant exactement le même nom) |
+| Photos de la formatrice | `public/images/rebecca/` (remplacer un fichier en gardant exactement le même nom). Toute photo ajoutée au site doit être allégée avant : 1600 px de large et 150 Ko au maximum, par exemple avec squoosh.app |
 | Brochures envoyées avec les devis | `assets/brochures/` (remplacer le PDF, même nom) |
 
 ## Après une modification
