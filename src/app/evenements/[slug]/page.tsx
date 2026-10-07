@@ -190,7 +190,7 @@ export default async function EvenementPage({ params }: Props) {
             )}
           </div>
 
-          <aside className="h-fit rounded-[26px] p-7 text-white lg:sticky lg:top-6" style={{ background: "linear-gradient(165deg,#04193c,#0e3f8b)", boxShadow: "0 44px 80px -44px rgba(0,22,54,.85)" }}>
+          <aside className="h-fit rounded-[26px] p-7 text-white" style={{ background: "linear-gradient(165deg,#04193c,#0e3f8b)", boxShadow: "0 44px 80px -44px rgba(0,22,54,.85)" }}>
             <p className="eyebrow">Infos pratiques</p>
             <dl className="mt-5 mb-0 grid gap-4">
               {infos.map((i) => (

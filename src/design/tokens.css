@@ -648,7 +648,12 @@ input:focus-visible + .chip {
   .hide-sm { display: none !important; }
 }
 
+/* Barre de navigation qui reste en haut au défilement */
+.header-stuck { animation: header-in .35s cubic-bezier(.2,.8,.2,1); }
+@keyframes header-in { from { transform: translateY(-100%); } to { transform: none; } }
+
 @media (prefers-reduced-motion: reduce) {
+  .header-stuck,
   .bubble, .sticker, .postit, .card-light, .yearcard, .badge, .reveal,
   .floaty, .wiggle, .bob, .pulse2, .halo, .marquee, .road-dash, .pop, .grow, .community-popup[open], .community-pill, .hero-line, .circle-draw path,
   .pack-ill, .pack:hover .pack-ill {

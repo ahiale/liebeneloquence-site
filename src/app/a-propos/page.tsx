@@ -73,6 +73,16 @@ const PARCOURS = [
       "Accompagnement de profils variés : docteurs, ingénieurs, étudiants, lycéens",
     ],
   },
+  {
+    year: "2026",
+    title: "Consécration & naissance de LEQ",
+    intro: "Une distinction internationale et le lancement officiel de Lieben Éloquence.",
+    items: [
+      "Vice-championne du Mondial de la Parole",
+      "Conférences, formations et ateliers en groupe",
+      "Naissance officielle de Lieben Éloquence (LEQ)",
+    ],
+  },
 ];
 
 export default function AProposPage() {

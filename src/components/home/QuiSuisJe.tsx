@@ -8,6 +8,7 @@ const DISTINCTIONS = [
   { year: "2022", text: "Vice-championne du concours d'art oratoire au féminin" },
   { year: "2023", text: "Lauréate du Trophée Coup de Cœur de la meilleure compétition d'éloquence du Togo" },
   { year: "2025", text: "Présidente d'Eloquentia Toulon" },
+  { year: "2026", text: "Vice-championne du Mondial de la Parole" },
 ];
 
 export function QuiSuisJe() {

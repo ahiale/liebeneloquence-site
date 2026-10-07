@@ -40,9 +40,9 @@ Dans le code, l'apostrophe s'écrit parfois `&apos;` (ex. `l&apos;éloquence`) :
 | Textes des mails automatiques | `src/emails/templates.ts` |
 | Fiche orateur (infographie envoyée avec le quiz) | `src/emails/fiche-orateur.tsx` |
 | Titre et description de chaque page dans Google | En haut de chaque `page.tsx`, bloc `metadata` |
-| Photo de la formatrice | `public/formatrice.jpg` (remplacer le fichier, même nom) |
+| Photos de la formatrice | `public/images/rebecca/` (remplacer un fichier en gardant exactement le même nom) |
 | Brochures envoyées avec les devis | `assets/brochures/` (remplacer le PDF, même nom) |
 
 ## Après une modification
 
-Les changements partent en ligne quand ils sont envoyés sur GitHub (`git push`). Claude s'en charge si vous le lui demandez. Le site se met à jour tout seul en 3 à 5 minutes.
+Les changements partent en ligne quand ils sont envoyés sur GitHub (`git push`). Le site se met à jour tout seul en 3 à 5 minutes. La marche à suivre pas à pas est dans `TRAVAILLER-EN-AUTONOMIE.md`.

@@ -2,17 +2,31 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Logo } from "@/components/ui/Logo";
 import { NAV } from "@/config/site";
 
 /**
- * En-tête principal, posé dans le hero de chaque page (non fixe, comme la maquette).
+ * En-tête principal, posé dans le hero de chaque page. Dès qu'on quitte le haut de page,
+ * la barre reste affichée en haut de l'écran sur fond bleu nuit.
  * Sous 1280 px, la navigation passe dans un menu déroulant.
  */
 export function Header() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
+  const [stuck, setStuck] = useState(false);
+  const [height, setHeight] = useState<number>();
+  const bar = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const onScroll = () => {
+      if (bar.current && window.scrollY < 10) setHeight(bar.current.offsetHeight);
+      setStuck(window.scrollY > 140);
+    };
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   useEffect(() => setOpen(false), [pathname]);
 
@@ -26,8 +40,17 @@ export function Header() {
   const isActive = (href: string) => !href.startsWith("/#") && pathname.startsWith(href);
 
   return (
-    <header className="relative z-40">
-      <div className="wrap flex items-center justify-between gap-6 py-5">
+    <header className="relative z-40" style={{ height }}>
+      <div
+        ref={bar}
+        className={
+          stuck
+            ? "header-stuck fixed inset-x-0 top-0 border-b border-white/10 bg-ink-800/92 shadow-[0_18px_40px_-24px_rgba(0,0,0,.6)] backdrop-blur-xl"
+            : "relative"
+        }
+        style={stuck ? { paddingTop: "env(safe-area-inset-top, 0px)" } : undefined}
+      >
+      <div className={`wrap flex items-center justify-between gap-6 ${stuck ? "py-3" : "py-5"}`}>
         <Logo />
 
         <nav aria-label="Navigation principale" className="hidden items-center gap-[26px] xl:flex">
@@ -88,6 +111,7 @@ export function Header() {
           </nav>
         </div>
       )}
+      </div>
     </header>
   );
 }
