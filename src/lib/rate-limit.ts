@@ -5,9 +5,14 @@ import { headers } from "next/headers";
  * Limite le nombre d'envois de formulaires par visiteur (adresse IP) :
  * empêche un robot d'utiliser le site pour envoyer des mails en masse.
  * En mémoire : remis à zéro au redémarrage du site, ce qui suffit ici.
+ *
+ * Plusieurs personnes peuvent partager la même adresse IP (wifi d'une école, réseau mobile) :
+ * les inscriptions (déjà protégées contre les doublons d'email) acceptent donc plus d'envois
+ * que les formulaires qui vous écrivent un mail (devis, Grand Oral, contact).
  */
 const WINDOW_MS = 10 * 60 * 1000;
-const MAX_PER_WINDOW = 5;
+const MAX_PER_WINDOW: Record<string, number> = { evenement: 30, "liste-attente": 30, newsletter: 30, quiz: 30 };
+const DEFAULT_MAX = 5;
 const hits = new Map<string, number[]>();
 
 export async function tooManyRequests(form: string): Promise<boolean> {
@@ -20,5 +25,5 @@ export async function tooManyRequests(form: string): Promise<boolean> {
   hits.set(key, recent);
   // Nettoyage léger pour ne pas garder d'anciennes entrées en mémoire
   if (hits.size > 5000) for (const [k, v] of hits) if (v.every((t) => now - t >= WINDOW_MS)) hits.delete(k);
-  return recent.length > MAX_PER_WINDOW;
+  return recent.length > (MAX_PER_WINDOW[form] ?? DEFAULT_MAX);
 }
