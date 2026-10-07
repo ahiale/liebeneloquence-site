@@ -180,14 +180,10 @@ export default function AProposPage() {
         <section className="bg-night py-20 sm:py-[104px]">
           <div className="wrap">
             <div className="panel grid items-center gap-10 overflow-hidden p-5 sm:p-8 lg:grid-cols-[1fr_1.15fr] lg:gap-12 lg:p-10">
-              {/* Sur scène au Mondial de la Parole */}
-              <figure className="relative m-0">
-                <div className="relative overflow-hidden rounded-[26px]" style={{ aspectRatio: "4 / 3", boxShadow: "0 40px 80px -40px rgba(0,0,0,.9)" }}>
-                  <Image src="/images/mondial-de-la-parole.jpg" alt="Rebecca Lieben Ahiale sur scène au Mondial de la Parole, devant le Pont du Gard" fill sizes="(max-width: 1024px) 90vw, 520px" style={{ objectFit: "cover", objectPosition: "45% 30%" }} />
+              <figure className="relative m-0 mx-auto w-full max-w-[400px]">
+                <div className="relative overflow-hidden rounded-[26px]" style={{ aspectRatio: "4 / 5", boxShadow: "0 40px 80px -40px rgba(0,0,0,.9)" }}>
+                  <Image src="/formatrice.jpg" alt="Portrait de Rebecca Lieben Ahiale" fill sizes="(max-width: 1024px) 90vw, 400px" style={{ objectFit: "cover", objectPosition: "50% 20%" }} />
                 </div>
-                <figcaption className="bob absolute -bottom-4 left-5 rounded-[16px] bg-white px-3.5 py-2 text-[13px] font-bold text-ink" style={{ boxShadow: "4px 4px 0 #FF5E01" }}>
-                  Mondial de la Parole · <span className="serif text-orange">Pont du Gard</span>
-                </figcaption>
                 <Sparkle className="wiggle absolute" size={40} style={{ top: -16, right: -12 }} />
               </figure>
               <div className="py-4 text-center lg:py-6 lg:text-left">
