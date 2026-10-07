@@ -19,10 +19,10 @@ export function QuiSuisJe() {
           <div className="relative w-full max-w-[384px]">
             <div aria-hidden="true" className="absolute inset-0 rounded-[28px]" style={{ transform: "translate(16px,16px)", border: "1px solid rgba(255,189,89,.25)" }} />
             <Image
-              src="/images/rebecca/eloquentia-toulon.jpg"
-              alt="Rebecca Lieben Ahiale sur scène, à la soirée de lancement d'Eloquentia Toulon"
-              width={720}
-              height={970}
+              src="/images/rebecca/portrait-rose.jpg"
+              alt="Portrait de Rebecca Lieben Ahiale en blazer rose"
+              width={1600}
+              height={1067}
               sizes="(max-width: 760px) 90vw, 384px"
               className="relative block h-auto w-full rounded-[28px] object-cover"
               style={{ aspectRatio: "4 / 5", objectPosition: "50% 30%" }}
