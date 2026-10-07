@@ -4,9 +4,9 @@ import { computeResult, describeAnswers, PROFILES, type Answer, type ProfileId }
 
 /**
  * Données des formulaires pour le tableau de bord Excel (LEQ-donnees.xlsx).
- * Accès réservé : en-tête « X-LEQ-Cle » égal à la variable DATA_API_KEY du serveur.
+ * Accès réservé : paramètre « ?cle= » (ou en-tête « X-LEQ-Cle ») égal à DATA_API_KEY sur le serveur.
  * Feuilles : liste-attente, newsletter, demandes, quiz (quiz réalisés), fiches (fiches orateur demandées).
- * Réponse : { columns: string[], rows: (string | null)[][] }, colonnes fixes par feuille.
+ * Réponse : CSV (séparateur « ; », UTF-8), colonnes fixes par feuille, la première est toujours la date.
  */
 export const dynamic = "force-dynamic";
 
@@ -20,7 +20,7 @@ function paris(iso: unknown): string | null {
   if (typeof iso !== "string") return null;
   const d = new Date(iso);
   if (Number.isNaN(d.getTime())) return null;
-  return d.toLocaleString("sv-SE", { timeZone: "Europe/Paris" }).replace(" ", "T");
+  return d.toLocaleString("sv-SE", { timeZone: "Europe/Paris" });
 }
 
 /** Réponses lisibles, niveau et nom du profil à partir d'une ligne du quiz. */
@@ -96,9 +96,18 @@ const BUILDERS: Record<Sheet, (lines: Row[]) => Table> = {
   }),
 };
 
+/** CSV lisible par Excel : retours à la ligne remplacés, guillemets doublés. */
+function toCsv({ columns, rows }: Table): string {
+  const cell = (v: string | null) => {
+    const t = (v ?? "").replace(/\s*[\r\n]+\s*/g, " / ");
+    return /[;"]/.test(t) ? `"${t.replace(/"/g, '""')}"` : t;
+  };
+  return [columns, ...rows].map((r) => r.map(cell).join(";")).join("\r\n") + "\r\n";
+}
+
 function authorized(req: Request): boolean {
   const key = process.env.DATA_API_KEY;
-  const given = req.headers.get("x-leq-cle");
+  const given = req.headers.get("x-leq-cle") ?? new URL(req.url).searchParams.get("cle");
   if (!key || key.length < 32 || !given) return false;
   const a = Buffer.from(key);
   const b = Buffer.from(given);
@@ -111,5 +120,7 @@ export async function GET(req: Request, { params }: { params: Promise<{ collecti
   const build = Object.hasOwn(BUILDERS, collection) ? BUILDERS[collection as Sheet] : undefined;
   if (!build) return new Response("Not found", { status: 404 });
   const table = build(await readAll(collection === "fiches" ? "quiz" : (collection as Collection)));
-  return Response.json(table, { headers: { "Cache-Control": "no-store", "X-Robots-Tag": "noindex" } });
+  return new Response(toCsv(table), {
+    headers: { "Content-Type": "text/csv; charset=utf-8", "Cache-Control": "no-store", "X-Robots-Tag": "noindex" },
+  });
 }

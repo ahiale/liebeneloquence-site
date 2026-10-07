@@ -65,7 +65,28 @@ L'historique complet est visible avec `git log --oneline`.
 
 ## Les données des formulaires
 
-Les inscriptions (devis, Grand Oral, contact, newsletter, liste d'attente, quiz) sont sur le serveur. Pour les récupérer en fichiers CSV dans `Téléchargements` :
+**Le tableau de bord** `LEQ-donnees.xlsx` est dans le dossier `leqsaas-main` (celui qui contient le projet). Ouvrez-le avec Excel : il se met à jour tout seul à l'ouverture, puis toutes les 5 minutes tant qu'il est ouvert. Pour forcer : *Données → Actualiser tout*.
+
+| Onglet | Contenu |
+| --- | --- |
+| Tableau de bord | les chiffres clés, les profils du quiz, les 14 derniers jours en tableau et en graphique |
+| Liste d'attente | une ligne par personne inscrite à LEQ'FAM |
+| Fiches orateur | les personnes qui ont laissé prénom et email pour recevoir leur fiche |
+| Quiz réalisés | chaque quiz terminé, anonyme (qu'il y ait eu une demande de fiche ou non) |
+| Demandes | devis, Grand Oral, contact |
+| Newsletter | les inscriptions à la newsletter |
+
+Une même adresse email ne peut plus s'inscrire deux fois (liste d'attente, newsletter, fiche orateur) : le site affiche « déjà inscrite ». Les doublons d'avant ce blocage sont masqués dans le tableau de bord.
+
+Si Excel affiche une barre jaune « Les connexions de données ont été désactivées », cliquez sur *Options → Activer ce contenu*.
+
+**Ce fichier reste sur votre ordinateur** : il contient la clé d'accès aux données et des données personnelles. Ne l'envoyez pas, ne le mettez pas sur GitHub (il est exclu automatiquement). S'il est perdu ou supprimé, recréez-le :
+
+```powershell
+powershell -ExecutionPolicy Bypass -File outils\creer-tableau-de-bord.ps1
+```
+
+Pour un export ponctuel en CSV (sauvegarde, import ailleurs) :
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File outils\exporter-donnees.ps1
