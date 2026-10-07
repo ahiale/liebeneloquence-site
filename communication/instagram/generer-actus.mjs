@@ -7,7 +7,7 @@
 import { readFile, writeFile, mkdir } from "node:fs/promises";
 import path from "node:path";
 import { ImageResponse } from "next/dist/compiled/@vercel/og/index.node.js";
-import { BG, BUBBLE, GOLD, H, HEART, MIC, NAVY, ORANGE, ROOT, ROYAL, SPARKLE, UNDERLINE, W, check, chip, fonts, frame, h, img, pricing, serif } from "./commun.mjs";
+import { BG, BUBBLE, GOLD, H, HEART, MIC, NAVY, ORANGE, ROOT, ROYAL, SPARKLE, UNDERLINE, W, check, chip, fonts, frame, h, img, serif } from "./commun.mjs";
 
 const OUT = path.join(ROOT, "communication", "instagram", "actus");
 const STORY_H = 1920;
@@ -44,7 +44,8 @@ const ctaBox = (title, sub, { dark = false } = {}) => h("div", { marginTop: 36, 
   h("div", { fontSize: 36, fontWeight: 700 }, title),
   h("div", { fontSize: 27, marginTop: 8, color: dark ? "rgba(255,255,255,.8)" : "rgba(0,22,54,.75)" }, sub),
 );
-const euro = (v) => `${String(v).replace(".", ",")} €`;
+/** Masterclass coorganisée (affiché sur ses visuels). */
+const ORGANISATEURS = "Organisée par LEQ et @whassup.ruth";
 
 // Rebecca : version éclaircie du portrait (celle du site est trop sombre en petit format)
 const PORTRAIT_REBECCA = "/images/rebecca/portrait-studio-lumineux.jpg";
@@ -80,7 +81,7 @@ const carrousel = [
         h("div", { flexDirection: "column", marginLeft: 28, flex: 1 },
           h("div", { fontSize: 22, fontWeight: 700, letterSpacing: 4, color: GOLD }, (e.type ?? "").toUpperCase()),
           h("div", { fontSize: 36, fontWeight: 700, marginTop: 4, letterSpacing: -0.5 }, e.title),
-          h("div", { fontSize: 25, marginTop: 4, color: "rgba(255,255,255,.78)" }, e.priceLabel === "Gratuit" ? "Gratuit · en ligne" : `${e.priceLabel} · en ligne`),
+          h("div", { fontSize: 25, marginTop: 4, color: "rgba(255,255,255,.78)" }, e.priceLabel === "Gratuit" ? "Gratuit · en ligne" : "En ligne"),
         ),
       )),
     ),
@@ -106,9 +107,10 @@ const carrousel = [
   // 3. La masterclass
   frame(3, total, BG.braise, h("div", { flexDirection: "column", position: "relative" },
     img(SPARKLE(GOLD), 80, 80, { position: "absolute", top: -40, right: 30 }),
-    h("div", { fontSize: 26, fontWeight: 700, letterSpacing: 8, color: ORANGE }, `MASTERCLASS · ${masterclass.priceLabel}`),
+    h("div", { fontSize: 26, fontWeight: 700, letterSpacing: 8, color: ORANGE }, "MASTERCLASS"),
     h("div", { fontSize: 108, fontWeight: 700, letterSpacing: -4, lineHeight: 1, marginTop: 22 }, "Convaincre"),
     serif("en entretien", { fontSize: 136, lineHeight: 1.08 }),
+    h("div", { fontSize: 30, fontWeight: 600, color: GOLD, marginTop: 14 }, ORGANISATEURS),
     h("div", { fontSize: 33, lineHeight: 1.4, marginTop: 20, color: "rgba(255,255,255,.9)", maxWidth: 880 }, "Deux voix, deux expertises : le fond de votre discours et la forme de votre prise de parole."),
     speakerRow(150),
     h("div", { flexDirection: "column", marginTop: 34 },
@@ -126,7 +128,7 @@ const carrousel = [
     h("div", { fontSize: 96, fontWeight: 700, letterSpacing: -3, marginTop: 30, lineHeight: 1 }, "La communauté"),
     serif("LEQ'FAM", { fontSize: 150, lineHeight: 1.1 }),
     h("div", { flexDirection: "column", marginTop: 26 }, ...leqfam.program.map((p) => check(p))),
-    ctaBox(`${euro(pricing.leqfam.monthlyPrice)} / mois`, "Rejoignez la liste d'attente pour être prévenu·e en premier"),
+    ctaBox("Rejoignez la liste d'attente", "Soyez prévenu·e en premier à l'ouverture · liebeneloquence.com"),
   )),
 
   // 5. Fin : toutes les dates au même endroit
@@ -159,6 +161,7 @@ const annonce = (story) => {
         h("div", { fontSize: 46 * s, fontWeight: 700, letterSpacing: -1, marginTop: 8 }, masterclass.title),
         h("div", { fontSize: 27 * s, marginTop: 10, color: "rgba(0,22,54,.7)" }, `${sansAnnee(masterclass.dateLabel)} · ${horaires(masterclass.timeLabel).split(" ")[0]} · en ligne`),
         h("div", { fontSize: 27 * s, marginTop: 6, color: ROYAL, fontWeight: 600 }, speakers.length > 1 ? `Avec ${speakers.map((x) => x.name.split(" ")[0]).join(" et ")}` : ""),
+        h("div", { fontSize: 24 * s, marginTop: 6, color: "rgba(0,22,54,.6)" }, ORGANISATEURS),
       ),
       h("div", { width: 110 * s, alignItems: "center", justifyContent: "center", background: ROYAL },
         serif("LEQ", { fontSize: 44 * s, color: "#fff", transform: "rotate(-90deg)" })),
