@@ -167,7 +167,7 @@ export default async function AutresServicesPage() {
                   </li>
                 ))}
               </ul>
-              <p className="mt-[22px] mb-0 text-[14px] text-white/70">Trois formules : gratuite, standard, et accès complet avec coaching.</p>
+              <p className="mt-[22px] mb-0 text-[14px] text-white/70">Trois formules : gratuite, standard et accès complet avec coaching.</p>
               <Link className="btn btn-p mt-7" href="/evenements#newsletter">Être prévenu du lancement</Link>
             </div>
             <div className="relative flex min-w-0 justify-center" style={{ flex: ".9 1 300px" }} aria-hidden="true">
@@ -190,7 +190,7 @@ export default async function AutresServicesPage() {
                   </div>
                   <div className="rounded-[18px] bg-peach p-3.5">
                     <p className="m-0 text-[13px] leading-[1.45]">
-                      <strong>Conseil du jour :</strong> un silence bien placé vaut mieux qu&apos;un « euh ».
+                      <strong>Conseil du jour :</strong>{" "}un silence bien placé vaut mieux qu&apos;un « euh ».
                     </p>
                   </div>
                   <div className="mt-auto flex gap-2">

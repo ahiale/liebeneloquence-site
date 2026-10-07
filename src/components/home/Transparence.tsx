@@ -16,7 +16,7 @@ export function Transparence() {
           Ce que je ne fais <span className="serif text-gold">pas</span>
         </h2>
         <p className="mt-5 mb-0 max-w-[672px] text-[15.5px] leading-[1.65] text-white/85">
-          Être clair sur les limites de mon accompagnement, c&apos;est la meilleure façon de vous garantir un travail utile. Voici ce qui relève d&apos;autres professionnels.
+          Être claire sur les limites de mon accompagnement, c&apos;est la meilleure façon de vous garantir un travail utile. Voici ce qui relève d&apos;autres professionnels.
         </p>
         <div className="mt-14 grid gap-9" style={{ gridTemplateColumns: "repeat(auto-fit,minmax(min(280px,100%),1fr))" }}>
           {LIMITES.map((l) => (

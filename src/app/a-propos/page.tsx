@@ -27,7 +27,7 @@ const PARCOURS = [
       "Double championne d'un concours national d'argumentation poétique",
       "Responsable communication du magazine scolaire",
       "Animatrice des jeux de culture générale au lycée",
-      "Paire éducatrice : accompagnement des élèves à la prise de parole",
+      "Pair-éducatrice : accompagnement des élèves à la prise de parole",
     ],
   },
   {
@@ -92,7 +92,7 @@ export default function AProposPage() {
               <DrawUnderline width={220} style={{ marginTop: 4 }} />
               <div className="mt-7 grid max-w-[600px] gap-[18px] text-[16px] leading-[1.7] text-white/85">
                 <p className="m-0">
-                  C&apos;est ce qu&apos;écrivait Cicéron. Au vu de mon parcours, je crois plutôt être née oratrice, comme la majorité d&apos;entre nous. Une personne qui parle et qui s&apos;exprime est déjà un orateur. Mais le fossé entre un orateur et un <strong className="font-semibold text-gold">bon</strong> orateur est immense. Ce fossé, j&apos;ai pris le temps de le combler ces dernières années.
+                  C&apos;est ce qu&apos;écrivait Cicéron. Au vu de mon parcours, je crois plutôt être née oratrice, comme la majorité d&apos;entre nous. Une personne qui parle et qui s&apos;exprime est déjà un orateur. Mais le fossé entre un orateur et un <strong className="font-semibold text-gold">bon</strong>{" "}orateur est immense. Ce fossé, j&apos;ai pris le temps de le combler ces dernières années.
                 </p>
                 <p className="m-0">
                   De la jeune fille qui jouait à l&apos;animatrice télé devant son miroir à l&apos;oratrice d&apos;aujourd&apos;hui, le chemin a été long. Moi, c&apos;est Rebecca Lieben Ahiale, togolaise d&apos;origine et résidant en France.
@@ -110,7 +110,7 @@ export default function AProposPage() {
             <div className="flex min-w-0 justify-center" style={{ flex: ".85 1 300px" }}>
               <div className="relative w-full max-w-[384px]">
                 <div aria-hidden="true" className="absolute inset-0 rounded-[28px]" style={{ transform: "translate(-16px,16px)", border: "1px solid rgba(255,189,89,.25)" }} />
-                <Image src="/formatrice.jpg" alt="Portrait de Rebecca Lieben Ahiale" width={900} height={1199} priority sizes="(max-width: 760px) 90vw, 384px" className="relative block h-auto w-full rounded-[28px] object-cover" style={{ aspectRatio: "4 / 5" }} />
+                <Image src="/images/rebecca/portrait-rose.jpg" alt="Portrait de Rebecca Lieben Ahiale" width={1600} height={1067} priority sizes="(max-width: 760px) 90vw, 384px" className="relative block h-auto w-full rounded-[28px] object-cover" style={{ aspectRatio: "4 / 5", objectPosition: "50% 30%" }} />
                 <div className="bob absolute z-[2] rounded-[20px] bg-white px-4 py-2.5 text-[15px] font-bold text-ink" style={{ left: -20, top: "16%", boxShadow: "4px 4px 0 #FF5E01" }}>
                   Togo <span className="serif text-orange">→</span> France
                 </div>

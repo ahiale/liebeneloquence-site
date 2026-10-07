@@ -354,6 +354,17 @@ input:focus-visible + .chip {
   }
 }
 
+/* Carrousel d'avis : défilement manuel, barre de défilement masquée */
+.reviews-track {
+  scrollbar-width: none;
+}
+.reviews-track::-webkit-scrollbar {
+  display: none;
+}
+.reviews-track .card-light {
+  animation: none;
+}
+
 /* Texte long (pages légales) */
 .legal h2 {
   margin: 44px 0 0;

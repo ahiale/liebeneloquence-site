@@ -15,7 +15,7 @@ export const metadata: Metadata = {
 };
 
 const ENSEMBLE: { icon: IconName; title: string; text: string; rotate: number }[] = [
-  { icon: "video", title: "Des lives chaque semaine", text: "Sur des thématiques choisies par la communauté : prise de parole, storytelling, gestion du trac, improvisation, culture générale, avec des invités surprises réguliers.", rotate: -1.2 },
+  { icon: "video", title: "Des lives chaque semaine", text: "Sur des thématiques choisies par la communauté : prise de parole, storytelling, gestion du trac, improvisation, culture générale, avec des invités surprise réguliers.", rotate: -1.2 },
   { icon: "chat", title: "Une entraide quotidienne", text: "Vous préparez une soutenance, un concours, un entretien ? Vous postez, la communauté répond.", rotate: 1 },
   { icon: "trophy", title: "Le Grand Prix LEQ", text: "Un concours trimestriel ouvert à tous les membres. Le gagnant est désigné à 50 % par le vote du public et à 50 % par un jury invité. À la clé, jusqu'à 200 € de prix.", rotate: -0.8 },
 ];

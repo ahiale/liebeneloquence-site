@@ -24,7 +24,7 @@ export function Constat() {
 
           <p className="eyebrow text-center">Le constat</p>
           <p className="mx-auto mt-6 max-w-[768px] text-center text-[17px] leading-[1.65] text-white sm:text-[20px]">
-            La prise de parole, on l&apos;imagine réservée aux grandes scènes et aux personnes d&apos;exception. La plupart des gens ne se sentent pas légitimes de prendre la parole, même quand ils en ont le droit, la compétence et les idées. Pourtant, savoir s&apos;exprimer avec clarté et confiance change tout dans la vie. Cette discipline est présente dans les domaines suivants, et bien plus encore :
+            La prise de parole, on l&apos;imagine réservée aux grandes scènes et aux personnes d&apos;exception. La plupart des gens ne se sentent pas légitimes pour prendre la parole, même quand ils en ont le droit, la compétence et les idées. Pourtant, savoir s&apos;exprimer avec clarté et confiance change tout dans la vie. Cette discipline est présente dans les domaines suivants, et bien plus encore :
           </p>
           <ul className="mx-auto mt-10 flex max-w-[896px] list-none flex-wrap justify-center gap-3 p-0">
             {DOMAINES.map((d) => (

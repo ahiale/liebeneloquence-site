@@ -19,7 +19,7 @@ const fonts = [
   { name: "Melodrame", data: await font("melodrame.ttf"), weight: 400, style: "italic" },
 ];
 const pricing = JSON.parse(await readFile(path.join(ROOT, "content/tarifs.json"), "utf8"));
-const photo = `data:image/jpeg;base64,${(await readFile(path.join(ROOT, "public/formatrice.jpg"))).toString("base64")}`;
+const photo = `data:image/jpeg;base64,${(await readFile(path.join(ROOT, "public/images/rebecca/pont-du-gard.jpg"))).toString("base64")}`;
 const svg = (s) => `data:image/svg+xml;base64,${Buffer.from(s).toString("base64")}`;
 const quizIcon = async (n) => svg(await readFile(path.join(ROOT, "public/quiz", `q-${n}.svg`), "utf8"));
 

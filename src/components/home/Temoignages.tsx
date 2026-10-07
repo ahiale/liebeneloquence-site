@@ -1,4 +1,5 @@
 import type { Review } from "@/content/schema";
+import { ReviewsCarousel } from "./ReviewsCarousel";
 
 const AVATARS = [
   { bg: "#f6c6c6", fg: "#8a3030" },
@@ -19,7 +20,7 @@ const initials = (author: string) =>
 function ReviewCard({ review, index }: { review: Review; index: number }) {
   const c = AVATARS[index % AVATARS.length];
   return (
-    <figure className="card-light m-0 flex w-[min(360px,82vw)] shrink-0 flex-col rounded-[26px] p-7">
+    <figure className="card-light m-0 flex w-[min(360px,82vw)] shrink-0 snap-start flex-col rounded-[26px] p-7">
       <p className="m-0 text-[17px] tracking-[3px] text-gold" aria-label={`${review.rating} étoiles sur 5`}>
         {"★".repeat(review.rating)}
       </p>
@@ -37,7 +38,7 @@ function ReviewCard({ review, index }: { review: Review; index: number }) {
   );
 }
 
-/** Carrousel défilant des avis. La section n'apparaît que s'il y a des avis publiés. */
+/** Carrousel des avis, que le visiteur fait défiler lui-même. La section n'apparaît que s'il y a des avis publiés. */
 export function Temoignages({ reviews }: { reviews: Review[] }) {
   if (reviews.length === 0) return null;
 
@@ -55,19 +56,11 @@ export function Temoignages({ reviews }: { reviews: Review[] }) {
           </svg>
         </div>
       </div>
-      <div className="marquee-viewport mt-12" style={{ maskImage: "linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)", WebkitMaskImage: "linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)" }}>
-        <div className="marquee py-2" tabIndex={0} aria-label="Avis de personnes accompagnées (survoler pour mettre en pause)">
-          {reviews.map((r, i) => (
-            <ReviewCard key={r.id} review={r} index={i} />
-          ))}
-          {/* Copie pour un défilement sans fin, ignorée des lecteurs d'écran */}
-          <div aria-hidden="true" className="marquee-copy contents">
-            {reviews.map((r, i) => (
-              <ReviewCard key={`copie-${r.id}`} review={r} index={i} />
-            ))}
-          </div>
-        </div>
-      </div>
+      <ReviewsCarousel count={reviews.length}>
+        {reviews.map((r, i) => (
+          <ReviewCard key={r.id} review={r} index={i} />
+        ))}
+      </ReviewsCarousel>
     </section>
   );
 }

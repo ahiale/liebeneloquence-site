@@ -91,7 +91,7 @@ export const PROFILES: Record<ProfileId, { name: string; img: string; desc: stri
     name: "L’Improvisateur",
     img: img("zap"),
     desc: "Vous êtes à l’aise dans l’imprévu et rebondissez sur tout. Votre défi : préparer sans perdre votre spontanéité.",
-    forces: ["Vous êtes à l’aise dans l’imprévu", "Vous rebondissez sur tout", "Vous restez spontané"],
+    forces: ["Vous êtes à l’aise dans l’imprévu", "Vous rebondissez sur tout", "Vous gardez votre spontanéité"],
   },
 };
 

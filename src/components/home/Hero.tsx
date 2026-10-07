@@ -47,12 +47,12 @@ export function Hero() {
                 style={{ left: "14%", right: "14%", top: "8%", bottom: "6%", borderRadius: "200px 200px 36px 36px", border: "4px solid #fff", boxShadow: "0 30px 60px -20px rgba(0,22,54,.6)" }}
               >
                 <Image
-                  src="/formatrice.jpg"
-                  alt="Rebecca Lieben Ahiale, formatrice en prise de parole"
+                  src="/images/rebecca/pont-du-gard.jpg"
+                  alt="Rebecca Lieben Ahiale au pupitre du Mondial de la Parole, devant le Pont du Gard"
                   fill
                   priority
                   sizes="(max-width: 760px) 70vw, 300px"
-                  style={{ objectFit: "cover", objectPosition: "50% 20%" }}
+                  style={{ objectFit: "cover", objectPosition: "50% 15%" }}
                 />
               </div>
               <div

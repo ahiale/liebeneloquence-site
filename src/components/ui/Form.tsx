@@ -66,6 +66,9 @@ export function FormSuccess({ title, children }: { title: string; children: Reac
       </svg>
       <p className="m-0 text-[17px] font-semibold text-white">{title}</p>
       <p className="m-0 max-w-[360px] text-[14px] leading-[1.6] text-white/70">{children}</p>
+      <p className="m-0 mt-1 max-w-[380px] rounded-[12px] bg-white/8 px-3.5 py-2.5 text-[12.5px] leading-[1.55] text-white/75">
+        Rien reçu d&apos;ici quelques minutes ? Pensez à vérifier vos <strong className="text-white">spams</strong> (courriers indésirables) et à marquer notre mail comme « non spam ».
+      </p>
     </div>
   );
 }

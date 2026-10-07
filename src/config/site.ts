@@ -47,7 +47,7 @@ export const paymentHref = (href: string) => (isPlaceholder(href) ? "/autres-ser
 /** Informations légales (page Mentions légales). */
 export const LEGAL = {
   owner: "Rebecca Lieben Ahiale",
-  status: "Entrepreneur individuel",
+  status: "Entrepreneure individuelle",
   siren: "106 469 240",
   siret: "106 469 240 00019",
   /** Adresse professionnelle ou de domiciliation. */
