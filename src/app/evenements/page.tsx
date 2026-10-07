@@ -112,7 +112,7 @@ export default async function EvenementsPage() {
               Tous les événements <span className="serif text-gold">à venir</span>
             </h2>
             {events.length > 0 ? (
-              <div className="mt-12 grid gap-8" style={{ gridTemplateColumns: "repeat(auto-fill,minmax(min(300px,100%),380px))" }}>
+              <div className="mt-12 grid grid-cols-1 gap-6 lg:grid-cols-3">
                 {events.map((e) => (
                   <EventCard key={e.slug} event={e} />
                 ))}
