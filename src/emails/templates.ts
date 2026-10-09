@@ -277,6 +277,29 @@ export function inscriptionEvenementClient(d: { prenom: string; title: string; d
   };
 }
 
+/** Invitation envoyée à une liste (outils/envoyer-invitation.ps1) : un bouton vers la page d'inscription. */
+export function invitationEvenement(d: { title: string; edition?: string; dateLabel: string; timeLabel: string | null; url: string }): Email {
+  const quand = d.dateLabel.charAt(0).toLowerCase() + d.dateLabel.slice(1);
+  const nom = d.edition ? d.title.replace(/^Le /, `Le ${d.edition} `) : d.title;
+  return {
+    subject: `${nom} : ${quand.replace(/\s+\d{4}$/, "")}, inscrivez-vous !`,
+    html: layout({
+      title: "C'est le moment",
+      accent: `du ${d.edition ? `${d.edition} ` : ""}rendez-vous LEQ !`,
+      preheader: `${d.dateLabel}${d.timeLabel ? `, ${d.timeLabel}` : ""}, en ligne et gratuit. Inscrivez-vous pour recevoir le lien.`,
+      reason: "Vous recevez ce mail car vous êtes en contact avec Lieben Éloquence. Pour ne plus recevoir nos invitations, répondez simplement « STOP » à ce mail.",
+      body:
+        hello() +
+        p(`${esc(nom)} arrive ! Une heure ouverte et gratuite pour poser toutes vos questions sur la prise de parole, l'éloquence et vos blocages à l'oral.`) +
+        box(rows([["Date", d.dateLabel], ["Horaires", d.timeLabel ?? undefined], ["Lieu", "En ligne, sur Google Meet"], ["Tarif", "Gratuit"]])) +
+        p("Un examen ou une soutenance approche ? Un discours à préparer ? Une conversation qui vous intimide ? Rien n'est préparé à l'avance : on part de vos questions, simplement, entre nous.") +
+        button(d.url, "Je m'inscris gratuitement") +
+        p("Une fois inscrit·e, vous recevez aussitôt le lien Google Meet par mail, avec un rappel pour votre agenda.") +
+        signature,
+    }),
+  };
+}
+
 /* ---------------------------------------------------------------------------
    Quiz d'orateur
    ------------------------------------------------------------------------- */

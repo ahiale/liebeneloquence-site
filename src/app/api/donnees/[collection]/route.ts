@@ -77,6 +77,10 @@ const BUILDERS: Record<Sheet, (lines: Row[]) => Table> = {
       str(l.message ?? l.attentes),
     ]),
   }),
+  invitations: (lines) => ({
+    columns: ["Date", "Événement", "Email"],
+    rows: lines.map((l) => [paris(l.createdAt), str(l.event), str(l.email)]),
+  }),
   inscriptions: (lines) => ({
     columns: ["Date", "Événement", "Prénom", "Nom", "Email", "Comment nous a connus"],
     rows: lines.map((l) => [paris(l.createdAt), str(l.eventTitle ?? l.event), str(l.prenom), str(l.nom), str(l.email), str(l.source)]),
