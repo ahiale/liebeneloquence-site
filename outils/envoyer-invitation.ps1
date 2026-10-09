@@ -13,6 +13,8 @@ param(
   [string]$Fichier,
   [string]$Edition,
   [switch]$Test,
+  # Saute la question de confirmation (envoi déjà validé)
+  [switch]$Confirme,
   [string]$AdresseTest = "formationn@liebeneloquence.com"
 )
 
@@ -31,8 +33,10 @@ if ($Test) {
   if ($emails.Count -eq 0) { Write-Host "Aucune adresse email trouvée dans $Fichier."; exit 1 }
   Write-Host "$($emails.Count) adresse(s) trouvée(s) :"
   $emails | ForEach-Object { Write-Host "  $_" }
-  $ok = Read-Host "Envoyer l'invitation à ces $($emails.Count) personne(s) ? Tapez OUI pour confirmer"
-  if ($ok -ne "OUI") { Write-Host "Envoi annulé."; exit 0 }
+  if (-not $Confirme) {
+    $ok = Read-Host "Envoyer l'invitation à ces $($emails.Count) personne(s) ? Tapez OUI pour confirmer"
+    if ($ok -ne "OUI") { Write-Host "Envoi annulé."; exit 0 }
+  }
   Write-Host "Envoi en cours (2 secondes par mail)…"
 }
 
