@@ -41,7 +41,7 @@ if ($Edition) { $corps.edition = $Edition }
 $json = $corps | ConvertTo-Json -Compress
 
 # La clé d'accès reste sur le serveur : l'appel est fait depuis le conteneur du site.
-$distant = "cd /opt/leq && docker compose exec -T site sh -c 'cat > /tmp/invitation.json && wget -q -O - -T 3600 --header=""Content-Type: application/json"" --header=""X-LEQ-Cle: `$DATA_API_KEY"" --post-file=/tmp/invitation.json http://127.0.0.1:3000/api/invitations; rm -f /tmp/invitation.json'"
+$distant = "cd /opt/leq && docker compose exec -T site sh -c 'cat > /tmp/invitation.json && wget -q -O - -T 3600 --header=Content-Type:application/json --header=X-LEQ-Cle:`$DATA_API_KEY --post-file=/tmp/invitation.json http://127.0.0.1:3000/api/invitations; rm -f /tmp/invitation.json'"
 $reponse = $json | ssh $Serveur $distant
 if (-not $reponse) { Write-Host "Pas de réponse du site : vérifiez le nom de l'événement (-Evenement) puis réessayez."; exit 1 }
 $r = $reponse | ConvertFrom-Json
