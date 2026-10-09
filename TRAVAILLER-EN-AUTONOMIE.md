@@ -92,6 +92,26 @@ Pour un export ponctuel en CSV (sauvegarde, import ailleurs) :
 powershell -ExecutionPolicy Bypass -File outils\exporter-donnees.ps1
 ```
 
+## Inviter une liste à un événement par mail
+
+Pour envoyer l'invitation mise en forme (avec le bouton « Je m'inscris gratuitement ») depuis formationn@liebeneloquence.com :
+
+1. Mettez les adresses dans un fichier texte, par exemple `Téléchargements\liste-invitations-LEQ.txt` (déjà créé avec votre liste). Peu importe la présentation : virgules, une adresse par ligne, copié depuis Excel…
+2. Repérez le nom de l'événement : c'est son `slug` dans `content/evenements.json`, par exemple `rendez-vous-mensuel-leq-novembre-2026`.
+3. Dans le terminal de VS Code, envoyez-vous d'abord un test :
+
+```powershell
+powershell -ExecutionPolicy Bypass -File outils\envoyer-invitation.ps1 -Evenement rendez-vous-mensuel-leq-novembre-2026 -Edition troisième -Test
+```
+
+4. Si le mail de test vous convient, envoyez à la liste :
+
+```powershell
+powershell -ExecutionPolicy Bypass -File outils\envoyer-invitation.ps1 -Evenement rendez-vous-mensuel-leq-novembre-2026 -Edition troisième -Fichier $HOME\Downloads\liste-invitations-LEQ.txt
+```
+
+Le script affiche les adresses trouvées et demande de taper `OUI` avant d'envoyer. `-Edition` est facultatif (« Le troisième rendez-vous mensuel LEQ »). Chaque personne reçoit son propre mail, et une adresse déjà invitée à ce même événement n'est jamais relancée : vous pouvez ajouter des adresses au fichier et relancer sans risque de doublon. Compter 2 secondes par mail.
+
 ## Les modèles PowerPoint (ateliers et publications)
 
 Dans `communication/` :
