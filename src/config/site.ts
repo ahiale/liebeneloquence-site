@@ -14,7 +14,7 @@ export const SITE = {
   /** Liens de paiement Stripe (à créer dans le tableau de bord Stripe). */
   stripeGrandOral: "https://buy.stripe.com/dRm7sKguQ8wA4Hm5jl2B203",
   /** Séance à l'unité : lien Stripe avec quantité réglable (le client choisit 1 à 3 séances sur la page de paiement). */
-  stripeSeance: "[LIEN STRIPE SÉANCE]",
+  stripeSeance: "https://buy.stripe.com/dRmbJ03I4fZ26PubHJ2B204",
   stripeLeqfam: "[LIEN STRIPE LEQ'FAM]",
 
   instagram: "https://www.instagram.com/becca_lieben/",
