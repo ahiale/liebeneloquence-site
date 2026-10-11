@@ -48,7 +48,7 @@ function firstPerEmail(lines: Row[]): Row[] {
   });
 }
 
-const TYPES: Record<string, string> = { devis: "Devis", "grand-oral": "Grand Oral", contact: "Contact" };
+const TYPES: Record<string, string> = { devis: "Devis", "grand-oral": "Grand Oral", seance: "Séance", contact: "Contact" };
 
 type Sheet = Collection | "fiches";
 
@@ -62,7 +62,7 @@ const BUILDERS: Record<Sheet, (lines: Row[]) => Table> = {
     rows: firstPerEmail(lines).map((l) => [paris(l.createdAt), str(l.nom), str(l.email), str(l.profil), str(l.thematique)]),
   }),
   demandes: (lines) => ({
-    columns: ["Date", "Type", "Prénom", "Nom", "Email", "Structure", "Demande", "Profil", "Oral", "Date de l'oral", "Message"],
+    columns: ["Date", "Type", "Prénom", "Nom", "Email", "Structure", "Demande", "Profil", "Oral", "Date de l'oral", "Message", "Séances"],
     rows: lines.map((l) => [
       paris(l.createdAt),
       str(TYPES[String(l.type)] ?? l.type),
@@ -75,6 +75,7 @@ const BUILDERS: Record<Sheet, (lines: Row[]) => Table> = {
       str(l.oral),
       str(l.date),
       str(l.message ?? l.attentes),
+      str(l.seances),
     ]),
   }),
   invitations: (lines) => ({

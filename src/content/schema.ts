@@ -118,6 +118,11 @@ export const PricingSchema = z.object({
     installments: z.number().int().positive(),
     features: z.array(z.string()),
   }),
+  /** Séance à l'unité sur un sujet précis : sans suivi ni ressources (le client choisit 1 à maxSessions séances). */
+  seance: z.object({
+    price: Price,
+    maxSessions: z.number().int().positive(),
+  }),
   leqfam: z.object({
     monthlyPrice: Price,
     /** Mention de disponibilité : « Bientôt disponible · fin octobre » (null = disponible) */

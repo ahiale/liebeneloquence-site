@@ -177,6 +177,48 @@ export function grandOralClient(d: GrandOral & { price: string }): Email {
 }
 
 /* ---------------------------------------------------------------------------
+   Séance à l'unité
+   ------------------------------------------------------------------------- */
+
+type Seance = { prenom: string; nom: string; email: string; seances: number; sujet: string };
+const seancesLabel = (n: number) => `${n} séance${n > 1 ? "s" : ""}`;
+
+export function seanceAdmin(d: Seance & { total: string }): Email {
+  return {
+    subject: `Séance à l'unité : ${d.prenom} ${d.nom} (${seancesLabel(d.seances)})`,
+    html: admin(
+      "Nouvelle demande de séance à l'unité",
+      [["Prénom", d.prenom], ["Nom", d.nom], ["Email", d.email], ["Séances", `${seancesLabel(d.seances)} · ${d.total}`], ["Sujet", d.sujet]],
+      isPlaceholder(SITE.stripeSeance)
+        ? "Le lien Stripe de la séance n'est pas encore renseigné sur le site : envoyez le lien de paiement à la personne en répondant à ce mail."
+        : "Le lien de paiement Stripe lui a été envoyé. Vous recevrez la notification de Stripe dès que le paiement est effectué : contactez alors la personne pour fixer la séance.",
+    ),
+  };
+}
+
+export function seanceClient(d: Seance & { unit: string; total: string }): Email {
+  const link = isPlaceholder(SITE.stripeSeance) ? null : `${SITE.stripeSeance}?prefilled_email=${encodeURIComponent(d.email)}`;
+  return {
+    subject: `Votre ${d.seances > 1 ? "réservation de séances" : "séance"} · Lieben Éloquence`,
+    html: layout({
+      title: "Votre demande est bien",
+      accent: "reçue.",
+      preheader: "Dernière étape : valider votre paiement pour confirmer votre séance.",
+      reason: REASON,
+      body:
+        hello(d.prenom) +
+        p("Merci pour votre confiance ! Voici le récapitulatif de votre demande :") +
+        box(rows([["Formule", `Séance à l'unité · ${d.unit} la séance`], ["Nombre de séances", seancesLabel(d.seances)], ["Total", d.total], ["Votre sujet", d.sujet]])) +
+        p(`<strong>Dernière étape : validez votre paiement</strong> pour confirmer ${d.seances > 1 ? "vos séances" : "votre séance"}.${d.seances > 1 ? ` Sur la page de paiement, indiquez <strong>${d.seances}</strong> dans la quantité.` : ""}`) +
+        (link ? button(link, "Je valide mon paiement") : p("Le lien de paiement vous est envoyé dans un prochain mail.")) +
+        p(`Dès que votre paiement est validé, je vous contacte pour fixer ${d.seances > 1 ? "les dates de vos séances" : "la date de votre séance"}.`) +
+        p(`<span style="color:${C.muted};font-size:14px">La séance à l'unité porte sur le sujet que vous avez choisi : elle ne comprend ni suivi ni ressources. Pour un accompagnement complet, découvrez <a href="${SITE.url}/#offres" style="color:${C.royal}">nos packs</a>.</span>`) +
+        signature,
+    }),
+  };
+}
+
+/* ---------------------------------------------------------------------------
    Contact (discours, animation, coaching, partenariat…)
    ------------------------------------------------------------------------- */
 

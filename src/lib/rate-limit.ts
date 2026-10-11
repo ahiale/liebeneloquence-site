@@ -12,7 +12,7 @@ import { headers } from "next/headers";
  */
 const WINDOW_MS = 10 * 60 * 1000;
 const MAX_PER_WINDOW: Record<string, number> = { evenement: 30, "liste-attente": 30, newsletter: 30, quiz: 30 };
-const DEFAULT_MAX = 5;
+const DEFAULT_MAX = 5; // devis, Grand Oral, séance, contact : vous recevez un mail à chaque envoi
 const hits = new Map<string, number[]>();
 
 export async function tooManyRequests(form: string): Promise<boolean> {

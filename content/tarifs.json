@@ -65,6 +65,10 @@
       "Relecture & feedback personnalisé"
     ]
   },
+  "seance": {
+    "price": 26.99,
+    "maxSessions": 3
+  },
   "leqfam": {
     "monthlyPrice": 3.99,
     "availability": "Bientôt disponible · fin octobre",

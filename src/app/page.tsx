@@ -4,6 +4,7 @@ import { Constat } from "@/components/home/Constat";
 import { Apports } from "@/components/home/Apports";
 import { Methode } from "@/components/home/Methode";
 import { Offres } from "@/components/home/Offres";
+import { SeanceUnique } from "@/components/home/SeanceUnique";
 import { Ecoles } from "@/components/home/Ecoles";
 import { Transparence } from "@/components/home/Transparence";
 import { Temoignages } from "@/components/home/Temoignages";
@@ -22,6 +23,7 @@ export default async function HomePage() {
         <Apports />
         <Methode />
         <Offres pricing={pricing} />
+        <SeanceUnique pricing={pricing} />
         <Ecoles />
         <Transparence />
         <Temoignages reviews={reviews} />

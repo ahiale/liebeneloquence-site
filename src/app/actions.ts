@@ -122,6 +122,42 @@ export async function reserverGrandOral(_: FormState, data: FormData): Promise<F
 }
 
 /* ---------------------------------------------------------------------------
+   Séance à l'unité (sujet précis, sans suivi)
+   ------------------------------------------------------------------------- */
+
+const SeanceSchema = z.object({
+  prenom: required("Prénom"),
+  nom: required("Nom"),
+  email,
+  seances: z.coerce.number().int().min(1, "Choisissez le nombre de séances"),
+  sujet: required("Le sujet à travailler", 2000),
+});
+
+export async function reserverSeance(_: FormState, data: FormData): Promise<FormState> {
+  if (isBot(data)) return { status: "success" };
+  if (await tooManyRequests("seance")) return TOO_MANY;
+  const parsed = SeanceSchema.safeParse(Object.fromEntries(data));
+  if (!parsed.success) return invalid(parsed.error);
+  const d = parsed.data;
+  const { seance } = await getPricing();
+  if (d.seances > seance.maxSessions) {
+    return { status: "error", message: "Merci de vérifier les champs indiqués.", fields: { seances: `${seance.maxSessions} séances au maximum` } };
+  }
+  const unit = formatPrice(seance.price);
+  const total = formatPrice(Math.round(seance.price * d.seances * 100) / 100);
+
+  await record("demandes", { type: "seance", prenom: d.prenom, nom: d.nom, email: d.email, seances: d.seances, message: d.sujet });
+  try {
+    await notifyAdmin(T.seanceAdmin({ ...d, total }), d.email);
+    await confirm(T.seanceClient({ ...d, unit, total }), d.email);
+    return { status: "success" };
+  } catch (e) {
+    console.error(e);
+    return FAILURE;
+  }
+}
+
+/* ---------------------------------------------------------------------------
    Contact (discours, animation, coaching, partenariat)
    ------------------------------------------------------------------------- */
 
