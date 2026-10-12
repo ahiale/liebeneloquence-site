@@ -359,7 +359,7 @@ export function leqfamBienvenue(d: { nom: string; formule: string; prix: number;
       reason: "Vous recevez ce mail suite à votre abonnement à la LEQ'FAM sur liebeneloquence.com.",
       body:
         hello(d.nom) +
-        p("Ton abonnement est activé : tous les salons membres de la LEQ'FAM sont ouverts sur Discord. Présente-toi dans <strong>#présente-toi</strong>, l'équipe et la communauté t'y attendent.") +
+        p("Ton abonnement est activé : tous les salons membres de la LEQ'FAM sont ouverts sur Discord. Commence par <strong>#fonctionnement</strong>, puis les règles, puis présente-toi : la communauté t'attend.") +
         button(d.lienDiscord, "Ouvrir la LEQ'FAM sur Discord") +
         box(rows([["Formule", d.formule], ["Prix normal", `${euros(d.prix)} par mois`], ["Engagement", d.engagementFin ? `jusqu'au ${dateFr(d.engagementFin)}, puis reconduit chaque mois` : "aucun, résiliable à tout moment"]])) +
         p(`Tes reçus de paiement t'arrivent par mail à chaque prélèvement. Pour résilier ton abonnement à tout moment, <a href="${esc(d.lienResiliation)}" style="color:${C.royal}">utilise ce lien</a> (garde ce mail).`) +

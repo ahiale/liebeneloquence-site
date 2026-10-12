@@ -71,7 +71,7 @@ export async function demanderResiliation(_: FormState, data: FormData): Promise
 /** Date de fin d'une résiliation : fin de l'engagement s'il est en cours, sinon fin du mois payé. */
 async function finDeResiliation(a: Abonnement): Promise<{ fin: number; engagement: boolean }> {
   const finPeriode = a.items.data[0]?.current_period_end ?? Math.floor(Date.now() / 1000);
-  const engagementFin = a.metadata.engagement_fin ? Math.floor(new Date(`${a.metadata.engagement_fin}T00:00:00+01:00`).getTime() / 1000) : 0;
+  const engagementFin = a.metadata.engagement_fin ? Math.floor(new Date(`${a.metadata.engagement_fin}T12:00:00Z`).getTime() / 1000) : 0;
   return engagementFin > finPeriode ? { fin: engagementFin, engagement: true } : { fin: finPeriode, engagement: false };
 }
 

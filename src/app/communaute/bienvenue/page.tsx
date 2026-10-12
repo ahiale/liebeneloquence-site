@@ -42,7 +42,7 @@ export default async function BienvenuePage({ searchParams }: { searchParams: Pr
             <a className="btn mt-9 text-white" href={lienServeur()} style={{ background: "#5865F2", fontSize: 18, padding: "16px 32px" }}>
               Ouvrir la LEQ&apos;FAM sur Discord
             </a>
-            <p className="mt-4 mb-0 text-[14px] text-white/65">Présentez-vous dans #présente-toi : on vous y attend !</p>
+            <p className="mt-4 mb-0 text-[14px] text-white/65">Vous arrivez dans #fonctionnement : suivez la visite en 3 étapes, puis présentez-vous !</p>
           </>
         ) : (
           <>

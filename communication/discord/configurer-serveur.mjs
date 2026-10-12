@@ -203,6 +203,7 @@ console.log("= catégories et salons prêts");
 const lien = (id) => `<#${id}>`;
 const bouton = (label, url) => ({ type: 2, style: 5, label, url });
 const rangee = (...b) => ({ type: 1, components: b });
+const salonUrl = (id) => `https://discord.com/channels/${G}/${id}`;
 
 const FONCTIONNEMENT = {
   embeds: [
@@ -237,6 +238,7 @@ const FONCTIONNEMENT = {
   components: [
     rangee(bouton("Rejoindre la LEQ'FAM", `${SITE}/communaute`)),
     rangee(bouton("Le site", SITE), bouton("Le quiz d'orateur", `${SITE}/quiz`), bouton("Les événements", `${SITE}/evenements`), bouton("Instagram", "https://www.instagram.com/becca_lieben/")),
+    rangee(bouton("Membre ? Étape suivante : les règles →", salonUrl(S.reglements))),
   ],
 };
 
@@ -248,9 +250,11 @@ const MESSAGES = {
     "**4. Pas de spam ni de publicité** sans l'accord de l'équipe.\n\n" +
     "**5. Attention aux plus jeunes.** Certains membres sont mineurs : les échanges se font dans les salons du serveur, pas en message privé.\n\n" +
     "**6. Signale ce qui ne va pas.** Si tu remarques quelque chose de contraire aux règles ou qui te met mal à l'aise, informe-en l'équipe. Nous voulons que ce serveur soit accueillant pour tout le monde !\n\n" +
-    "En cas de manquement, l'équipe peut retirer l'accès au serveur." },
+    "En cas de manquement, l'équipe peut retirer l'accès au serveur.",
+    boutons: [bouton("Membre ? Étape suivante : me présenter →", salonUrl(S.presente))] },
   presente: { img: "presente-toi", color: ORANGE, title: "Présente-toi, on t'écoute !", description:
-    "Copie ce modèle, complète-le et publie-le ici :\n\n```\nPrénom :\nCe que je fais (études, métier…) :\nMon objectif à l'oral :\nMon plus grand défi quand je prends la parole :\nUne phrase ou une personne qui m'inspire :\n```\nPrends le temps de lire et d'accueillir les autres présentations : c'est comme ça que la famille s'agrandit." },
+    "Copie ce modèle, complète-le et publie-le ici :\n\n```\nPrénom :\nCe que je fais (études, métier…) :\nMon objectif à l'oral :\nMon plus grand défi quand je prends la parole :\nUne phrase ou une personne qui m'inspire :\n```\nPrends le temps de lire et d'accueillir les autres présentations : c'est comme ça que la famille s'agrandit.\n\nEnsuite, à toi d'explorer :",
+    boutons: [bouton("Entraide", salonUrl(S.entraide)), bouton("Ressources et opportunités", salonUrl(S.ressources)), bouton("Grand Prix LEQ", salonUrl(S.grandprix))] },
   entraide: { img: "entraide", color: ROYAL, title: "Une question ? On s'entraide.", description:
     "Un discours, un entretien ou une soutenance à préparer ? Pose ta question ou partage ton texte, ton audio ou ta vidéo : la communauté et l'équipe te répondent.\n\n**Pour une réponse utile, précise :**\n• le contexte (examen, entretien, soutenance, discours…) et la date ;\n• ce sur quoi tu veux un avis (structure, voix, rythme, gestuelle…).\n\n**Pour donner un retour :** commence par ce qui fonctionne, puis une piste concrète pour progresser. Réponds dans le fil du message pour garder le salon lisible." },
   grandprix: { img: "grand-prix", color: GOLD, title: "Le Grand Prix LEQ", description:
@@ -286,7 +290,7 @@ console.log("✓ fonctionnement : guide complet publié et épinglé");
 for (const [cle, salonId] of Object.entries({ reglements: S.reglements, presente: S.presente, entraide: S.entraide, grandprix: S.grandprix, ambassadeurs: S.ambassadeurs })) {
   const m = MESSAGES[cle];
   await nettoyer(salonId);
-  await publier(salonId, { embeds: [{ title: m.title, description: m.description, color: m.color, image: { url: `attachment://${m.img}.png` }, footer: { text: MARQUE } }] }, `${m.img}.png`);
+  await publier(salonId, { embeds: [{ title: m.title, description: m.description, color: m.color, image: { url: `attachment://${m.img}.png` }, footer: { text: MARQUE } }], components: m.boutons ? [rangee(...m.boutons)] : [] }, `${m.img}.png`);
   console.log("✓ texte publié et épinglé :", cle);
   await pause(400);
 }

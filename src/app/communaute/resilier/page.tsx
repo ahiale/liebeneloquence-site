@@ -20,7 +20,7 @@ export default async function ResilierPage({ searchParams }: { searchParams: Pro
     try {
       const a = await stripe<Abonnement>("GET", `/subscriptions/${j.ab}`, {}, j.mode);
       const finPeriode = a.items.data[0]?.current_period_end ?? 0;
-      const finEngagement = a.metadata.engagement_fin ? Math.floor(new Date(`${a.metadata.engagement_fin}T00:00:00+01:00`).getTime() / 1000) : 0;
+      const finEngagement = a.metadata.engagement_fin ? Math.floor(new Date(`${a.metadata.engagement_fin}T12:00:00Z`).getTime() / 1000) : 0;
       if (a.status !== "active") contenu = <p className="m-0 text-[17px] text-white">Cet abonnement est déjà terminé.</p>;
       else if (a.cancel_at || a.cancel_at_period_end) contenu = <p className="m-0 text-[17px] text-white">Votre résiliation est déjà enregistrée : votre abonnement s&apos;arrête le {dateFr(a.cancel_at ?? finPeriode)}.</p>;
       else {
