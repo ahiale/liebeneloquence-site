@@ -160,6 +160,7 @@ const S = {};
 S.bienvenue = await salon({ nom: "👋bienvenue", parent: ACCUEIL, droits: PUBLIC, position: 0, sujet: "Chaque nouvel arrivant est salué ici. Ensuite, direction #📜règlements et #⚙️fonctionnement." });
 S.reglements = await salon({ nom: "📜règlements", parent: ACCUEIL, droits: PUBLIC, position: 1, sujet: "Les règles de la LEQ'FAM. En restant sur le serveur, tu les acceptes." });
 S.fonctionnement = await salon({ nom: "⚙️fonctionnement", parent: ACCUEIL, droits: PUBLIC, position: 2, sujet: "Tout comprendre en une minute : la LEQ'FAM, les salons, comment rejoindre, les liens utiles." });
+S.liens = await salon({ nom: "🔗liens-utiles", parent: ACCUEIL, droits: PUBLIC, position: 4, sujet: "Tous les liens Lieben Éloquence : site, quiz, formations, événements, réseaux." });
 S.annonces = await salon({ nom: "🔈annonces", parent: ACCUEIL, droits: PUBLIC, position: 3, sujet: "Les annonces officielles : dates des lives, Grand Prix, nouveautés LEQ." });
 
 // Communauté : membres et ambassadeurs
@@ -187,7 +188,7 @@ await salon({ nom: "🎙️Discours et débats", type: 2, parent: ATELIERS, droi
 S.ambassadeurs = await salon({ nom: "🌟espace-ambassadeurs", parent: CAT_AMB, droits: AMBASSADEURS, position: 0, sujet: "L'espace des ambassadeurs LEQ : ton code, tes visuels à partager, les nouveautés." });
 
 // Salons retirés de la structure (vides, sauf les messages du robot)
-const A_SUPPRIMER = ["🎟️rejoindre-la-leqfam", "🔗liens-utiles", "🏋️entraînements", "🎯défis-de-la-semaine", "⭐feed", "🗳️quiz", "🗳️quizz", "📚ressources", "🌍organisations-internationales", "🗓️programme-des-lives"];
+const A_SUPPRIMER = ["🎟️rejoindre-la-leqfam", "🏋️entraînements", "🎯défis-de-la-semaine", "⭐feed", "🗳️quiz", "🗳️quizz", "📚ressources", "🌍organisations-internationales", "🗓️programme-des-lives"];
 for (const nom of A_SUPPRIMER) {
   const c = salons.find((x) => x.type !== 4 && base(x.name) === base(nom));
   if (!c) continue;
