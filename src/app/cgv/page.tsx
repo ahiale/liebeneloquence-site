@@ -38,7 +38,7 @@ export default async function CgvPage() {
         <li><strong>Offre de lancement</strong> : {formatPrice(l.prixPremierMois)} le premier mois, pendant {l.jours} jours à compter de l&apos;ouverture des adhésions et dans la limite des {l.places} premières inscriptions.</li>
         <li><strong>Code ambassadeur ou association partenaire</strong> : {formatPrice(leqfam.partnerMonthlyPrice)} par mois pendant {leqfam.partnerDurationMonths} mois (dont le premier mois au prix de l&apos;offre de lancement si elle est en cours), puis le prix normal de la formule choisie.</li>
       </ul>
-      <p>Les prix sont indiqués en euros, toutes taxes comprises. [À CONFIRMER : TVA non applicable, article 293 B du CGI.] Le détail exact de ce que vous paierez est affiché avant la validation du paiement.</p>
+      <p>Les prix sont indiqués en euros, toutes taxes comprises. TVA non applicable, article 293 B du CGI. Le détail exact de ce que vous paierez est affiché avant la validation du paiement.</p>
 
       <h2>4. Paiement</h2>
       <p>

@@ -20,6 +20,7 @@ export default function MentionsLegalesPage() {
       <ul>
         <li>SIREN : {LEGAL.siren}</li>
         <li>SIRET : {LEGAL.siret}</li>
+        {LEGAL.address && <li>Adresse : {LEGAL.address}</li>}
         <li>
           Email : <a href={`mailto:${SITE.email}`}>{SITE.email}</a>
         </li>

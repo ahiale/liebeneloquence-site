@@ -76,13 +76,55 @@ export async function retirerRoleMembre(idDiscord: string): Promise<boolean> {
   return r.ok;
 }
 
-/** Message d'accueil du robot dans #présente-toi. */
+/** Identifiants des salons utiles à l'accueil, retrouvés par leur nom (mis en cache). */
+let salonsAccueil: Record<string, string> | null = null;
+async function salons(): Promise<Record<string, string>> {
+  if (salonsAccueil) return salonsAccueil;
+  const liste = (await (await robot("GET", `/guilds/${DISCORD.serveur}/channels`)).json()) as { id: string; name: string }[];
+  const trouver = (mot: string) => liste.find((c) => c.name.normalize("NFD").replace(/[̀-ͯ]/g, "").includes(mot))?.id ?? "";
+  salonsAccueil = { reglements: trouver("reglements"), fonctionnement: trouver("fonctionnement"), presente: trouver("presente-toi"), entraide: trouver("entraide"), ressources: trouver("ressources") };
+  return salonsAccueil;
+}
+const lienSalon = (id: string) => `https://discord.com/channels/${DISCORD.serveur}/${id}`;
+
+/** Accueil automatique d'un nouveau membre : message dans #présente-toi, puis guide « Commence ici » en message privé. */
 export async function souhaiterBienvenue(idDiscord: string): Promise<void> {
-  if (!DISCORD.salonArrivee) return;
-  await robot("POST", `/channels/${DISCORD.salonArrivee}/messages`, {
-    content: `Bienvenue <@${idDiscord}> dans la LEQ'FAM ! Ton accès membre est activé. Présente-toi avec le modèle épinglé juste au-dessus.`,
-    allowed_mentions: { users: [idDiscord] },
-  });
+  const s = await salons();
+  const salonArrivee = DISCORD.salonArrivee || s.presente;
+  if (salonArrivee) {
+    await robot("POST", `/channels/${salonArrivee}/messages`, {
+      content:
+        `Bienvenue <@${idDiscord}> dans la LEQ'FAM ! 🎉 Ton accès membre est activé, tous les salons de la communauté sont ouverts.\n\n` +
+        "**Première étape : présente-toi ici même.** Copie ce modèle, complète-le et envoie-le :\n" +
+        "```\nPrénom :\nCe que je fais (études, métier…) :\nMon objectif à l'oral :\nMon plus grand défi quand je prends la parole :\nUne phrase ou une personne qui m'inspire :\n```" +
+        "Je t'ai aussi envoyé un message privé avec tout ce qu'il faut savoir pour bien démarrer.",
+      allowed_mentions: { users: [idDiscord] },
+    });
+  }
+  // Guide en message privé (peut échouer si la personne a fermé ses messages privés : sans conséquence)
+  try {
+    const dm = (await (await robot("POST", "/users/@me/channels", { recipient_id: idDiscord })).json()) as { id?: string };
+    if (!dm.id) return;
+    const bouton = (label: string, id: string) => (id ? [{ type: 2, style: 5, label, url: lienSalon(id) }] : []);
+    await robot("POST", `/channels/${dm.id}/messages`, {
+      embeds: [{
+        color: 0xff5e01,
+        title: "Bienvenue dans la LEQ'FAM ! Commence ici 👇",
+        description:
+          "Ton abonnement est actif et tous les salons membres sont ouverts. Voici tes premiers pas :\n\n" +
+          "**1. Lis les règles** · respect, bienveillance, confidentialité : c'est ce qui fait la qualité de la famille.\n\n" +
+          "**2. Présente-toi** dans #présente-toi avec le modèle : la communauté va t'accueillir.\n\n" +
+          "**3. Note les prochains lives** · ils sont dans les **Événements** du serveur, tout en haut de la liste des salons. Clique sur « Intéressé » pour recevoir un rappel.\n\n" +
+          "**4. Une question, un oral à préparer ?** Pose-la dans #entraide, ou partage ton texte, ton audio ou ta vidéo pour recevoir des retours.\n\n" +
+          "**5. Explore les ressources et les opportunités** · une fiche par ressource, à filtrer par étiquette.\n\n" +
+          "Ton reçu et le lien pour gérer ton abonnement sont dans le mail de bienvenue. À très vite en live !\n**Rebecca**",
+        footer: { text: "LEQ'FAM · Lieben Éloquence" },
+      }],
+      components: [{ type: 1, components: [...bouton("Les règles", s.reglements), ...bouton("Me présenter", s.presente), ...bouton("Entraide", s.entraide), ...bouton("Ressources", s.ressources), ...bouton("Le fonctionnement", s.fonctionnement)].slice(0, 5) }],
+    });
+  } catch (e) {
+    console.error("Message privé d'accueil", e);
+  }
 }
 
 /** Lien qui ouvre directement le serveur (application ou navigateur). */
