@@ -101,6 +101,7 @@ const horsPublic = guide.new_member_actions.filter((a) => !publics.includes(a.ch
 // Les robots ne peuvent pas modifier le guide du serveur : ces étapes sont à changer à la main.
 if (horsPublic.length) console.log("! guide du serveur : à modifier à la main (étapes vers des salons membres) :", horsPublic.map((a) => a.title.trim()).join(", "));
 const bloquesParLeGuide = new Set(horsPublic.map((a) => a.channel_id));
+const publicsDuGuide = new Set(guide.new_member_actions.map((a) => a.channel_id));
 
 // ---------------------------------------------------------------- salons
 let salons = await api("GET", `/guilds/${G}/channels`);
@@ -155,39 +156,90 @@ const staff = trouver(["🪿Staff"], 4);
 if (staff) await maj(staff, { position: 4 });
 
 const S = {};
-S.bienvenue = await salon({ nom: "👋bienvenue", parent: ACCUEIL, droits: PUBLIC, position: 0, sujet: "Les nouveaux arrivants sont accueillis ici. Commence par lire #📜règlements." });
+// Accueil : 4 salons publics en lecture seule
+S.bienvenue = await salon({ nom: "👋bienvenue", parent: ACCUEIL, droits: PUBLIC, position: 0, sujet: "Chaque nouvel arrivant est salué ici. Ensuite, direction #📜règlements et #⚙️fonctionnement." });
 S.reglements = await salon({ nom: "📜règlements", parent: ACCUEIL, droits: PUBLIC, position: 1, sujet: "Les règles de la LEQ'FAM. En restant sur le serveur, tu les acceptes." });
-S.fonctionnement = await salon({ nom: "⚙️fonctionnement", parent: ACCUEIL, droits: PUBLIC, position: 2, sujet: "Comment fonctionne le serveur, salon par salon." });
-S.rejoindre = await salon({ nom: "🎟️rejoindre-la-leqfam", parent: ACCUEIL, droits: PUBLIC, position: 3, sujet: `Les formules et l'offre de lancement. Rejoindre : ${SITE}/communaute` });
-S.liens = await salon({ nom: "🔗liens-utiles", parent: ACCUEIL, droits: PUBLIC, position: 4, sujet: "Tous les liens Lieben Éloquence : site, quiz, formations, événements, réseaux." });
-S.annonces = await salon({ nom: "🔈annonces", parent: ACCUEIL, droits: PUBLIC, position: 5, sujet: "Les annonces officielles de LEQ : nouveautés, événements, lives." });
+S.fonctionnement = await salon({ nom: "⚙️fonctionnement", parent: ACCUEIL, droits: PUBLIC, position: 2, sujet: "Tout comprendre en une minute : la LEQ'FAM, les salons, comment rejoindre, les liens utiles." });
+S.annonces = await salon({ nom: "🔈annonces", parent: ACCUEIL, droits: PUBLIC, position: 3, sujet: "Les annonces officielles : dates des lives, Grand Prix, nouveautés LEQ." });
 
+// Communauté : membres et ambassadeurs
 S.presente = await salon({ nom: "👀présente-toi", parent: LEQFAM, droits: MEMBRES_ECRIRE, position: 0, sujet: "Présente-toi à la communauté avec le modèle épinglé." });
-S.discussion = await salon({ nom: "💬discussion-générale", anciens: ["💬discussion-génerale"], parent: LEQFAM, droits: MEMBRES_ECRIRE, position: 1, sujet: "Parle de tout, avec bienveillance." });
-S.entraide = await salon({ nom: "🤝entraide", parent: LEQFAM, droits: MEMBRES_ECRIRE, position: 2, sujet: "Une question sur un oral, un discours, le trac ? La communauté t'aide." });
-S.entrainements = await salon({ nom: "🏋️entraînements", parent: LEQFAM, droits: MEMBRES_ECRIRE, position: 3, sujet: "Publie tes entraînements (texte, audio, vidéo) et reçois des retours bienveillants." });
-S.defis = await salon({ nom: "🎯défis-de-la-semaine", parent: LEQFAM, droits: MEMBRES_LIRE, position: 4, sujet: "Un nouveau défi chaque semaine. Réponds dans le fil sous le défi." });
-S.feed = await salon({ nom: "⭐feed", type: 15, parent: LEQFAM, droits: MEMBRES_ECRIRE, position: 5, sujet: "Partage tes discours et tes vidéos : un sujet par prise de parole, les retours en réponse." });
-S.quiz = await salon({ nom: "🗳️quiz", anciens: ["🗳️quizz"], parent: LEQFAM, droits: MEMBRES_ECRIRE, position: 6, sujet: "Quiz et sondages pour tester ta culture oratoire." });
-S.ressources = await salon({ nom: "📚ressources", parent: LEQFAM, droits: MEMBRES_LIRE, position: 7, sujet: "Fiches, méthodes, livres et vidéos sélectionnés par l'équipe LEQ." });
-S.organisations = await salon({ nom: "🌍organisations-internationales", parent: LEQFAM, droits: MEMBRES_LIRE, position: 8, sujet: "Veille : concours d'éloquence, programmes et opportunités des organisations internationales." });
-S.temoignages = await salon({ nom: "🗣️témoignages", parent: LEQFAM, droits: MEMBRES_ECRIRE, position: 9, sujet: "Partage tes réussites : un oral réussi, un trac vaincu, un discours qui a marqué." });
-S.grandprix = await salon({ nom: "🏆grand-prix-leq", parent: LEQFAM, droits: MEMBRES_LIRE, position: 10, sujet: "Le Grand Prix LEQ, chaque trimestre : thème, règlement, participants et résultats." });
+S.discussion = await salon({ nom: "💬discussion-générale", anciens: ["💬discussion-génerale"], parent: LEQFAM, droits: MEMBRES_ECRIRE, position: 1, sujet: "Éloquence, communication, culture générale et tout ce qui gravite autour." });
+S.entraide = await salon({ nom: "🤝entraide", parent: LEQFAM, droits: MEMBRES_ECRIRE, position: 2, sujet: "Un discours, un entretien, une soutenance ? Demande conseils et retours sur tes textes, audios et vidéos." });
+S.temoignages = await salon({ nom: "🗣️témoignages", parent: LEQFAM, droits: MEMBRES_ECRIRE, position: 3, sujet: "Tes progrès, tes prises de parole et tes déclics, pour inspirer la communauté." });
+S.ressources = await salon({ nom: "📚ressources-et-opportunités", type: 15, parent: LEQFAM, droits: MEMBRES_LIRE, position: 4,
+  sujet: "Une fiche par ressource ou opportunité. Filtre avec les étiquettes, commente sous chaque fiche." });
+S.grandprix = await salon({ nom: "🏆grand-prix-leq", parent: LEQFAM, droits: MEMBRES_LIRE, position: 5, sujet: "Le Grand Prix LEQ, chaque trimestre : thème, règlement, résultats et archives." });
 
-S.programme = await salon({ nom: "🗓️programme-des-lives", parent: ATELIERS, droits: MEMBRES_LIRE, position: 0, sujet: "Le calendrier des lives et des ateliers. Les lives ont lieu dans les salons vocaux ci-dessous." });
-await salon({ nom: "Live conseils prise de parole", type: 2, parent: ATELIERS, droits: MEMBRES_ECRIRE, position: 1 });
-await salon({ nom: "🎙️Discours et débats", type: 2, parent: ATELIERS, droits: MEMBRES_ECRIRE, position: 2 });
+// Étiquettes du forum (créées une fois)
+const forum = salons.find((c) => c.id === S.ressources);
+const ETIQUETTES = ["Ressource", "Opportunité internationale", "Concours"];
+const manquantes = ETIQUETTES.filter((t) => !(forum.available_tags ?? []).some((x) => x.name === t));
+if (manquantes.length) {
+  await api("PATCH", `/channels/${S.ressources}`, { available_tags: [...(forum.available_tags ?? []), ...manquantes.map((name) => ({ name }))], default_forum_layout: 1, default_sort_order: 1 });
+  console.log("+ étiquettes du forum ressources");
+}
+
+// Lives : les deux salons vocaux (le calendrier passe par les Événements Discord)
+await salon({ nom: "Live conseils prise de parole", type: 2, parent: ATELIERS, droits: MEMBRES_ECRIRE, position: 0 });
+await salon({ nom: "🎙️Discours et débats", type: 2, parent: ATELIERS, droits: MEMBRES_ECRIRE, position: 1 });
 
 S.ambassadeurs = await salon({ nom: "🌟espace-ambassadeurs", parent: CAT_AMB, droits: AMBASSADEURS, position: 0, sujet: "L'espace des ambassadeurs LEQ : ton code, tes visuels à partager, les nouveautés." });
+
+// Salons retirés de la structure (vides, sauf les messages du robot)
+const A_SUPPRIMER = ["🎟️rejoindre-la-leqfam", "🔗liens-utiles", "🏋️entraînements", "🎯défis-de-la-semaine", "⭐feed", "🗳️quiz", "🗳️quizz", "📚ressources", "🌍organisations-internationales", "🗓️programme-des-lives"];
+for (const nom of A_SUPPRIMER) {
+  const c = salons.find((x) => x.type !== 4 && base(x.name) === base(nom));
+  if (!c) continue;
+  if (publicsDuGuide.has(c.id)) { console.log(`! ${c.name} conservé : le guide du serveur y renvoie encore`); continue; }
+  try { await api("DELETE", `/channels/${c.id}`); console.log("- salon supprimé :", c.name); }
+  catch (e) { console.log(`! ${c.name} non supprimé : ${e.message}`); }
+}
+salons = await api("GET", `/guilds/${G}/channels`);
 console.log("= catégories et salons prêts");
 
 // ---------------------------------------------------------------- textes et bannières
 const lien = (id) => `<#${id}>`;
 const bouton = (label, url) => ({ type: 2, style: 5, label, url });
+const rangee = (...b) => ({ type: 1, components: b });
+
+const FONCTIONNEMENT = {
+  embeds: [
+    { color: ORANGE, title: "Bienvenue dans la LEQ'FAM", description:
+      "La toute première communauté francophone dédiée à la prise de parole en public et à la culture sociétale.\n\n" +
+      "Je m'appelle **Rebecca Lieben Ahiale**, coach en éloquence et en prise de parole en public. J'ai créé cet espace bienveillant pour démocratiser la prise de parole, s'entraîner, s'entraider et montrer tout le champ des possibles quand on sait bien manier sa langue.\n\n" +
+      "Que vous soyez débutant ou déjà expert, quel que soit votre pays ou votre continent, vous êtes toutes et tous les bienvenus. 😊",
+      footer: { text: MARQUE } },
+    { color: GOLD, title: "Ce qu'on fait ensemble", description:
+      "**Les lives** · 3 à 4 fois par mois, j'anime un atelier en direct sur des thèmes choisis par la communauté : prise de parole, storytelling, gestion du trac, improvisation. Des séances pratiques où l'on apprend en faisant, parfois avec des invités surprises.\n\n" +
+      "**Le Grand Prix LEQ** · chaque trimestre, un concours d'éloquence et de culture sociétale ouvert à tous les membres, sur un thème tiré au sort. Le gagnant est désigné par les votes de ses pairs et par un jury invité, différent à chaque édition.\n\n" +
+      "**L'entraide au quotidien** · tu prépares un discours, un entretien ou une soutenance ? Partage tes textes, tes audios ou tes vidéos : la communauté te fait des retours bienveillants et constructifs.\n\n" +
+      "**Des avantages et des opportunités** · des réductions sur les événements et formations LEQ, et une sélection d'opportunités : organisations internationales, associations, cours, concours." },
+    { color: ROYAL, title: "Comment s'organise le serveur", description:
+      `${lien(S.annonces)} · les informations importantes : dates des lives, Grand Prix, nouveautés LEQ.\n\n` +
+      "**Réservés aux membres de la LEQ'FAM :**\n" +
+      `${lien(S.presente)} · pour te présenter et créer des liens.\n` +
+      `${lien(S.discussion)} · éloquence, communication, culture générale et tout ce qui gravite autour.\n` +
+      `${lien(S.entraide)} · conseils et retours sur tes discours, entretiens et soutenances.\n` +
+      `${lien(S.temoignages)} · tes progrès et tes déclics, pour inspirer les autres.\n` +
+      `${lien(S.ressources)} · articles, podcasts, vidéos, outils et opportunités, à filtrer par étiquette.\n` +
+      `${lien(S.grandprix)} · thèmes, règlement, résultats et archives du Grand Prix.\n` +
+      "**Les salons vocaux** · un pour les ateliers en direct, un pour s'entraîner librement avec un admin.\n\n" +
+      "Les lives sont programmés dans les **Événements** du serveur, tout en haut de la liste des salons : clique sur « Intéressé » pour recevoir un rappel." },
+    { color: ORANGE, title: "Rejoindre la LEQ'FAM", description:
+      "Les salons membres s'ouvrent dès que tu as rejoint la LEQ'FAM :\n" +
+      "• **avec engagement** : 3,99 € par mois ;\n" +
+      "• **sans engagement** : 4,99 € par mois.\n\n" +
+      "**Offre de lancement : 1 € le premier mois.** Tu as un code ambassadeur ? Il s'utilise au moment du paiement.",
+      image: { url: "attachment://bienvenue.png" } },
+  ],
+  components: [
+    rangee(bouton("Rejoindre la LEQ'FAM", `${SITE}/communaute`)),
+    rangee(bouton("Le site", SITE), bouton("Le quiz d'orateur", `${SITE}/quiz`), bouton("Les événements", `${SITE}/evenements`), bouton("Instagram", "https://www.instagram.com/becca_lieben/")),
+  ],
+};
+
 const MESSAGES = {
-  bienvenue: { img: "bienvenue", color: ORANGE, title: "Bienvenue dans la LEQ'FAM !", description:
-    `Ici, on apprend à prendre la parole, à convaincre et à s'exprimer avec assurance, **ensemble**.\n\n**Par où commencer ?**\n1. Lis les règles dans ${lien(S.reglements)}.\n2. Découvre le serveur dans ${lien(S.fonctionnement)}.\n3. Rejoins la LEQ'FAM dans ${lien(S.rejoindre)} pour ouvrir tout l'espace membres.\n\nUne question ? Écris-nous à formationn@liebeneloquence.com.`,
-    boutons: [bouton("Découvrir Lieben Éloquence", SITE)] },
   reglements: { img: "reglements", color: GOLD, title: "Les règles de la maison", description:
     "**1. Le respect avant tout.** Traitez tout le monde avec respect. Aucun harcèlement, chasse aux sorcières, sexisme, racisme ou discours de haine ne sera toléré.\n\n" +
     "**2. Des retours bienveillants.** On commente une prise de parole, jamais une personne. Un retour utile dit ce qui marche, puis ce qui peut progresser.\n\n" +
@@ -196,49 +248,63 @@ const MESSAGES = {
     "**5. Attention aux plus jeunes.** Certains membres sont mineurs : les échanges se font dans les salons du serveur, pas en message privé.\n\n" +
     "**6. Signale ce qui ne va pas.** Si tu remarques quelque chose de contraire aux règles ou qui te met mal à l'aise, informe-en l'équipe. Nous voulons que ce serveur soit accueillant pour tout le monde !\n\n" +
     "En cas de manquement, l'équipe peut retirer l'accès au serveur." },
-  rejoindre: { img: "rejoindre", color: ORANGE, title: "Rejoindre la LEQ'FAM", description:
-    `La LEQ'FAM, c'est **l'espace membres** du serveur : entraînements, défis chaque semaine, lives, ressources, entraide et le **Grand Prix LEQ** chaque trimestre.\n\n**Les formules**\n• Avec engagement : **3,99 € par mois**\n• Sans engagement : **4,99 € par mois**\n\n**Offre de lancement : 1 € le premier mois.**\n\n**Comment rejoindre ?**\nInscris-toi sur le site : dès que ton abonnement est validé, ton accès s'ouvre automatiquement ici.\nTu as un code ambassadeur ? Tu pourras l'utiliser au moment du paiement.`,
-    boutons: [bouton("Rejoindre la LEQ'FAM", `${SITE}/communaute`)] },
-  liens: { img: "liens", color: ROYAL, title: "Tous nos liens utiles", description:
-    `**Le site** · ${SITE}\n**Le quiz d'orateur** (gratuit, 2 minutes) · ${SITE}/quiz\n**Les formations** · ${SITE}/#offres\n**L'offre Grand Oral** · ${SITE}/grand-oral\n**Une séance à l'unité** · ${SITE}/#seance\n**Les événements** · ${SITE}/evenements\n**La séance découverte offerte** · https://calendly.com/formationn-liebeneloquence/30min\n\n**Instagram** · https://www.instagram.com/becca_lieben/\n**LinkedIn** · https://www.linkedin.com/in/rebecca-lieben-ahiale/\n**Contact** · formationn@liebeneloquence.com`,
-    boutons: [bouton("Le site", SITE), bouton("Faire le quiz", `${SITE}/quiz`), bouton("Les événements", `${SITE}/evenements`), bouton("Instagram", "https://www.instagram.com/becca_lieben/")] },
   presente: { img: "presente-toi", color: ORANGE, title: "Présente-toi, on t'écoute !", description:
     "Copie ce modèle, complète-le et publie-le ici :\n\n```\nPrénom :\nCe que je fais (études, métier…) :\nMon objectif à l'oral :\nMon plus grand défi quand je prends la parole :\nUne phrase ou une personne qui m'inspire :\n```\nPrends le temps de lire et d'accueillir les autres présentations : c'est comme ça que la famille s'agrandit." },
   entraide: { img: "entraide", color: ROYAL, title: "Une question ? On s'entraide.", description:
-    "Un oral qui approche, un discours qui coince, le trac qui monte ? Pose ta question ici, la communauté et l'équipe te répondent.\n\n**Pour une réponse utile, précise :**\n• le contexte (examen, entretien, soutenance, discours…) ;\n• la date ;\n• ce qui te bloque.\n\nPense à répondre dans le fil de la question pour garder le salon lisible." },
-  entrainements: { img: "entrainements", color: ORANGE, title: "On s'entraîne ensemble", description:
-    "Publie ici tes entraînements : un texte, un audio ou une vidéo de quelques minutes.\n\n**Pour recevoir de bons retours, indique :**\n• le contexte et le public visé ;\n• ce sur quoi tu veux un avis (voix, rythme, structure, gestuelle…).\n\n**Pour donner un retour :** commence par ce qui fonctionne, puis une piste concrète pour progresser. Toujours dans le fil du message." },
-  defis: { img: "defis", color: GOLD, title: "Le défi de la semaine", description:
-    "Chaque semaine, un nouveau défi de prise de parole est publié ici : improvisation, argumentation, storytelling, voix…\n\n**Comment participer ?** Réponds dans le **fil** ouvert sous le défi, en texte, en audio ou en vidéo. Les meilleures participations peuvent être mises en avant dans la communauté." },
-  ressources: { img: "ressources", color: ROYAL, title: "Les ressources pour progresser", description:
-    "Fiches pratiques, méthodes, livres, vidéos et exercices sélectionnés par l'équipe LEQ.\n\nChaque ressource est publiée ici avec une courte explication. Pour en discuter ou poser une question, ouvre un fil sous la ressource." },
-  organisations: { img: "organisations", color: ROYAL, title: "Organisations internationales", description:
-    "La veille LEQ des opportunités à l'international : concours d'éloquence, programmes jeunesse, appels à candidatures, événements des organisations internationales et de la Francophonie.\n\nLes informations sont publiées ici au fil de l'eau, avec les dates limites et les liens officiels. Une question sur une opportunité ? Ouvre un fil sous la publication." },
+    "Un discours, un entretien ou une soutenance à préparer ? Pose ta question ou partage ton texte, ton audio ou ta vidéo : la communauté et l'équipe te répondent.\n\n**Pour une réponse utile, précise :**\n• le contexte (examen, entretien, soutenance, discours…) et la date ;\n• ce sur quoi tu veux un avis (structure, voix, rythme, gestuelle…).\n\n**Pour donner un retour :** commence par ce qui fonctionne, puis une piste concrète pour progresser. Réponds dans le fil du message pour garder le salon lisible." },
   grandprix: { img: "grand-prix", color: GOLD, title: "Le Grand Prix LEQ", description:
-    "Chaque trimestre, la LEQ'FAM organise le **Grand Prix LEQ**, avec une dotation de **200 €**.\n\nLe thème, le règlement, les dates et les résultats de chaque édition sont publiés ici. Prépare-toi : chaque entraînement compte !" },
-  programme: { img: "lives", color: ORANGE, title: "Le programme des lives", description:
-    "Le calendrier des lives et des ateliers est publié ici.\n\nLes lives ont lieu dans les salons vocaux de cette catégorie :\n• **Live conseils prise de parole** : méthodes et réponses à vos questions ;\n• **Discours et débats** : on s'exerce, on débat, on se donne des retours.\n\nActive les notifications de ce salon pour ne rater aucun live." },
+    "Chaque trimestre, un concours d'éloquence et de culture sociétale ouvert à tous les membres, sur un **thème tiré au sort**.\n\nLe gagnant est désigné par **les votes de ses pairs et un jury invité**, différent à chaque édition, et remporte une dotation de **200 €**.\n\nLe thème, le règlement, les dates, les résultats et les archives de chaque édition sont publiés ici." },
   ambassadeurs: { img: "ambassadeurs", color: GOLD, title: "Bienvenue dans l'espace ambassadeurs", description:
-    "Merci de porter la voix de LEQ !\n\n**Ici, tu trouveras :**\n• ton **code ambassadeur**, à partager autour de toi : il est utilisable au moment de l'abonnement sur le site ;\n• les visuels et les textes à partager sur tes réseaux ;\n• les nouveautés en avant-première.\n\nUne idée, une question ? Écris-la ici, l'équipe te répond." },
+    "Merci de porter la voix de LEQ !\n\n**Ici, tu trouveras :**\n• ton **code ambassadeur**, à partager autour de toi : il s'utilise au moment de l'abonnement ;\n• les visuels et les textes à partager sur tes réseaux ;\n• les nouveautés en avant-première.\n\nUne idée, une question ? Écris-la ici, l'équipe te répond." },
 };
-const QUELS = { bienvenue: S.bienvenue, reglements: S.reglements, rejoindre: S.rejoindre, liens: S.liens, presente: S.presente, entraide: S.entraide, entrainements: S.entrainements, defis: S.defis, ressources: S.ressources, organisations: S.organisations, grandprix: S.grandprix, programme: S.programme, ambassadeurs: S.ambassadeurs };
 
-for (const [cle, salonId] of Object.entries(QUELS)) {
-  const m = MESSAGES[cle];
-  // Remplace l'éventuel message d'introduction déjà posté par le robot
-  const recents = await api("GET", `/channels/${salonId}/messages?limit=50`);
-  for (const old of recents.filter((x) => x.author.id === me.id && x.embeds?.[0]?.footer?.text === MARQUE)) await api("DELETE", `/channels/${salonId}/messages/${old.id}`);
-  const fichier = `${m.img}.png`;
-  const corps = {
-    embeds: [{ title: m.title, description: m.description, color: m.color, image: { url: `attachment://${fichier}` }, footer: { text: MARQUE } }],
-    components: m.boutons ? [{ type: 1, components: m.boutons }] : [],
-    attachments: [{ id: 0, filename: fichier }],
-  };
-  const msg = await api("POST", `/channels/${salonId}/messages`, corps, [{ name: fichier, data: await readFile(`/tmp/bannieres/${fichier}`) }]);
+/** Supprime les anciens messages d'introduction du robot (et ses avis d'épinglage) dans un salon. */
+async function nettoyer(salonId, aussiAuteur) {
+  const recents = await api("GET", `/channels/${salonId}/messages?limit=100`);
+  for (const m of recents) {
+    const robot = m.author.id === me.id && (m.type === 6 || m.embeds?.some((e) => e.footer?.text === MARQUE));
+    if (robot || (aussiAuteur && m.author.username === aussiAuteur)) await api("DELETE", `/channels/${salonId}/messages/${m.id}`);
+  }
+}
+async function publier(salonId, corps, fichier) {
+  const msg = await api("POST", `/channels/${salonId}/messages`, { ...corps, attachments: [{ id: 0, filename: fichier }] }, [{ name: fichier, data: await readFile(`/tmp/bannieres/${fichier}`) }]);
   await api("PUT", `/channels/${salonId}/pins/${msg.id}`).catch((e) => console.log("épinglage impossible :", e.message));
+  const apres = await api("GET", `/channels/${salonId}/messages?limit=5`);
+  for (const m of apres.filter((x) => x.type === 6 && x.author.id === me.id)) await api("DELETE", `/channels/${salonId}/messages/${m.id}`);
+}
+
+// #bienvenue : réservé à Welcomer, le message du robot est retiré
+await nettoyer(S.bienvenue);
+console.log("✓ bienvenue : message du robot retiré");
+
+// #fonctionnement : l'ancien texte de Rebecca (compte __leq) est remplacé par la version mise à jour
+await nettoyer(S.fonctionnement, "__leq");
+await publier(S.fonctionnement, { embeds: FONCTIONNEMENT.embeds, components: FONCTIONNEMENT.components }, "bienvenue.png");
+console.log("✓ fonctionnement : guide complet publié et épinglé");
+
+for (const [cle, salonId] of Object.entries({ reglements: S.reglements, presente: S.presente, entraide: S.entraide, grandprix: S.grandprix, ambassadeurs: S.ambassadeurs })) {
+  const m = MESSAGES[cle];
+  await nettoyer(salonId);
+  await publier(salonId, { embeds: [{ title: m.title, description: m.description, color: m.color, image: { url: `attachment://${m.img}.png` }, footer: { text: MARQUE } }] }, `${m.img}.png`);
   console.log("✓ texte publié et épinglé :", cle);
   await pause(400);
 }
+
+// Forum ressources : une fiche épinglée « À lire » en tête
+const fils = (await api("GET", `/guilds/${G}/threads/active`)).threads.filter((t) => t.parent_id === S.ressources && t.owner_id === me.id);
+for (const t of fils) await api("DELETE", `/channels/${t.id}`);
+const etiquettes = (await api("GET", `/channels/${S.ressources}`)).available_tags;
+const fiche = await api("POST", `/channels/${S.ressources}/threads`, {
+  name: "À lire : comment utiliser ce salon",
+  applied_tags: etiquettes.filter((t) => t.name === "Ressource").map((t) => t.id),
+  message: { embeds: [{ color: ROYAL, title: "Ressources et opportunités", image: { url: "attachment://ressources.png" }, footer: { text: MARQUE }, description:
+    "Ici, chaque publication est une **fiche** : une ressource pour progresser (article, podcast, vidéo, livre, outil) ou une opportunité (organisations internationales, associations, cours, concours).\n\n" +
+    "**Pour t'y retrouver**, filtre avec les étiquettes en haut du salon :\n• **Ressource** · pour progresser à l'oral ;\n• **Opportunité internationale** · programmes, appels à candidatures, événements ;\n• **Concours** · concours d'éloquence et de culture générale.\n\n" +
+    "Les fiches sont publiées par l'équipe LEQ. Une question ou un avis ? Réponds directement sous la fiche." }],
+    attachments: [{ id: 0, filename: "ressources.png" }] },
+}, [{ name: "ressources.png", data: await readFile("/tmp/bannieres/ressources.png") }]);
+await api("PATCH", `/channels/${fiche.id}`, { flags: 2 }).catch((e) => console.log("épinglage de la fiche impossible :", e.message));
+console.log("✓ forum ressources : fiche « À lire » épinglée");
 
 // ---------------------------------------------------------------- serveur : icône, description, accueil
 const icone = (await readFile("/tmp/bannieres/icone-serveur.png")).toString("base64");
