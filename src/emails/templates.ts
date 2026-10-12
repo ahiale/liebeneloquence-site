@@ -343,6 +343,68 @@ export function invitationEvenement(d: { title: string; edition?: string; dateLa
 }
 
 /* ---------------------------------------------------------------------------
+   Abonnement LEQ'FAM
+   ------------------------------------------------------------------------- */
+
+const dateFr = (iso: string) => new Date(`${iso}T12:00:00`).toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" });
+const euros = (n: number) => `${n.toFixed(2).replace(".", ",").replace(",00", "")} €`;
+
+export function leqfamBienvenue(d: { nom: string; formule: string; prix: number; engagementFin: string | null; lienDiscord: string; lienResiliation: string }): Email {
+  return {
+    subject: "Bienvenue dans la LEQ'FAM !",
+    html: layout({
+      title: "Bienvenue dans",
+      accent: "la LEQ'FAM !",
+      preheader: "Ton accès membre est activé sur Discord.",
+      reason: "Vous recevez ce mail suite à votre abonnement à la LEQ'FAM sur liebeneloquence.com.",
+      body:
+        hello(d.nom) +
+        p("Ton abonnement est activé : tous les salons membres de la LEQ'FAM sont ouverts sur Discord. Présente-toi dans <strong>#présente-toi</strong>, l'équipe et la communauté t'y attendent.") +
+        button(d.lienDiscord, "Ouvrir la LEQ'FAM sur Discord") +
+        box(rows([["Formule", d.formule], ["Prix normal", `${euros(d.prix)} par mois`], ["Engagement", d.engagementFin ? `jusqu'au ${dateFr(d.engagementFin)}, puis reconduit chaque mois` : "aucun, résiliable à tout moment"]])) +
+        p(`Tes reçus de paiement t'arrivent par mail à chaque prélèvement. Pour résilier ton abonnement à tout moment, <a href="${esc(d.lienResiliation)}" style="color:${C.royal}">utilise ce lien</a> (garde ce mail).`) +
+        p(`<span style="color:${C.muted};font-size:14px">Conditions générales de vente : <a href="${SITE.url}/cgv" style="color:${C.royal}">${SITE.url.replace("https://", "")}/cgv</a></span>`) +
+        signature,
+    }),
+  };
+}
+
+export function leqfamLienResiliation(d: { lien: string }): Email {
+  return {
+    subject: "Résilier ton abonnement LEQ'FAM",
+    html: layout({
+      title: "Résilier ton",
+      accent: "abonnement",
+      preheader: "Le lien pour résilier ton abonnement LEQ'FAM.",
+      reason: "Vous recevez ce mail car une demande de résiliation a été faite sur liebeneloquence.com avec votre adresse.",
+      body:
+        hello() +
+        p("Tu as demandé à résilier ton abonnement à la LEQ'FAM. Clique sur le bouton pour voir la date de fin et confirmer :") +
+        button(d.lien, "Résilier mon abonnement") +
+        p("Ce lien est valable 48 heures. Si tu n'es pas à l'origine de cette demande, ignore simplement ce mail : rien ne change.") +
+        signature,
+    }),
+  };
+}
+
+export function leqfamResiliation(d: { dateFin: string; engagement: boolean }): Email {
+  return {
+    subject: "Ta résiliation LEQ'FAM est enregistrée",
+    html: layout({
+      title: "Résiliation",
+      accent: "enregistrée.",
+      preheader: `Ton accès reste ouvert jusqu'au ${dateFr(d.dateFin)}.`,
+      reason: "Vous recevez ce mail suite à la résiliation de votre abonnement LEQ'FAM.",
+      body:
+        hello() +
+        p(`Ta résiliation est bien enregistrée. ${d.engagement ? "Comme prévu par ton engagement, ton abonnement" : "Ton abonnement"} s'arrête le <strong>${dateFr(d.dateFin)}</strong> : d'ici là, ton accès à la LEQ'FAM reste ouvert et aucun autre prélèvement n'aura lieu après cette date.`) +
+        p("Merci d'avoir fait partie de la famille. Tu restes sur le serveur Discord et tu pourras revenir quand tu veux.") +
+        signature,
+    }),
+  };
+}
+
+/* ---------------------------------------------------------------------------
    Quiz d'orateur
    ------------------------------------------------------------------------- */
 

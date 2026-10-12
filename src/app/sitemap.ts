@@ -3,7 +3,7 @@ import { getEvents } from "@/content";
 import { SITE } from "@/config/site";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const pages = ["", "/quiz", "/grand-oral", "/autres-services", "/communaute", "/evenements", "/a-propos", "/mentions-legales", "/confidentialite", "/cookies"];
+  const pages = ["", "/quiz", "/grand-oral", "/autres-services", "/communaute", "/evenements", "/a-propos", "/mentions-legales", "/confidentialite", "/cookies", "/cgv"];
   const events = await getEvents();
   return [
     ...pages.map((p) => ({ url: `${SITE.url}${p}`, changeFrequency: "monthly" as const, priority: p === "" ? 1 : 0.7 })),

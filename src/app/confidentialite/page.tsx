@@ -14,6 +14,7 @@ const TRAITEMENTS = [
   ["Demande de devis", "Nom, établissement, email, message", "Répondre à la demande et envoyer la brochure", "Mesures précontractuelles", "3 ans après le dernier contact"],
   ["Réservation Grand Oral", "Prénom, nom, email, profil, type et date de l'oral, attentes", "Gérer la réservation et l'accompagnement", "Exécution du contrat", "3 ans après la fin de l'accompagnement"],
   ["Séance à l'unité", "Prénom, nom, email, nombre de séances, sujet à travailler", "Gérer la réservation et la séance", "Exécution du contrat", "3 ans après la séance"],
+  ["Abonnement LEQ'FAM", "Identifiant et nom Discord, email, formule, code utilisé, historique des paiements (les données de carte sont traitées uniquement par Stripe)", "Gérer l'abonnement, l'accès aux salons membres et la facturation", "Exécution du contrat ; obligations comptables", "Durée de l'abonnement, puis 10 ans pour les pièces comptables"],
   ["Formulaire de contact", "Nom, email, type de demande, message", "Répondre à la demande", "Intérêt légitime", "3 ans après le dernier contact"],
   ["Newsletter", "Nom, email, profil et thématique (facultatifs)", "Envoyer la newsletter", "Consentement", "Jusqu'à la désinscription"],
   ["Liste d'attente LEQ'FAM", "Prénom, email", "Prévenir de l'ouverture de la communauté", "Consentement", "Jusqu'à l'ouverture, puis 6 mois au plus"],

@@ -35,6 +35,7 @@ export const FOOTER_LINKS = [
   { label: "Mentions légales", href: "/mentions-legales" },
   { label: "Confidentialité", href: "/confidentialite" },
   { label: "Cookies", href: "/cookies" },
+  { label: "CGV", href: "/cgv" },
   { label: "Contact", href: "/autres-services#contact" },
   { label: "Instagram", href: SITE.instagram, external: true },
   { label: "LinkedIn", href: SITE.linkedin, external: true },

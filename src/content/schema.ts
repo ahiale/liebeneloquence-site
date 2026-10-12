@@ -129,6 +129,34 @@ export const PricingSchema = z.object({
     availability: z.string().nullable(),
     partnerMonthlyPrice: Price,
     partnerDurationMonths: z.number().int().positive(),
+    /** Les deux formules d'abonnement (les prix doivent correspondre à ceux créés dans Stripe). */
+    formules: z.object({
+      engagement: z.object({ label: z.string(), monthlyPrice: Price, engagementMonths: z.number().int().min(0) }),
+      libre: z.object({ label: z.string(), monthlyPrice: Price, engagementMonths: z.number().int().min(0) }),
+    }),
+    /** Offre de lancement : prix du premier mois, pendant `jours` jours à partir de `debut` (AAAA-MM-JJ), pour les `places` premiers. */
+    lancement: z.object({
+      debut: z.string().date().nullable(),
+      jours: z.number().int().positive(),
+      places: z.number().int().positive(),
+      prixPremierMois: Price,
+    }),
   }),
 });
 export type Pricing = z.infer<typeof PricingSchema>;
+
+/* ---------------------------------------------------------------------------
+   Codes ambassadeurs et associations partenaires (content/partenaires.json)
+   ------------------------------------------------------------------------- */
+
+export const PartenaireSchema = z.object({
+  /** Code à saisir au moment de l'adhésion (majuscules, chiffres et tirets). */
+  code: z.string().regex(/^[A-Z0-9-]{3,30}$/, "majuscules, chiffres et tirets"),
+  /** Nom de l'ambassadeur ou de l'association. */
+  nom: z.string(),
+  type: z.enum(["ambassadeur", "association"]),
+  /** false : le code n'est plus accepté. */
+  actif: z.boolean(),
+  note: z.string().optional(),
+});
+export type Partenaire = z.infer<typeof PartenaireSchema>;

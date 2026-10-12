@@ -73,6 +73,16 @@
     "monthlyPrice": 3.99,
     "availability": "Bientôt disponible · fin octobre",
     "partnerMonthlyPrice": 1.99,
-    "partnerDurationMonths": 6
+    "partnerDurationMonths": 6,
+    "formules": {
+      "engagement": { "label": "Avec engagement", "monthlyPrice": 3.99, "engagementMonths": 12 },
+      "libre": { "label": "Sans engagement", "monthlyPrice": 4.99, "engagementMonths": 0 }
+    },
+    "lancement": {
+      "debut": null,
+      "jours": 10,
+      "places": 49,
+      "prixPremierMois": 1
+    }
   }
 }

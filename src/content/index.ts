@@ -3,11 +3,14 @@ import { z } from "zod";
 import eventsJson from "../../content/evenements.json";
 import reviewsJson from "../../content/avis.json";
 import pricingJson from "../../content/tarifs.json";
+import partenairesJson from "../../content/partenaires.json";
 import {
   EventSchema,
+  PartenaireSchema,
   PricingSchema,
   ReviewSchema,
   type LeqEvent,
+  type Partenaire,
   type Pricing,
   type Review,
 } from "./schema";
@@ -36,6 +39,7 @@ function parse<T>(schema: z.ZodType<T>, data: unknown, file: string): T {
 const EVENTS = parse(z.array(EventSchema), eventsJson, "evenements.json");
 const REVIEWS = parse(z.array(ReviewSchema), reviewsJson, "avis.json");
 const PRICING = parse(PricingSchema, pricingJson, "tarifs.json");
+const PARTENAIRES = parse(z.array(PartenaireSchema), partenairesJson, "partenaires.json");
 
 /** Événements publiés, du plus proche au plus lointain (dates inconnues en dernier). */
 export async function getEvents(): Promise<LeqEvent[]> {
@@ -60,4 +64,10 @@ export async function getReviews(): Promise<Review[]> {
 
 export async function getPricing(): Promise<Pricing> {
   return PRICING;
+}
+
+/** Ambassadeur ou association correspondant à un code (insensible à la casse), s'il est actif. */
+export async function getPartenaire(code: string): Promise<Partenaire | undefined> {
+  const c = code.trim().toUpperCase();
+  return PARTENAIRES.find((p) => p.actif && p.code === c);
 }

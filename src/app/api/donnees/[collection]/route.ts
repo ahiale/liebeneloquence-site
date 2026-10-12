@@ -6,7 +6,7 @@ import { computeResult, describeAnswers, PROFILES, type Answer, type ProfileId }
  * Données des formulaires pour le tableau de bord Excel (LEQ-donnees.xlsx).
  * Accès réservé : paramètre « ?cle= » (ou en-tête « X-LEQ-Cle ») égal à DATA_API_KEY sur le serveur.
  * Feuilles : liste-attente, newsletter, demandes, quiz (quiz réalisés), fiches (fiches orateur demandées),
- * inscriptions (événements gratuits).
+ * inscriptions (événements gratuits), membres (abonnements LEQ'FAM).
  * Réponse : CSV (séparateur « ; », UTF-8), colonnes fixes par feuille, la première est toujours la date.
  */
 export const dynamic = "force-dynamic";
@@ -78,6 +78,28 @@ const BUILDERS: Record<Sheet, (lines: Row[]) => Table> = {
       str(l.seances),
     ]),
   }),
+  // Un abonnement = une ligne : l'adhésion, puis son dernier état (résiliation demandée, fin, impayé)
+  membres: (lines) => {
+    const parAbo = new Map<string, Row[]>();
+    for (const l of lines) parAbo.set(String(l.abonnement), [...(parAbo.get(String(l.abonnement)) ?? []), l]);
+    const rows: (string | null)[][] = [];
+    for (const evts of parAbo.values()) {
+      const a = evts.find((e) => e.evenement === "adhesion");
+      if (!a) continue;
+      const dernier = evts[evts.length - 1];
+      const statut =
+        dernier.evenement === "fin" ? "Terminé" :
+        dernier.evenement === "impaye" ? "Impayé (accès coupé)" :
+        dernier.evenement === "resiliation_demandee" ? `Résiliation demandée (fin le ${String(dernier.finPrevue ?? "")})` : "Actif";
+      rows.push([
+        paris(a.createdAt), str(a.discordNom), str(a.email),
+        a.formule === "engagement" ? "Avec engagement" : "Sans engagement",
+        a.lancement ? "Oui" : "Non", str(a.code), str(a.partenaire), str(a.partenaireType),
+        statut, str(a.engagementFin), a.mode === "live" ? "Réel" : "Test",
+      ]);
+    }
+    return { columns: ["Date", "Membre (Discord)", "Email", "Formule", "Offre 1 €", "Code", "Ambassadeur ou association", "Type", "Statut", "Fin d'engagement", "Mode"], rows };
+  },
   invitations: (lines) => ({
     columns: ["Date", "Événement", "Email"],
     rows: lines.map((l) => [paris(l.createdAt), str(l.event), str(l.email)]),

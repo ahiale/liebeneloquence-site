@@ -20,6 +20,7 @@ $Feuilles = @(
   @{ Feuille = "Fiches orateur";  Api = "fiches";        Table = "TFiches"; Noms = @{};     Titre = "Fiches orateur demandées";       Info = "Personnes qui ont laissé prénom et email pour recevoir leur fiche après le quiz." },
   @{ Feuille = "Quiz réalisés";   Api = "quiz";          Table = "TQuiz"; Noms = @{ Q_Profil = "B"; Q_Pack = "D" };       Titre = "Quiz réalisés";                  Info = "Chaque quiz terminé, anonyme (la personne a pu ensuite demander sa fiche ou non)." },
   @{ Feuille = "Demandes";        Api = "demandes";      Table = "TDemandes"; Noms = @{ Dem_Type = "B" };   Titre = "Demandes : devis, Grand Oral, contact"; Info = "Tous les formulaires qui vous sont aussi notifiés par mail." },
+  @{ Feuille = "Membres LEQ'FAM"; Api = "membres"; Table = "TMembres"; Noms = @{ Mb_Statut = "I"; Mb_Partenaire = "G" }; Titre = "Membres de la LEQ'FAM"; Info = "Un abonnement par ligne, avec sa formule, le code utilisé et son statut (la colonne Mode distingue les essais des vrais membres)." },
   @{ Feuille = "Inscriptions événements"; Api = "inscriptions"; Table = "TInscriptions"; Noms = @{ Ins_Source = "F" }; Titre = "Inscriptions aux événements gratuits"; Info = "Une ligne par inscription (rendez-vous mensuel…), avec la façon dont la personne vous a connus." },
   @{ Feuille = "Newsletter";      Api = "newsletter";    Table = "TNewsletter"; Noms = @{}; Titre = "Inscriptions à la newsletter";   Info = "Une ligne par adresse." }
 )
