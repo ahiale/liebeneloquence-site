@@ -57,7 +57,9 @@ export function AdhesionForm({ formules, lancement, code }: Props) {
       )}
 
       <label className="grid gap-1.5 text-[14.5px] font-bold">
-        Code ambassadeur ou association <span className="font-normal text-ink/60">(facultatif)</span>
+        <span>
+          Code ambassadeur ou association <span className="font-normal text-ink/60">(facultatif)</span>
+        </span>
         <input
           className="h-12 rounded-[12px] border-2 border-ink/15 px-4 text-[16px] font-semibold tracking-[.06em] uppercase outline-none focus:border-royal"
           placeholder="EX. SAM-LEQ"
