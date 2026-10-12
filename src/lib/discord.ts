@@ -85,6 +85,8 @@ async function salons(): Promise<Record<string, string>> {
   salonsAccueil = { reglements: trouver("reglements"), fonctionnement: trouver("fonctionnement"), presente: trouver("presente-toi"), entraide: trouver("entraide"), ressources: trouver("ressources"), grandprix: trouver("grand-prix") };
   return salonsAccueil;
 }
+/** Vidéo d'accueil (communication/discord/video-accueil.mp4), lue directement dans Discord. */
+const VIDEO_ACCUEIL = "https://liebeneloquence.com/discord/video-accueil.mp4";
 const lienSalon = (id: string) => `https://discord.com/channels/${DISCORD.serveur}/${id}`;
 
 /** Accueil automatique d'un nouveau membre : visite guidée en message privé, puis mot d'accueil dans #présente-toi. */
@@ -96,6 +98,7 @@ export async function souhaiterBienvenue(idDiscord: string): Promise<void> {
   try {
     const dm = (await (await robot("POST", "/users/@me/channels", { recipient_id: idDiscord })).json()) as { id?: string };
     if (dm.id) {
+      await robot("POST", `/channels/${dm.id}/messages`, { content: `🎬 La visite en 18 secondes : ${VIDEO_ACCUEIL}` });
       await robot("POST", `/channels/${dm.id}/messages`, {
         embeds: [{
           color: 0xff5e01,

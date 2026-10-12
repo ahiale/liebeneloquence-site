@@ -267,7 +267,7 @@ const MESSAGES = {
 async function nettoyer(salonId, aussiAuteur) {
   const recents = await api("GET", `/channels/${salonId}/messages?limit=100`);
   for (const m of recents) {
-    const robot = m.author.id === me.id && (m.type === 6 || m.embeds?.some((e) => e.footer?.text === MARQUE));
+    const robot = m.author.id === me.id && (m.type === 6 || m.embeds?.some((e) => e.footer?.text === MARQUE) || m.content?.includes("video-accueil.mp4"));
     if (robot || (aussiAuteur && m.author.username === aussiAuteur)) await api("DELETE", `/channels/${salonId}/messages/${m.id}`);
   }
 }
@@ -285,7 +285,9 @@ console.log("✓ bienvenue : message du robot retiré");
 // #fonctionnement : l'ancien texte de Rebecca (compte __leq) est remplacé par la version mise à jour
 await nettoyer(S.fonctionnement, "__leq");
 await publier(S.fonctionnement, { embeds: FONCTIONNEMENT.embeds, components: FONCTIONNEMENT.components }, "bienvenue.png");
-console.log("✓ fonctionnement : guide complet publié et épinglé");
+await api("POST", `/channels/${S.fonctionnement}/messages`, { content: `🎬 **Nouveau membre ? La visite en 18 secondes :**
+${SITE}/discord/video-accueil.mp4` });
+console.log("✓ fonctionnement : guide complet publié et épinglé, vidéo d'accueil en dessous");
 
 for (const [cle, salonId] of Object.entries({ reglements: S.reglements, presente: S.presente, entraide: S.entraide, grandprix: S.grandprix, ambassadeurs: S.ambassadeurs })) {
   const m = MESSAGES[cle];
