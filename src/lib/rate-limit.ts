@@ -11,7 +11,7 @@ import { headers } from "next/headers";
  * que les formulaires qui vous écrivent un mail (devis, Grand Oral, contact).
  */
 const WINDOW_MS = 10 * 60 * 1000;
-const MAX_PER_WINDOW: Record<string, number> = { evenement: 30, "liste-attente": 30, newsletter: 30, quiz: 30, leqfam: 30, resiliation: 10 };
+const MAX_PER_WINDOW: Record<string, number> = { evenement: 30, "liste-attente": 30, newsletter: 30, quiz: 30, leqfam: 30, resiliation: 10, avis: 30 };
 const DEFAULT_MAX = 5; // devis, Grand Oral, séance, contact : vous recevez un mail à chaque envoi
 const hits = new Map<string, number[]>();
 

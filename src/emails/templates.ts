@@ -405,6 +405,21 @@ export function leqfamResiliation(d: { dateFin: string; engagement: boolean }): 
 }
 
 /* ---------------------------------------------------------------------------
+   Avis reçu (notification à Rebecca)
+   ------------------------------------------------------------------------- */
+
+export function avisAdmin(d: { prenom: string; contexte: string; note: number; texte: string; publication: boolean }): Email {
+  return {
+    subject: `Nouvel avis ${"★".repeat(d.note)}${"☆".repeat(5 - d.note)} : ${d.prenom}`,
+    html: admin(
+      "Nouvel avis reçu",
+      [["Prénom", d.prenom], ["Contexte", d.contexte || undefined], ["Note", `${d.note} / 5`], ["Avis", d.texte], ["Publication", d.publication ? "Accepte d'être publié sur le site" : "Ne souhaite pas être publié"]],
+      d.publication ? "Pour le publier sur le site, ajoutez-le dans content/avis.json (ou demandez-le à Claude)." : undefined,
+    ),
+  };
+}
+
+/* ---------------------------------------------------------------------------
    Quiz d'orateur
    ------------------------------------------------------------------------- */
 

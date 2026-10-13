@@ -100,6 +100,10 @@ const BUILDERS: Record<Sheet, (lines: Row[]) => Table> = {
     }
     return { columns: ["Date", "Membre (Discord)", "Email", "Formule", "Offre 1 €", "Code", "Ambassadeur ou association", "Type", "Statut", "Fin d'engagement", "Mode"], rows };
   },
+  "avis-recus": (lines) => ({
+    columns: ["Date", "Prénom", "Contexte", "Note", "Avis", "Publication acceptée"],
+    rows: lines.map((l) => [paris(l.createdAt), str(l.prenom), str(l.contexte), str(l.note), str(l.texte), l.publication ? "Oui" : "Non"]),
+  }),
   invitations: (lines) => ({
     columns: ["Date", "Événement", "Email"],
     rows: lines.map((l) => [paris(l.createdAt), str(l.event), str(l.email)]),

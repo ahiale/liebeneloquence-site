@@ -13,11 +13,12 @@ import path from "node:path";
  *   data/liste-attente.jsonl  liste d'attente de la communauté LEQ'FAM
  *   data/inscriptions.jsonl   inscriptions aux événements gratuits (rendez-vous mensuel…)
  *   data/invitations.jsonl    invitations envoyées par mail (pour ne jamais inviter deux fois)
+ *   data/avis-recus.jsonl     avis laissés après un atelier ou un accompagnement (à valider avant publication)
  *   data/membres.jsonl        abonnements LEQ'FAM : adhésions, résiliations, fins (un événement par ligne)
  */
 const DATA_DIR = process.env.DATA_DIR || path.join(process.cwd(), "data");
 
-export type Collection = "newsletter" | "quiz" | "demandes" | "liste-attente" | "inscriptions" | "invitations" | "membres";
+export type Collection = "newsletter" | "quiz" | "demandes" | "liste-attente" | "inscriptions" | "invitations" | "membres" | "avis-recus";
 
 export async function record(collection: Collection, data: Record<string, unknown>): Promise<void> {
   try {

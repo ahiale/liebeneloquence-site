@@ -339,3 +339,31 @@ export async function inscrireEvenement(_: FormState, data: FormData): Promise<F
     return FAILURE;
   }
 }
+
+/* ---------------------------------------------------------------------------
+   Avis (après un atelier, une séance, un accompagnement)
+   ------------------------------------------------------------------------- */
+
+const AvisSchema = z.object({
+  prenom: required("Prénom"),
+  contexte: optional(120),
+  note: z.coerce.number().int().min(1, "Choisissez une note").max(5),
+  texte: required("Votre avis", 2000),
+  publication: z.literal("on").optional(),
+});
+
+export async function laisserAvis(_: FormState, data: FormData): Promise<FormState> {
+  if (isBot(data)) return { status: "success" };
+  if (await tooManyRequests("avis")) return TOO_MANY;
+  const parsed = AvisSchema.safeParse(Object.fromEntries(data));
+  if (!parsed.success) return invalid(parsed.error);
+  const d = parsed.data;
+  const accord = d.publication === "on";
+  await record("avis-recus", { prenom: d.prenom, contexte: d.contexte, note: d.note, texte: d.texte, publication: accord });
+  try {
+    await notifyAdmin(T.avisAdmin({ ...d, publication: accord }), ADMIN_EMAIL);
+  } catch (e) {
+    console.error(e);
+  }
+  return { status: "success" };
+}
