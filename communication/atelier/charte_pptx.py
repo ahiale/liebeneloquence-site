@@ -71,6 +71,10 @@ def background(kind):
         im = gradient(["FFFFFF", "F6F8FC", "E8EFFA"], 0.2)
     elif kind == "warm":
         im = gradient(["FBF8F4", "EDE7E1", "D5DDEB"], 0.3)
+    elif kind == "blanc":  # blanc, très légère touche de bleu ciel en bas à droite
+        im = gradient(["FFFFFF", "FFFFFF", "EAF4FD"], 0.35)
+    elif kind == "ciel":  # bleu ciel doux
+        im = gradient(["F2F8FE", "E3F1FC", "D3E9FA"], 0.3)
     elif kind == "ember":
         im = gradient(["2E1106", "0b1d3f", "001636"])
     path = os.path.join(TMP, f"bg-{kind}.png")
@@ -79,11 +83,45 @@ def background(kind):
     return path
 
 
-def doodle(name, size=240):
+def doodle(name, size=240, mono=None):
     S = size * 2
     im = Image.new("RGBA", (S, S), (0, 0, 0, 0))
     d = ImageDraw.Draw(im)
     c = S / 2
+    if mono:  # dessin au trait, d'une seule couleur
+        col, wd = hex2t(mono), int(S * 0.03)
+        if name == "sparkle":
+            r = S * 0.46
+            for ang in range(0, 360, 45):
+                a = math.radians(ang)
+                r1 = r * (0.42 if ang % 90 else 0.38)
+                d.line((c + math.cos(a) * r1, c + math.sin(a) * r1, c + math.cos(a) * r, c + math.sin(a) * r), fill=col, width=int(S * 0.05))
+        elif name == "heart":
+            pts = []
+            for i in range(201):
+                t = i / 200 * 2 * math.pi
+                x = 16 * math.sin(t) ** 3
+                y = 13 * math.cos(t) - 5 * math.cos(2 * t) - 2 * math.cos(3 * t) - math.cos(4 * t)
+                pts.append((c + x * S / 36, c - y * S / 36))
+            d.line(pts, fill=col, width=int(S * 0.05), joint="curve")
+        elif name == "mic":
+            d.rounded_rectangle((S * 0.36, S * 0.06, S * 0.64, S * 0.52), radius=S * 0.14, outline=col, width=wd)
+            for k in (0.18, 0.27, 0.36):
+                d.line((S * 0.43, S * k, S * 0.57, S * k), fill=col, width=int(S * 0.02))
+            d.arc((S * 0.24, S * 0.16, S * 0.76, S * 0.66), start=0, end=180, fill=col, width=wd)
+            d.line((c, S * 0.66, c, S * 0.86), fill=col, width=wd)
+            d.line((S * 0.38, S * 0.88, S * 0.62, S * 0.88), fill=col, width=wd)
+        elif name == "bubble":
+            x, y, w, h = S * 0.06, S * 0.16, S * 0.88, S * 0.5
+            d.rounded_rectangle((x, y, x + w, y + h), radius=h * 0.28, outline=col, width=wd)
+            d.polygon([(x + w * 0.22, y + h - wd), (x + w * 0.22, y + h * 1.45), (x + w * 0.42, y + h - wd)], fill=(0, 0, 0, 0))
+            d.line((x + w * 0.22, y + h - 2, x + w * 0.22, y + h * 1.45), fill=col, width=wd)
+            d.line((x + w * 0.22, y + h * 1.45, x + w * 0.42, y + h - 2), fill=col, width=wd)
+            d.line((x + w * 0.2, y + h * 0.4, x + w * 0.8, y + h * 0.4), fill=col, width=wd)
+            d.line((x + w * 0.2, y + h * 0.62, x + w * 0.58, y + h * 0.62), fill=col, width=wd)
+        path = os.path.join(TMP, f"d-{name}-{mono}.png")
+        im.resize((size, size), Image.LANCZOS).save(path)
+        return path
     if name.startswith("sparkle"):
         col = hex2t(GOLD) if name == "sparkle" else (255, 255, 255)
         r, wd = S * 0.46, int(S * 0.06)
