@@ -251,6 +251,8 @@ def text(s, x, y, w, h, runs, size=28, color="FFFFFF", align=PP_ALIGN.LEFT, anch
             for st in style.split():
                 if st == "b":
                     f.bold = True
+                elif st == "m":  # graisse intermédiaire (ex. « Inter Medium »)
+                    f.name = SANS + " Medium"
                 elif st == "serif":
                     f.name = SERIF
                     f.italic = True
