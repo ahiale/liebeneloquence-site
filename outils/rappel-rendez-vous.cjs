@@ -41,7 +41,7 @@ ${corps}${signature}</td></tr>
 const MAILS = {
   inscrit: {
     subject: "C'est ce soir à 19h30 : le rendez-vous mensuel LEQ",
-    html: gabarit("C'est dans", "30 minutes !", p("Bonjour,") +
+    html: gabarit("C'est", "ce soir !", p("Bonjour,") +
       p("Petit rappel : le <strong>rendez-vous mensuel LEQ</strong> commence ce soir à <strong>19h30</strong>. Une heure ouverte pour poser toutes vos questions sur la prise de parole, l'éloquence et vos blocages à l'oral.") +
       infos + bouton(MEET, "Rejoindre le Google Meet") +
       p("Venez avec vos questions : rien n'est préparé à l'avance, on part de ce qui vous intéresse, simplement, entre nous.")),
