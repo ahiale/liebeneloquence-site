@@ -39,6 +39,13 @@ const APP_POINTS = [
   "Des débats face à une IA",
 ];
 
+/** Cartes du visuel provisoire du jeu Avocat du diable. */
+const GAME_CARDS = [
+  { label: "Rôle", title: "Rôle", bg: "#FFFFFF", fg: "#001636" },
+  { label: "Le jeu", title: "Avocat du diable", bg: "#114DA8", fg: "#FFFFFF" },
+  { label: "Gage", title: "Gage", bg: "#FFBD59", fg: "#001636" },
+];
+
 export default async function AutresServicesPage() {
   const { leqfam } = await getPricing();
 
@@ -56,13 +63,14 @@ export default async function AutresServicesPage() {
             </h1>
             <DrawUnderline className="hide-sm" style={{ margin: "4px auto 0", transform: "translateX(70px)" }} />
             <p className="mx-auto mt-[22px] mb-0 max-w-[620px] text-[17px] leading-[1.7] text-white/85">
-              Une communauté, des discours sur mesure, l&apos;animation de vos événements et bientôt une application mobile : d&apos;autres façons de prendre la parole avec LEQ.
+              Une communauté, des discours sur mesure, l&apos;animation de vos événements et bientôt une application mobile et un jeu de cartes : d&apos;autres façons de prendre la parole avec LEQ.
             </p>
             <div className="mt-7 flex flex-wrap justify-center gap-2.5">
               {[
                 ["#leqfam", "LEQ'FAM"],
                 ["#services", "Discours & animation"],
                 ["#app", "Application mobile"],
+                ["#jeu", "Jeu de cartes"],
               ].map(([href, label]) => (
                 <a key={href} href={href} className="rounded-full bg-white px-[18px] py-[9px] text-[14px] font-semibold text-ink no-underline">
                   {label}
@@ -200,6 +208,41 @@ export default async function AutresServicesPage() {
                   </div>
                 </div>
               </div>
+            </div>
+          </div>
+        </section>
+
+        {/* JEU DE CARTES (visuel provisoire en attendant l'illustration définitive) */}
+        <section id="jeu" className="bg-light overflow-hidden py-20 text-ink sm:py-[104px]">
+          <div className="wrap flex flex-wrap-reverse items-center gap-14">
+            <div className="relative flex min-w-0 justify-center" style={{ flex: ".9 1 300px", minHeight: 300 }} aria-hidden="true">
+              <Star className="wiggle absolute" style={{ right: "6%", top: 0 }} />
+              <Heart className="wiggle absolute" size={26} style={{ left: "8%", bottom: 10 }} />
+              <div className="relative h-[300px] w-[190px] origin-center scale-[.72] sm:scale-100">
+              {GAME_CARDS.map((c, i) => (
+                <div
+                  key={c.label}
+                  className={`absolute flex flex-col justify-between rounded-[22px] p-5 ${i === 2 ? "items-end text-right" : ""}`}
+                  style={{ width: 190, height: 270, top: 15, left: 0, background: c.bg, color: c.fg, border: "3px solid #001636", boxShadow: "6px 6px 0 #001636", transform: `translateX(${(i - 1) * 120}px) rotate(${(i - 1) * 10}deg)`, zIndex: i === 1 ? 2 : 1 }}
+                >
+                  <span className="text-[11px] font-bold tracking-[.18em] uppercase">{c.label}</span>
+                  <span className="serif text-[34px] leading-[1.05]">{c.title}</span>
+                  <span className="text-[15px] font-extrabold tracking-[-0.04em]">
+                    LEQ<span className="text-orange">.</span>
+                  </span>
+                </div>
+              ))}
+              </div>
+            </div>
+            <div className="min-w-0" style={{ flex: "1.1 1 440px" }}>
+              <span className="inline-flex items-center rounded-full bg-royal px-4 py-2 text-[11px] font-bold tracking-[.16em] text-white uppercase">Bientôt</span>
+              <h2 className="h2 mt-[22px]">
+                Le jeu de cartes <span className="serif text-royal">Avocat du diable</span>
+              </h2>
+              <p className="mt-[18px] mb-0 max-w-[540px] text-[16px] leading-[1.7] text-ink/75">
+                Un jeu de cartes fun pour s&apos;entraîner à l&apos;oral entre amis : des cartes, des rôles et des gages.
+              </p>
+              <Link className="btn btn-p mt-7" href="/evenements#newsletter">Être prévenu du lancement</Link>
             </div>
           </div>
         </section>

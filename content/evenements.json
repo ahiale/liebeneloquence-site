@@ -1,7 +1,39 @@
 [
   {
-    "slug": "rendez-vous-mensuel-leq-octobre-2026",
+    "slug": "rendez-vous-mensuel-leq-novembre-2026",
     "status": "published",
+    "type": "Rendez-vous mensuel",
+    "title": "Le rendez-vous mensuel LEQ",
+    "dateLabel": "Novembre 2026",
+    "startsAt": null,
+    "timeLabel": null,
+    "location": "En ligne, sur Google Meet",
+    "priceLabel": "Gratuit",
+    "badge": "Gratuit",
+    "image": "/evenements/couvertures/bulles-ciel.jpg",
+    "summary": "Une heure de discussion ouverte et gratuite pour poser toutes vos questions sur l'art oratoire, l'éloquence et vos blocages à l'oral.",
+    "description": [
+      "Le rendez-vous mensuel LEQ, c'est une heure de discussion ouverte, sans thème et sans rien de préparé à l'avance. Vous venez avec vos questions sur l'art oratoire, l'éloquence ou vos blocages, et j'y réponds, autant que possible pendant une heure.",
+      "Un examen ou une soutenance approche ? Un discours à préparer ? Vous avez du mal à tenir une conversation ? C'est le moment d'en parler, simplement, entre nous.",
+      "La participation est gratuite. Inscrivez-vous avec le formulaire : vous recevez par mail le lien Google Meet pour nous rejoindre, puis la date dès qu'elle est fixée."
+    ],
+    "program": [],
+    "audience": [
+      "Vous avez bientôt un examen, un oral ou une soutenance",
+      "Vous préparez un discours",
+      "Vous vous sentez bloqué·e à l'oral ou en conversation",
+      "Vous êtes simplement curieux·se d'art oratoire et d'éloquence"
+    ],
+    "registrationUrl": null,
+    "registrationLabel": "Je m'inscris gratuitement",
+    "signup": {
+      "meetingUrl": "https://meet.google.com/bqk-cmws-vfd",
+      "durationMinutes": 60
+    }
+  },
+  {
+    "slug": "rendez-vous-mensuel-leq-octobre-2026",
+    "status": "draft",
     "type": "Rendez-vous mensuel",
     "title": "Le rendez-vous mensuel LEQ",
     "dateLabel": "Mardi 13 octobre 2026",
@@ -65,12 +97,12 @@
     "status": "published",
     "type": "Masterclass",
     "title": "Convaincre en entretien",
-    "dateLabel": "Dimanche 25 octobre 2026",
-    "startsAt": "2026-10-25T18:30:00+01:00",
-    "timeLabel": "18h30 à 20h30 (2 heures)",
+    "dateLabel": "Nouvelle date à venir",
+    "startsAt": null,
+    "timeLabel": "2 heures",
     "location": "En ligne, sur Google Meet",
     "priceLabel": "24,99 €",
-    "badge": "Nouveau",
+    "badge": "Reportée",
     "image": "/evenements/masterclass-entretien.jpg",
     "summary": "Une masterclass à deux voix pour réussir vos entretiens : Ruth vous aide à construire le fond de votre discours, Rebecca à travailler la forme et votre prise de parole. Une masterclass organisée par LEQ et @whassup.ruth.",
     "description": [
@@ -118,7 +150,8 @@
       "Des ressources",
       "Des mises en situation",
       "Des études de cas"
-    ]
+    ],
+    "postponed": true
   },
   {
     "slug": "premier-rendez-vous-leq",

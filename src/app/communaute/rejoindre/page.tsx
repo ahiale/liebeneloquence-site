@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
-import { getPricing } from "@/content";
+import { getAssociations, getPricing } from "@/content";
 import { lancement } from "@/lib/leqfam";
 import { stripeMode } from "@/lib/stripe";
 import { Header } from "@/components/layout/Header";
@@ -63,6 +63,7 @@ export default async function RejoindrePage({ searchParams }: { searchParams: Pr
               formules={(["engagement", "libre"] as const).map((id) => ({ id, label: leqfam.formules[id].label, prix: leqfam.formules[id].monthlyPrice, engagementMois: leqfam.formules[id].engagementMonths }))}
               lancement={{ actif: l.actif, prix: l.prixPremierMois, restantes: l.restantes }}
               code={{ prix: leqfam.partnerMonthlyPrice, mois: leqfam.partnerDurationMonths }}
+              associations={await getAssociations()}
             />
           </div>
         </div>

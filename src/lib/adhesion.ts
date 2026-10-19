@@ -36,7 +36,7 @@ export async function activerAdhesion(session: SessionPaiement, mode: StripeMode
     const email = session.customer_details?.email ?? null;
     await noterMembre({
       evenement: "adhesion", mode, abonnement: ab, client: session.customer ?? undefined, discordId: m.discord_id, discordNom: m.discord_nom, email,
-      formule: m.formule as Formule, lancement: m.lancement === "oui", code: m.code, partenaire: m.partenaire, partenaireType: m.partenaire_type, engagementFin,
+      formule: m.formule as Formule, lancement: m.lancement === "oui", code: m.code, partenaire: m.partenaire, partenaireType: m.partenaire_type, groupe: m.groupe || undefined, engagementFin,
     });
     if (email) {
       const { leqfam } = await getPricing();

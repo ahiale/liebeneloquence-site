@@ -309,8 +309,8 @@ export async function inscrireEvenement(_: FormState, data: FormData): Promise<F
   const d = parsed.data;
 
   const event = await getEvent(d.slug);
-  if (!event?.signup || !event.startsAt) return FAILURE;
-  if (Date.parse(event.startsAt) + event.signup.durationMinutes * 60_000 < Date.now()) {
+  if (!event?.signup || event.postponed) return FAILURE;
+  if (event.startsAt && Date.parse(event.startsAt) + event.signup.durationMinutes * 60_000 < Date.now()) {
     return { status: "error", message: "Cet événement est terminé : les inscriptions sont closes." };
   }
   const title = event.title ?? "Événement LEQ";
@@ -320,18 +320,21 @@ export async function inscrireEvenement(_: FormState, data: FormData): Promise<F
 
   await record("inscriptions", { event: d.slug, eventTitle: title, prenom: d.prenom, nom: d.nom, email: d.email, source: d.source });
   try {
-    const ics = eventIcs({
-      uid: `${d.slug}-${Date.now()}`,
-      title: `${title} · Lieben Éloquence`,
-      start: event.startsAt,
-      minutes: event.signup.durationMinutes,
-      description: `Lien Google Meet : ${event.signup.meetingUrl}`,
-      url: event.signup.meetingUrl,
-    });
+    // Date pas encore fixée : pas de fichier agenda, le mail annonce que la date suivra.
+    const ics = event.startsAt
+      ? eventIcs({
+          uid: `${d.slug}-${Date.now()}`,
+          title: `${title} · Lieben Éloquence`,
+          start: event.startsAt,
+          minutes: event.signup.durationMinutes,
+          description: `Lien Google Meet : ${event.signup.meetingUrl}`,
+          url: event.signup.meetingUrl,
+        })
+      : null;
     await confirm(
-      T.inscriptionEvenementClient({ prenom: d.prenom, title, dateLabel: event.dateLabel, timeLabel: event.timeLabel, meetingUrl: event.signup.meetingUrl }),
+      T.inscriptionEvenementClient({ prenom: d.prenom, title, dateLabel: event.dateLabel, timeLabel: event.timeLabel, meetingUrl: event.signup.meetingUrl, dateAVenir: !event.startsAt }),
       d.email,
-      [{ name: "rendez-vous-LEQ.ics", content: Buffer.from(ics, "utf8"), contentType: "text/calendar; charset=utf-8; method=PUBLISH" }],
+      ics ? [{ name: "rendez-vous-LEQ.ics", content: Buffer.from(ics, "utf8"), contentType: "text/calendar; charset=utf-8; method=PUBLISH" }] : [],
     );
     return { status: "success" };
   } catch (e) {
@@ -362,6 +365,40 @@ export async function laisserAvis(_: FormState, data: FormData): Promise<FormSta
   await record("avis-recus", { prenom: d.prenom, contexte: d.contexte, note: d.note, texte: d.texte, publication: accord });
   try {
     await notifyAdmin(T.avisAdmin({ ...d, publication: accord }), ADMIN_EMAIL);
+  } catch (e) {
+    console.error(e);
+  }
+  return { status: "success" };
+}
+
+/* ---------------------------------------------------------------------------
+   Candidature pour devenir ambassadeur LEQ
+   ------------------------------------------------------------------------- */
+
+const AmbassadeurSchema = z.object({
+  prenom: required("Prénom"),
+  nom: required("Nom"),
+  email,
+  reseaux: optional(300),
+  association: optional(200),
+  concours: z.enum(["oui", "non"], { message: "Répondez par oui ou par non" }),
+  parcours: required("Votre parcours en éloquence", 3000),
+  motivation: required("Votre motivation", 3000),
+});
+
+export async function candidaterAmbassadeur(_: FormState, data: FormData): Promise<FormState> {
+  if (isBot(data)) return { status: "success" };
+  if (await tooManyRequests("ambassadeur")) return TOO_MANY;
+  const parsed = AmbassadeurSchema.safeParse(Object.fromEntries(data));
+  if (!parsed.success) return invalid(parsed.error);
+  const d = parsed.data;
+  if ((await readAll("candidatures-ambassadeur")).some((l) => sameEmail(l.email, d.email))) {
+    return already("Nous avons déjà reçu votre candidature avec cette adresse. Nous revenons vers vous par mail.");
+  }
+  await record("candidatures-ambassadeur", { ...d });
+  try {
+    await notifyAdmin(T.candidatureAmbassadeurAdmin(d), d.email);
+    await confirm(T.candidatureAmbassadeurClient({ prenom: d.prenom }), d.email);
   } catch (e) {
     console.error(e);
   }

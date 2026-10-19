@@ -10,7 +10,8 @@ import { stripe, stripeMode, type StripeMode } from "@/lib/stripe";
  * - deux formules : avec engagement (12 mois, puis reconduit) et sans engagement ;
  * - offre de lancement : 1 € le premier mois, pendant 10 jours à partir de l'ouverture, pour les 49 premiers ;
  * - code ambassadeur ou association : 1,99 € par mois pendant 6 mois
- *   (pendant le lancement : 1 € le premier mois, puis 1,99 € pendant 5 mois) ;
+ *   (pendant le lancement : 1 € le premier mois, puis 1,99 € pendant 5 mois),
+ *   dans la limite du nombre d'adhésions fixé pour chaque code (content/partenaires.json) ;
  * - ensuite, le prix normal de la formule.
  * Tous les montants viennent de content/tarifs.json.
  */
@@ -40,6 +41,19 @@ export async function placesLancementPrises(mode: StripeMode): Promise<number> {
   return (await readAll("membres")).filter((m) => m.evenement === "adhesion" && m.lancement === true && m.mode === mode).length;
 }
 
+/** Nombre d'adhésions déjà faites avec un code (dans le mode Stripe en cours). */
+export async function utilisationsCode(code: string, mode: StripeMode | null = stripeMode()): Promise<number> {
+  return (await readAll("membres")).filter((m) => m.evenement === "adhesion" && m.code === code && m.mode === mode).length;
+}
+
+/** Partenaire du code s'il est actif et que sa limite d'adhésions n'est pas atteinte ; sinon la raison du refus. */
+export async function partenaireValide(code: string): Promise<{ partenaire: Partenaire } | { refus: "inconnu" | "epuise" }> {
+  const partenaire = await getPartenaire(code);
+  if (!partenaire) return { refus: "inconnu" };
+  if (partenaire.limite != null && (await utilisationsCode(partenaire.code)) >= partenaire.limite) return { refus: "epuise" };
+  return { partenaire };
+}
+
 /** L'offre de lancement est-elle ouverte ? (en test, LEQFAM_LANCEMENT_TEST=1 l'ouvre pour les essais) */
 export async function lancement(pricing: Pricing, mode: StripeMode | null = stripeMode()) {
   const l = pricing.leqfam.lancement;
@@ -67,7 +81,8 @@ export async function calculerOffre(formule: Formule, code?: string | null): Pro
   const pricing = await getPricing();
   const f = pricing.leqfam.formules[formule];
   const l = await lancement(pricing);
-  const partenaire = code ? ((await getPartenaire(code)) ?? null) : null;
+  const v = code ? await partenaireValide(code) : null;
+  const partenaire = v && "partenaire" in v ? v.partenaire : null;
   const etapes: Offre["etapes"] = [];
   if (l.actif) etapes.push({ prix: l.prixPremierMois, mois: 1 });
   if (partenaire) etapes.push({ prix: pricing.leqfam.partnerMonthlyPrice, mois: pricing.leqfam.partnerDurationMonths - (l.actif ? 1 : 0) });
@@ -103,7 +118,7 @@ async function coupon(id: string, montantDeduit: number, nom: string, mois: numb
 }
 
 /** Crée la session de paiement Stripe pour un compte Discord déjà connecté. */
-export async function creerPaiement(p: { formule: Formule; code: string | null; cgv: string; discord: { id: string; nom: string; email: string | null } }): Promise<string> {
+export async function creerPaiement(p: { formule: Formule; code: string | null; groupe?: string | null; cgv: string; discord: { id: string; nom: string; email: string | null } }): Promise<string> {
   const mode = stripeMode();
   if (!mode) throw new Error("Adhésion fermée");
   const offre = await calculerOffre(p.formule, p.code);
@@ -128,6 +143,7 @@ export async function creerPaiement(p: { formule: Formule; code: string | null; 
     code: offre.partenaire?.code ?? "",
     partenaire: offre.partenaire?.nom ?? "",
     partenaire_type: offre.partenaire?.type ?? "",
+    groupe: (offre.partenaire && p.groupe) || "",
     reduction_ensuite: reductionEnsuite ?? "",
     engagement_mois: String(offre.engagementMois),
     cgv_acceptees: p.cgv,
@@ -161,6 +177,7 @@ export type EvenementMembre = {
   code?: string;
   partenaire?: string;
   partenaireType?: string;
+  groupe?: string;
   engagementFin?: string | null;
   finPrevue?: string | null;
 };

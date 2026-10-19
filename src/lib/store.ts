@@ -15,10 +15,11 @@ import path from "node:path";
  *   data/invitations.jsonl    invitations envoyées par mail (pour ne jamais inviter deux fois)
  *   data/avis-recus.jsonl     avis laissés après un atelier ou un accompagnement (à valider avant publication)
  *   data/membres.jsonl        abonnements LEQ'FAM : adhésions, résiliations, fins (un événement par ligne)
+ *   data/candidatures-ambassadeur.jsonl  candidatures pour devenir ambassadeur LEQ
  */
 const DATA_DIR = process.env.DATA_DIR || path.join(process.cwd(), "data");
 
-export type Collection = "newsletter" | "quiz" | "demandes" | "liste-attente" | "inscriptions" | "invitations" | "membres" | "avis-recus";
+export type Collection = "newsletter" | "quiz" | "demandes" | "liste-attente" | "inscriptions" | "invitations" | "membres" | "avis-recus" | "candidatures-ambassadeur";
 
 export async function record(collection: Collection, data: Record<string, unknown>): Promise<void> {
   try {

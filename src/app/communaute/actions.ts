@@ -2,12 +2,12 @@
 
 import { redirect } from "next/navigation";
 import { z } from "zod";
-import { getPartenaire } from "@/content";
+import { getAssociations } from "@/content";
 import { ADMIN_EMAIL, sendMail } from "@/lib/mail";
 import { HONEYPOT, type FormState } from "@/lib/forms";
 import { tooManyRequests } from "@/lib/rate-limit";
 import { lienAutorisation } from "@/lib/discord";
-import { lire, noterMembre, signer } from "@/lib/leqfam";
+import { lire, noterMembre, partenaireValide, signer } from "@/lib/leqfam";
 import { stripe, stripeMode, type StripeMode } from "@/lib/stripe";
 import * as T from "@/emails/templates";
 
@@ -18,6 +18,7 @@ import * as T from "@/emails/templates";
 const AdhesionSchema = z.object({
   formule: z.enum(["engagement", "libre"], { message: "Choisissez une formule" }),
   code: z.string().trim().max(30).optional().default(""),
+  groupe: z.string().trim().max(120).optional().default(""),
   cgv: z.literal("on", { message: "Merci d'accepter les conditions générales de vente" }),
 });
 
@@ -31,11 +32,18 @@ export async function demarrerAdhesion(_: FormState, data: FormData): Promise<Fo
     for (const i of parsed.error.issues) fields[String(i.path[0])] ??= i.message;
     return { status: "error", message: "Merci de vérifier les champs indiqués.", fields };
   }
-  const { formule, code } = parsed.data;
-  if (code && !(await getPartenaire(code))) {
-    return { status: "error", message: "Merci de vérifier les champs indiqués.", fields: { code: "Code inconnu ou expiré. Vérifiez l'orthographe, ou laissez le champ vide." } };
+  const { formule, code, groupe } = parsed.data;
+  const verifie = code ? await partenaireValide(code) : null;
+  if (verifie && "refus" in verifie) {
+    const message = verifie.refus === "epuise" ? "Ce code a atteint son nombre maximum d'utilisations." : "Code inconnu ou expiré. Vérifiez l'orthographe, ou laissez le champ vide.";
+    return { status: "error", message: "Merci de vérifier les champs indiqués.", fields: { code: message } };
   }
-  const etat = signer({ formule, code: code ? code.toUpperCase() : null, cgv: new Date().toISOString() }, 30);
+  // Avec un code, l'association ou le groupe est à choisir dans la liste (si la liste existe)
+  const associations = await getAssociations();
+  if (code && associations.length && !associations.includes(groupe)) {
+    return { status: "error", message: "Merci de vérifier les champs indiqués.", fields: { groupe: "Choisissez votre association ou votre groupe" } };
+  }
+  const etat = signer({ formule, code: code ? code.toUpperCase() : null, groupe: code && groupe ? groupe : null, cgv: new Date().toISOString() }, 30);
   redirect(lienAutorisation(etat));
 }
 

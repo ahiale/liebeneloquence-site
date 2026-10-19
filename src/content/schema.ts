@@ -52,6 +52,8 @@ export const EventSchema = z.object({
     .default([]),
   /** Ce que les participants reçoivent (facultatif). */
   includes: z.array(z.string()).optional().default([]),
+  /** Reporté : la carte s'affiche en grisé, sans réservation possible, en attendant la nouvelle date. */
+  postponed: z.boolean().optional().default(false),
   /** Lien d'inscription : externe (Stripe, billetterie…) ou page du site (« /communaute#rejoindre ») ; sinon le bouton mène à la newsletter. */
   registrationUrl: z.union([z.string().url(), z.string().regex(/^\/[^\s]*$/, "lien interne commençant par /")]).nullable(),
   /** Texte du bouton d'inscription (défaut : « S'inscrire »). */
@@ -157,6 +159,11 @@ export const PartenaireSchema = z.object({
   type: z.enum(["ambassadeur", "association"]),
   /** false : le code n'est plus accepté. */
   actif: z.boolean(),
+  /** Nombre maximum d'adhésions avec ce code (20 par défaut ; null : sans limite). Au-delà, le code est refusé. */
+  limite: z.number().int().positive().nullable().optional().default(20),
   note: z.string().optional(),
 });
 export type Partenaire = z.infer<typeof PartenaireSchema>;
+
+/** Associations et groupes proposés au paiement quand un code est saisi (content/associations.json). */
+export const AssociationsSchema = z.array(z.string().min(1));

@@ -4,6 +4,7 @@
     "nom": "Rebecca Lieben Ahiale",
     "type": "ambassadeur",
     "actif": true,
-    "note": "Code de test"
+    "note": "Code de test",
+    "limite": 20
   }
 ]

@@ -200,7 +200,14 @@ export default async function EvenementPage({ params }: Props) {
                 </div>
               ))}
             </dl>
-            {event.signup && !isPast ? (
+            {event.postponed ? (
+              <>
+                <p className="mt-7 mb-0 rounded-[16px] bg-white/10 px-4 py-3 text-center text-[14px] text-white/85">Cet événement est reporté. La nouvelle date sera annoncée prochainement.</p>
+                <Link className="btn btn-p mt-4 w-full" href="/evenements#newsletter">
+                  Être prévenu
+                </Link>
+              </>
+            ) : event.signup && !isPast ? (
               <EventSignupForm slug={event.slug} label={event.registrationLabel ?? "Je m'inscris"} />
             ) : event.signup ? (
               <p className="mt-7 mb-0 rounded-[16px] bg-white/10 px-4 py-3 text-center text-[14px] text-white/85">Cet événement est terminé. Les prochaines dates arrivent bientôt !</p>

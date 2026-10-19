@@ -94,12 +94,16 @@ const BUILDERS: Record<Sheet, (lines: Row[]) => Table> = {
       rows.push([
         paris(a.createdAt), str(a.discordNom), str(a.email),
         a.formule === "engagement" ? "Avec engagement" : "Sans engagement",
-        a.lancement ? "Oui" : "Non", str(a.code), str(a.partenaire), str(a.partenaireType),
+        a.lancement ? "Oui" : "Non", str(a.code), str(a.partenaire), str(a.partenaireType), str(a.groupe),
         statut, str(a.engagementFin), a.mode === "live" ? "Réel" : "Test",
       ]);
     }
-    return { columns: ["Date", "Membre (Discord)", "Email", "Formule", "Offre 1 €", "Code", "Ambassadeur ou association", "Type", "Statut", "Fin d'engagement", "Mode"], rows };
+    return { columns: ["Date", "Membre (Discord)", "Email", "Formule", "Offre 1 €", "Code", "Ambassadeur ou association", "Type", "Association ou groupe", "Statut", "Fin d'engagement", "Mode"], rows };
   },
+  "candidatures-ambassadeur": (lines) => ({
+    columns: ["Date", "Prénom", "Nom", "Email", "Réseaux sociaux", "Association ou groupe", "Concours d'éloquence", "Parcours", "Motivation"],
+    rows: lines.map((l) => [paris(l.createdAt), str(l.prenom), str(l.nom), str(l.email), str(l.reseaux), str(l.association), l.concours === "oui" ? "Oui" : "Non", str(l.parcours), str(l.motivation)]),
+  }),
   "avis-recus": (lines) => ({
     columns: ["Date", "Prénom", "Contexte", "Note", "Avis", "Publication acceptée"],
     rows: lines.map((l) => [paris(l.createdAt), str(l.prenom), str(l.contexte), str(l.note), str(l.texte), l.publication ? "Oui" : "Non"]),

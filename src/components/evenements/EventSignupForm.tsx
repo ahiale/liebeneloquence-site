@@ -13,7 +13,7 @@ export function EventSignupForm({ slug, label }: { slug: string; label: string }
   if (state.status === "success") {
     return (
       <div className="mt-7">
-        <FormSuccess title="Vous êtes inscrit·e !">Le lien Google Meet vient de vous être envoyé par mail, avec un fichier pour l&apos;ajouter à votre agenda.</FormSuccess>
+        <FormSuccess title="Vous êtes inscrit·e !">Le lien Google Meet vient de vous être envoyé par mail.</FormSuccess>
       </div>
     );
   }

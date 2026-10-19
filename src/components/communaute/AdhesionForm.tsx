@@ -12,10 +12,12 @@ type Props = {
   formules: FormuleAffichee[];
   lancement: { actif: boolean; prix: number; restantes: number };
   code: { prix: number; mois: number };
+  /** Associations et groupes à choisir avec un code (content/associations.json). */
+  associations: string[];
 };
 
 /** Choix de la formule, code ambassadeur ou association, CGV, puis connexion Discord. */
-export function AdhesionForm({ formules, lancement, code }: Props) {
+export function AdhesionForm({ formules, lancement, code, associations }: Props) {
   const [state, action, envoi] = useActionState(demarrerAdhesion, IDLE);
   const [choix, setChoix] = useState<"engagement" | "libre">("engagement");
   const [saisie, setSaisie] = useState("");
@@ -71,6 +73,23 @@ export function AdhesionForm({ formules, lancement, code }: Props) {
         <span className="text-[13px] font-normal text-ink/60">Avec un code : {formatPrice(code.prix)} par mois pendant {code.mois} mois{lancement.actif ? ` (dont le premier mois à ${formatPrice(lancement.prix)})` : ""}.</span>
         <FieldError state={state} name="code" />
       </label>
+
+      {avecCode && associations.length > 0 && (
+        <label className="grid gap-1.5 text-[14.5px] font-bold">
+          Votre association ou votre groupe
+          <select className="h-12 rounded-[12px] border-2 border-ink/15 bg-white px-3 text-[16px] outline-none focus:border-royal" defaultValue="" {...fieldProps(state, "groupe")}>
+            <option value="" disabled>
+              Choisir dans la liste
+            </option>
+            {associations.map((a) => (
+              <option key={a} value={a}>
+                {a}
+              </option>
+            ))}
+          </select>
+          <FieldError state={state} name="groupe" />
+        </label>
+      )}
 
       <div className="rounded-[16px] bg-cloud px-5 py-4">
         <p className="m-0 text-[13px] font-bold tracking-[.12em] text-royal uppercase">Vous paierez</p>

@@ -13,9 +13,12 @@ const nextConfig: NextConfig = {
   // sur le serveur, qui pouvait rester bloqué sur une taille et laisser l'image vide sur mobile.
   // Toute nouvelle photo dans public/ doit donc être allégée avant d'être ajoutée (1600 px de large, 150 Ko maximum).
   images: { unoptimized: true },
-  // Ancienne adresse de la page « Autres produits »
+  // Anciennes adresses : page « Autres produits », rendez-vous mensuel passé (lien des mails d'octobre)
   async redirects() {
-    return [{ source: "/autres-produits", destination: "/autres-services", permanent: true }];
+    return [
+      { source: "/autres-produits", destination: "/autres-services", permanent: true },
+      { source: "/evenements/rendez-vous-mensuel-leq-octobre-2026", destination: "/evenements/rendez-vous-mensuel-leq-novembre-2026", permanent: false },
+    ];
   },
 };
 

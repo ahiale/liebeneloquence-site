@@ -4,7 +4,9 @@ import eventsJson from "../../content/evenements.json";
 import reviewsJson from "../../content/avis.json";
 import pricingJson from "../../content/tarifs.json";
 import partenairesJson from "../../content/partenaires.json";
+import associationsJson from "../../content/associations.json";
 import {
+  AssociationsSchema,
   EventSchema,
   PartenaireSchema,
   PricingSchema,
@@ -40,10 +42,12 @@ const EVENTS = parse(z.array(EventSchema), eventsJson, "evenements.json");
 const REVIEWS = parse(z.array(ReviewSchema), reviewsJson, "avis.json");
 const PRICING = parse(PricingSchema, pricingJson, "tarifs.json");
 const PARTENAIRES = parse(z.array(PartenaireSchema), partenairesJson, "partenaires.json");
+const ASSOCIATIONS = parse(AssociationsSchema, associationsJson, "associations.json");
 
 /** Événements publiés, du plus proche au plus lointain (dates inconnues en dernier). */
 export async function getEvents(): Promise<LeqEvent[]> {
   return EVENTS.filter((e) => e.status === "published").sort((a, b) => {
+    if (a.postponed !== b.postponed) return a.postponed ? 1 : -1; // reportés en dernier
     if (!a.startsAt && !b.startsAt) return 0; // dates inconnues : ordre du fichier
     if (!a.startsAt) return 1;
     if (!b.startsAt) return -1;
@@ -64,6 +68,11 @@ export async function getReviews(): Promise<Review[]> {
 
 export async function getPricing(): Promise<Pricing> {
   return PRICING;
+}
+
+/** Associations et groupes à choisir au paiement avec un code. */
+export async function getAssociations(): Promise<string[]> {
+  return ASSOCIATIONS;
 }
 
 /** Ambassadeur ou association correspondant à un code (insensible à la casse), s'il est actif. */

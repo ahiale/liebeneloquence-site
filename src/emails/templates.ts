@@ -299,7 +299,7 @@ export function listeAttenteClient(d: { prenom: string }): Email {
    ------------------------------------------------------------------------- */
 
 /** Mail d'inscription : le lien de la visio, le récapitulatif et un fichier agenda joint. */
-export function inscriptionEvenementClient(d: { prenom: string; title: string; dateLabel: string; timeLabel: string | null; meetingUrl: string }): Email {
+export function inscriptionEvenementClient(d: { prenom: string; title: string; dateLabel: string; timeLabel: string | null; meetingUrl: string; dateAVenir?: boolean }): Email {
   return {
     subject: `Votre inscription : ${d.title}, ${d.dateLabel.charAt(0).toLowerCase()}${d.dateLabel.slice(1)}`,
     html: layout({
@@ -312,7 +312,11 @@ export function inscriptionEvenementClient(d: { prenom: string; title: string; d
         p(`Votre inscription au <strong>${esc(d.title)}</strong> est bien enregistrée. Voici le lien pour nous rejoindre le jour J :`) +
         box(rows([["Date", d.dateLabel], ["Horaires", d.timeLabel ?? undefined], ["Lieu", "En ligne, sur Google Meet"]])) +
         button(d.meetingUrl, "Rejoindre le Google Meet") +
-        p("Gardez ce mail : le lien sera le même le jour J. Le fichier joint vous permet d'ajouter le rendez-vous à votre agenda en un clic, avec un rappel 30 minutes avant.") +
+        p(
+          d.dateAVenir
+            ? "La date exacte n'est pas encore fixée : vous la recevrez par mail dès qu'elle sera annoncée. Gardez ce mail, le lien sera le même le jour J."
+            : "Gardez ce mail : le lien sera le même le jour J. Le fichier joint vous permet d'ajouter le rendez-vous à votre agenda en un clic, avec un rappel 30 minutes avant.",
+        ) +
         p("Venez avec toutes vos questions sur la prise de parole, l'éloquence ou vos blocages à l'oral : rien n'est préparé à l'avance, c'est un moment ouvert, entre nous.") +
         signature,
     }),
@@ -416,6 +420,48 @@ export function avisAdmin(d: { prenom: string; contexte: string; note: number; t
       [["Prénom", d.prenom], ["Contexte", d.contexte || undefined], ["Note", `${d.note} / 5`], ["Avis", d.texte], ["Publication", d.publication ? "Accepte d'être publié sur le site" : "Ne souhaite pas être publié"]],
       d.publication ? "Pour le publier sur le site, ajoutez-le dans content/avis.json (ou demandez-le à Claude)." : undefined,
     ),
+  };
+}
+
+/* ---------------------------------------------------------------------------
+   Candidature ambassadeur
+   ------------------------------------------------------------------------- */
+
+type Candidature = { prenom: string; nom: string; email: string; reseaux: string; association: string; concours: "oui" | "non"; parcours: string; motivation: string };
+
+export function candidatureAmbassadeurAdmin(d: Candidature): Email {
+  return {
+    subject: `Candidature ambassadeur : ${d.prenom} ${d.nom}`,
+    html: admin(
+      "Nouvelle candidature ambassadeur",
+      [
+        ["Prénom et nom", `${d.prenom} ${d.nom}`],
+        ["Email", d.email],
+        ["Réseaux sociaux", d.reseaux || undefined],
+        ["Association ou groupe", d.association || undefined],
+        ["Concours d'éloquence", d.concours === "oui" ? "A déjà participé à un concours" : "N'a jamais participé à un concours"],
+        ["Parcours en éloquence", d.parcours],
+        ["Motivation", d.motivation],
+      ],
+      "Pour l'accepter : lui créer un code dans content/partenaires.json (type « ambassadeur ») et lui donner le rôle LeqAmbassadeur sur Discord (ou demandez-le à Claude).",
+    ),
+  };
+}
+
+export function candidatureAmbassadeurClient(d: { prenom: string }): Email {
+  return {
+    subject: "Votre candidature pour devenir ambassadeur LEQ",
+    html: layout({
+      title: "Merci pour",
+      accent: "votre candidature !",
+      preheader: "Votre candidature pour devenir ambassadeur LEQ est bien reçue.",
+      reason: "Vous recevez ce mail car vous avez candidaté pour devenir ambassadeur LEQ sur liebeneloquence.com.",
+      body:
+        hello(d.prenom) +
+        p("Votre candidature pour devenir <strong>ambassadeur LEQ</strong> est bien reçue. Je la lis avec attention et je reviens vers vous par mail.") +
+        p("Merci de vouloir faire grandir la communauté avec nous !") +
+        signature,
+    }),
   };
 }
 

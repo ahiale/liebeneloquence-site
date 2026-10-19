@@ -185,13 +185,16 @@ export default async function CommunautePage() {
                 <p className="eyebrow" style={{ color: "#CC4A00" }}>Ambassadeur</p>
                 <h3 className="mt-3 mb-0 text-[26px] font-bold tracking-[-0.03em]">Ambassadeur LEQ</h3>
                 <ul className="mt-[18px] mb-0 grid list-none gap-2.5 p-0">
-                  {["Accès en avant-première aux nouvelles fonctionnalités", "Goodies physiques", "Implication directe dans la construction de la communauté"].map((it) => (
+                  {["Accès gratuit à toutes les solutions LEQ", "Goodies physiques à l'effigie de LEQ", "Un code promo personnel pour votre entourage"].map((it) => (
                     <li key={it} className="flex gap-2.5 text-[15px] text-ink/78">
                       <span className="mt-[7px] h-2 w-2 shrink-0 rounded-full bg-orange" />
                       {it}
                     </li>
                   ))}
                 </ul>
+                <Link href="/ambassadeurs" className="btn btn-p mt-6 w-full">
+                  Candidater pour être ambassadeur
+                </Link>
               </div>
             </div>
           </div>

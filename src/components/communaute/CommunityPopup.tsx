@@ -2,18 +2,21 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { MicDoodle } from "@/components/ui/Doodles";
 
 /* Invitation à la communauté, une fois par visite :
-   1. carte au centre de l'écran, fond flouté (2,5 s après l'arrivée) ;
+   1. petite carte en bas de l'écran (en bas à droite sur ordinateur), sans fond flouté, qui apparaît
+      quand le visiteur fait défiler la page ou au bout de 15 s : jamais dès l'arrivée ;
    2. une fois fermée, elle laisse une petite pastille en bas à droite qui permet de la rouvrir ;
    3. la pastille disparaît si on clique sur sa croix ou si on rejoint la liste.
    État mémorisé le temps de la visite (stockage de session), puis tout recommence à la visite suivante.
    Pour la revoir : ajouter « ?invitation » à l'adresse, ex. liebeneloquence.com/?invitation */
 
 const STORAGE_KEY = "leq-popup-communaute";
-const DELAY_MS = 2500;
+const DELAY_MS = 15000;
+/** Défilement (en part de la hauteur d'écran) qui fait apparaître la carte. */
+const SCROLL_RATIO = 0.6;
 /** Pages où l'invitation gênerait (parcours d'achat, page communauté elle-même, pages légales). */
 const EXCLUDED = ["/communaute", "/quiz", "/grand-oral", "/mentions-legales", "/confidentialite", "/cookies", "/apercus-mails"];
 
@@ -41,7 +44,6 @@ function save(v: Exclude<Saved, null>) {
 export function CommunityPopup({ price, availability }: { price: string; availability: string | null }) {
   const pathname = usePathname();
   const [view, setView] = useState<View>("hidden");
-  const dialog = useRef<HTMLDialogElement>(null);
   const excluded = EXCLUDED.some((p) => pathname.startsWith(p));
 
   useEffect(() => {
@@ -53,15 +55,30 @@ export function CommunityPopup({ price, availability }: { price: string; availab
       setView("mini");
       return;
     }
-    const t = window.setTimeout(() => {
+    const show = () => {
+      cleanup();
       setView("open");
       save("mini"); // déjà vue pour cette visite : la prochaine page affichera la pastille
-    }, DELAY_MS);
-    return () => window.clearTimeout(t);
+    };
+    const onScroll = () => window.scrollY > window.innerHeight * SCROLL_RATIO && show();
+    const t = window.setTimeout(show, DELAY_MS);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    const cleanup = () => {
+      window.clearTimeout(t);
+      window.removeEventListener("scroll", onScroll);
+    };
+    return cleanup;
   }, [excluded]);
 
   useEffect(() => {
-    if (view === "open" && !dialog.current?.open) dialog.current?.showModal();
+    if (view !== "open") return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key !== "Escape") return;
+      save("mini");
+      setView("mini");
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
   }, [view]);
 
   if (excluded || view === "hidden") return null;
@@ -102,37 +119,38 @@ export function CommunityPopup({ price, availability }: { price: string; availab
     );
 
   return (
-    <dialog
-      ref={dialog}
+    <aside
+      role="dialog"
       aria-labelledby="invitation-communaute"
-      onClose={minimize}
-      onClick={(e) => e.target === e.currentTarget && dialog.current?.close()}
-      className="community-popup m-auto w-[min(420px,calc(100vw-40px))] overflow-visible border-0 bg-transparent p-0"
+      className="community-card fixed right-4 left-4 z-50 sm:left-auto sm:w-[360px]"
+      style={{ bottom: "calc(16px + env(safe-area-inset-bottom, 0px))" }}
     >
-      <div className="relative rounded-[28px] px-7 pt-10 pb-7 text-center text-white" style={{ background: "linear-gradient(165deg,#0B3070 0%,#114DA8 100%)", boxShadow: "0 40px 80px -30px rgba(0,0,0,.6)", border: "1px solid rgba(255,255,255,.18)" }}>
-        <MicDoodle className="absolute" width={58} height={74} body="#FF5E01" stand="#FF5E01" style={{ top: -46, left: "50%", marginLeft: -29 }} />
-        <button type="button" onClick={() => dialog.current?.close()} aria-label="Fermer" className="absolute top-3.5 right-3.5 grid h-9 w-9 cursor-pointer place-items-center rounded-full border-0 bg-white/12 text-white hover:bg-white/25 focus-visible:outline-white">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" aria-hidden="true">
+      <div className="relative rounded-[24px] px-6 pt-6 pb-5 text-white" style={{ background: "linear-gradient(165deg,#0B3070 0%,#114DA8 100%)", boxShadow: "0 30px 60px -24px rgba(0,22,54,.7)", border: "1px solid rgba(255,255,255,.18)" }}>
+        <MicDoodle className="absolute" width={40} height={52} body="#FF5E01" stand="#FF5E01" style={{ top: -30, left: 22 }} />
+        <button type="button" onClick={minimize} aria-label="Fermer" className="absolute top-3 right-3 grid h-8 w-8 cursor-pointer place-items-center rounded-full border-0 bg-white/12 text-white hover:bg-white/25 focus-visible:outline-white">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" aria-hidden="true">
             <path d="M18 6 6 18M6 6l12 12" />
           </svg>
         </button>
 
         {availability && (
-          <span className="inline-block rounded-full bg-white/12 px-3 py-1 text-[10.5px] font-bold tracking-[.14em] text-white uppercase">{availability}</span>
+          <span className="inline-block rounded-full bg-white/12 px-3 py-1 text-[10px] font-bold tracking-[.14em] text-white uppercase">{availability}</span>
         )}
-        <p id="invitation-communaute" className="mt-3 mb-0 text-[28px] leading-[1.1] font-bold tracking-[-0.03em]">
+        <p id="invitation-communaute" className="mt-2.5 mb-0 pr-8 text-[22px] leading-[1.15] font-bold tracking-[-0.03em]">
           Rejoignez la <span className="serif font-normal text-orange">LEQ&apos;FAM</span> !
         </p>
-        <p className="mx-auto mt-2.5 mb-0 max-w-[300px] text-[15px] leading-[1.55] text-white/80">
+        <p className="mt-2 mb-0 text-[14px] leading-[1.5] text-white/80">
           La communauté pour s&apos;entraîner à l&apos;oral ensemble, pour {price} par mois.
         </p>
-        <Link href={href} onClick={finish} className="btn mt-5 w-full bg-orange text-white hover:brightness-110">
-          Découvrir la communauté
-        </Link>
-        <button type="button" onClick={() => dialog.current?.close()} className="mt-3 cursor-pointer border-0 bg-transparent text-[13.5px] text-white/60 underline hover:text-white">
-          Plus tard
-        </button>
+        <div className="mt-4 flex items-center gap-4">
+          <Link href={href} onClick={finish} className="btn flex-1 bg-orange text-white hover:brightness-110">
+            Découvrir la communauté
+          </Link>
+          <button type="button" onClick={minimize} className="cursor-pointer border-0 bg-transparent text-[13px] text-white/60 underline hover:text-white">
+            Plus tard
+          </button>
+        </div>
       </div>
-    </dialog>
+    </aside>
   );
 }
