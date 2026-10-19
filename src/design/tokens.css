@@ -756,3 +756,388 @@ input:focus-visible + .chip {
 }
 
 } /* fin @layer components */
+
+/* ---------------------------------------------------------------------------
+   Jeu Avocat du diable : salle d'audience, tirage de carte, Banque du diable
+   ------------------------------------------------------------------------- */
+.jeu-section {
+  background: radial-gradient(ellipse at 30% 0%, #0e3f8b 0%, #04193c 55%, #010d24 100%);
+}
+.jeu-projecteur {
+  position: absolute;
+  left: 4%;
+  top: 0;
+  width: 52%;
+  height: 820px;
+  background: linear-gradient(180deg, rgba(255, 170, 70, 0.32), rgba(255, 94, 1, 0.08) 70%, transparent);
+  clip-path: polygon(44% 0, 56% 0, 100% 100%, 0 100%);
+  filter: blur(6px);
+  pointer-events: none;
+}
+.jeu-scene--grande {
+  --w: 500px;
+  --h: 333px;
+  --d: 84px;
+  position: relative;
+  z-index: 2;
+  padding: 60px 30px 60px;
+}
+.jeu-feuille {
+  position: absolute;
+  top: -40px;
+  z-index: 1;
+  width: 34px;
+  height: 44px;
+  border-radius: 3px;
+  background: #fff6e6 repeating-linear-gradient(180deg, transparent 0 8px, rgba(0, 22, 54, 0.22) 8px 9px);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.3);
+  opacity: 0;
+  animation: jeu-feuille 7s linear infinite;
+}
+@keyframes jeu-feuille {
+  0% { transform: translate(0, 0) rotate(0); opacity: 0; }
+  10% { opacity: 0.9; }
+  85% { opacity: 0.8; }
+  100% { transform: translate(60px, 560px) rotate(560deg); opacity: 0; }
+}
+.jeu-bulle {
+  position: absolute;
+  z-index: 3;
+  padding: 8px 16px;
+  border: 3px solid #001636;
+  border-radius: 18px;
+  background: #fff;
+  color: #001636;
+  font-size: 22px;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  box-shadow: 4px 4px 0 #ff5e01;
+  opacity: 0;
+  animation: jeu-bulle 4.8s ease-in-out infinite both;
+}
+@keyframes jeu-bulle {
+  0% { transform: scale(0.3); opacity: 0; }
+  7% { transform: scale(1.15); opacity: 1; }
+  12% { transform: scale(1); }
+  38% { transform: scale(1); opacity: 1; }
+  46%, 100% { transform: scale(0.85); opacity: 0; }
+}
+.jeu-etape {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  transition: transform 0.25s ease, background 0.25s ease;
+}
+.jeu-etape:hover {
+  transform: translateY(-6px);
+  background: rgba(255, 255, 255, 0.1);
+}
+.jeu-etape-num {
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #ffbd59, #ff5e01);
+  color: #001636;
+  font-size: 21px;
+  font-weight: 900;
+}
+
+/* Tirage de carte */
+.jeu-paquet,
+.jeu-tirage {
+  position: relative;
+  width: 200px;
+  height: 280px;
+}
+.jeu-tirage {
+  perspective: 1100px;
+}
+.jeu-dos {
+  position: absolute;
+  inset: 0;
+}
+.jeu-dos-motif {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  width: 100%;
+  height: 100%;
+  border: 3px solid #001636;
+  border-radius: 16px;
+  background: radial-gradient(circle at 50% 40%, #16397d, #0b1b45 70%);
+  box-shadow: inset 0 0 0 7px #0b1b45, inset 0 0 0 9px #ffbd59, 6px 6px 0 rgba(0, 0, 0, 0.35);
+}
+.jeu-cornes {
+  position: relative;
+  width: 64px;
+  height: 22px;
+}
+.jeu-cornes::before,
+.jeu-cornes::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  width: 16px;
+  height: 22px;
+  background: #d9332b;
+  clip-path: polygon(50% 0, 100% 100%, 0 100%);
+}
+.jeu-cornes::before { left: 4px; rotate: -22deg; }
+.jeu-cornes::after { right: 4px; rotate: 22deg; }
+.jeu-dos-titre {
+  color: #fff6e6;
+  font-size: 23px;
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  text-align: center;
+  text-shadow: 2px 2px 0 #ff5e01;
+}
+.jeu-tremble {
+  animation: jeu-tremble 0.11s linear infinite;
+}
+@keyframes jeu-tremble {
+  0%, 100% { transform: translate(0, 0) rotate(0); }
+  25% { transform: translate(-3px, 1px) rotate(-2deg); }
+  75% { transform: translate(3px, -1px) rotate(2deg); }
+}
+.jeu-retourne {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.75s cubic-bezier(0.2, 0.8, 0.2, 1.25);
+}
+.jeu-retourne--face {
+  transform: rotateY(180deg);
+}
+.jeu-retourne-dos,
+.jeu-retourne-face {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+}
+.jeu-retourne-face {
+  transform: rotateY(180deg);
+  filter: drop-shadow(0 22px 30px rgba(0, 0, 0, 0.45));
+}
+.jeu-reaction {
+  position: absolute;
+  top: -28px;
+  right: -40px;
+  z-index: 5;
+  padding: 8px 14px;
+  border: 3px solid #001636;
+  border-radius: 16px;
+  background: #ff5e01;
+  color: #fff;
+  font-size: 22px;
+  font-weight: 900;
+  white-space: nowrap;
+  box-shadow: 4px 4px 0 #001636;
+  rotate: 8deg;
+  animation: jeu-reaction 0.6s cubic-bezier(0.2, 0.9, 0.3, 1.5) 0.5s both;
+}
+@keyframes jeu-reaction {
+  from { transform: scale(0); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+.jeu-suspense {
+  position: absolute;
+  bottom: -38px;
+  left: 50%;
+  translate: -50% 0;
+  color: #ffbd59;
+  font-size: 14px;
+  font-weight: 700;
+  white-space: nowrap;
+  animation: jeu-clignote 0.45s ease-in-out infinite alternate;
+}
+@keyframes jeu-clignote {
+  from { opacity: 0.35; }
+  to { opacity: 1; }
+}
+
+/* Banque du diable : boîte ouverte, couvercle relevé, billets qui sortent */
+.banque-scene {
+  position: relative;
+  z-index: 2;
+  padding: 170px 20px 50px;
+  perspective: 1100px;
+}
+.banque-boite {
+  --w: 300px;
+  --h: 130px;
+  --d: 200px;
+  position: relative;
+  width: var(--w);
+  height: var(--h);
+  transform-style: preserve-3d;
+  transform: rotateX(-24deg) rotateY(-26deg);
+}
+.banque-face {
+  position: absolute;
+  border: 2px solid #001636;
+}
+.banque-devant {
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: translateZ(calc(var(--d) / 2));
+  background: linear-gradient(180deg, #114da8, #0b3070);
+  box-shadow: inset 0 0 0 6px rgba(255, 189, 89, 0.5);
+}
+.banque-etiquette {
+  padding: 6px 14px;
+  border-radius: 10px;
+  background: #0f1b3d;
+  color: #fff6e6;
+  font-size: 17px;
+  font-weight: 900;
+  letter-spacing: 0.04em;
+}
+.banque-fond {
+  inset: 0;
+  transform: translateZ(calc(var(--d) / -2));
+  background: #0b2a63;
+}
+.banque-gauche,
+.banque-droite {
+  width: var(--d);
+  height: var(--h);
+  left: calc((var(--w) - var(--d)) / 2);
+}
+.banque-gauche {
+  transform: rotateY(-90deg) translateZ(calc(var(--w) / 2));
+  background: #0a2558;
+}
+.banque-droite {
+  transform: rotateY(90deg) translateZ(calc(var(--w) / 2));
+  background: #0d3274;
+}
+.banque-sol {
+  width: var(--w);
+  height: var(--d);
+  top: calc((var(--h) - var(--d)) / 2);
+  transform: rotateX(-90deg) translateZ(calc(var(--h) / 2));
+  background: #081d47;
+}
+.banque-couvercle {
+  position: absolute;
+  left: 0;
+  top: calc(var(--d) * -1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--w);
+  height: var(--d);
+  border: 2px solid #001636;
+  background: #0f1b3d radial-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px) 0 0 / 10px 10px;
+  box-shadow: inset 0 0 0 6px #0f1b3d, inset 0 0 0 8px #ffbd59;
+  color: #fff6e6;
+  font-size: 22px;
+  font-weight: 900;
+  text-shadow: 2px 2px 0 #ff5e01;
+  transform-origin: bottom center;
+  transform: translateZ(calc(var(--d) / -2)) rotateX(-28deg);
+}
+.banque-billet {
+  position: absolute;
+  left: calc(50% - 95px);
+  top: 0;
+  width: 190px;
+  filter: drop-shadow(0 8px 10px rgba(0, 0, 0, 0.35));
+  transform: translate(var(--x), var(--y)) rotate(var(--r));
+  animation: banque-billet 3.4s ease-in-out infinite;
+}
+@keyframes banque-billet {
+  0%, 100% { transform: translate(var(--x), var(--y)) rotate(var(--r)); }
+  50% { transform: translate(var(--x), calc(var(--y) - 26px)) rotate(calc(var(--r) * -0.6)); }
+}
+.jeu-banque-carte {
+  rotate: -9deg;
+  filter: drop-shadow(0 20px 26px rgba(0, 0, 0, 0.45));
+}
+.jeu-plateau {
+  filter: drop-shadow(0 30px 40px rgba(0, 0, 0, 0.5));
+  animation: jeu-plateau 9s ease-in-out infinite;
+}
+@keyframes jeu-plateau {
+  0%, 100% { rotate: -6deg; }
+  50% { rotate: 6deg; }
+}
+
+@media (max-width: 640px) {
+  .jeu-scene--grande {
+    --w: 290px;
+    --h: 193px;
+    --d: 50px;
+    padding: 40px 16px 40px;
+  }
+  .jeu-bulle {
+    font-size: 15px;
+    padding: 5px 10px;
+  }
+  .jeu-paquet,
+  .jeu-tirage {
+    width: 140px;
+    height: 196px;
+  }
+  .jeu-dos-titre {
+    font-size: 16px;
+  }
+  .jeu-reaction {
+    font-size: 16px;
+    right: -18px;
+  }
+  .banque-boite {
+    --w: 230px;
+    --h: 100px;
+    --d: 150px;
+  }
+  .banque-billet {
+    width: 150px;
+    left: calc(50% - 75px);
+  }
+  .banque-couvercle {
+    font-size: 17px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .jeu-feuille { display: none; }
+  .jeu-bulle { animation: none; opacity: 1; }
+  .banque-billet, .jeu-plateau, .jeu-tremble, .jeu-suspense { animation: none !important; }
+  .jeu-reaction { animation: none; }
+  .jeu-retourne { transition: none; }
+}
+
+/* Flèche « retour en haut » */
+.retour-haut {
+  opacity: 0;
+  pointer-events: none;
+  translate: 0 16px;
+  scale: 0.8;
+  transition: opacity 0.3s ease, translate 0.3s ease, scale 0.3s cubic-bezier(0.2, 0.9, 0.3, 1.4);
+}
+.retour-haut--visible {
+  opacity: 1;
+  pointer-events: auto;
+  translate: 0 0;
+  scale: 1;
+}
+.retour-haut:hover svg {
+  animation: retour-haut 0.7s ease-in-out infinite;
+}
+@keyframes retour-haut {
+  0%, 100% { translate: 0 0; }
+  50% { translate: 0 -4px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .retour-haut { transition: opacity 0.2s; translate: none; scale: 1; }
+  .retour-haut:hover svg { animation: none; }
+}

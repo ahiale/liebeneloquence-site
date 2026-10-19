@@ -6,6 +6,7 @@ import { SITE } from "@/config/site";
 import { getPricing } from "@/content";
 import { formatPrice } from "@/lib/format";
 import { CommunityPopup } from "@/components/communaute/CommunityPopup";
+import { RetourHaut } from "@/components/layout/RetourHaut";
 import { JsonLd, KEYWORDS, pageMeta, siteGraph } from "@/lib/seo";
 import { DISTINCTIONS } from "@/components/home/QuiSuisJe";
 import "./globals.css";
@@ -36,11 +37,12 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
   const pricing = await getPricing();
   const { leqfam } = pricing;
   return (
-    <html lang="fr" className={`${sfPro.variable} ${melodrame.variable}`}>
+    <html lang="fr" className={`${sfPro.variable} ${melodrame.variable}`} data-scroll-behavior="smooth">
       <body>
         <JsonLd data={siteGraph(pricing, DISTINCTIONS)} />
         {children}
         <Footer />
+        <RetourHaut />
         <CommunityPopup price={formatPrice(leqfam.monthlyPrice)} availability={leqfam.availability} />
         {/* Mesure d'audience Umami (sans cookie), active seulement si configurée au build */}
         {process.env.UMAMI_WEBSITE_ID && (
