@@ -3,7 +3,8 @@
 import Image from "next/image";
 import { useRef, useState } from "react";
 
-/* « Tire une carte ! » : le paquet tremble (suspense), puis une carte au hasard se retourne avec une réaction.
+/* « Tire une carte ! » : une carte est déjà retournée à droite ; à chaque tirage, le paquet tremble (suspense),
+   puis la carte suivante, au hasard, la remplace en se retournant, avec une réaction.
    Sans animation si le visiteur a demandé à réduire les animations. */
 
 const CARTES = [
@@ -13,12 +14,12 @@ const CARTES = [
   { src: "/jeu/carte-role.webp", nom: "Rôle : le Public", reaction: "Oh !" },
 ];
 
-type Phase = "repos" | "suspense" | "revele";
+type Phase = "suspense" | "revele";
 
 export function TirerCarte() {
-  const [phase, setPhase] = useState<Phase>("repos");
+  const [phase, setPhase] = useState<Phase>("revele"); // une première carte est visible dès le départ
   const [index, setIndex] = useState(0);
-  const [tirage, setTirage] = useState(0); // relance l'animation de la réaction à chaque tirage
+  const [tirage, setTirage] = useState(0); // nombre de tirages : relance l'animation de la réaction
   const minuteur = useRef<number | null>(null);
 
   const tirer = () => {
@@ -62,7 +63,7 @@ export function TirerCarte() {
               <Image src={carte.src} alt={carte.nom} width={600} height={840} sizes="240px" className="h-full w-full" />
             </div>
           </div>
-          {revele && (
+          {revele && tirage > 0 && (
             <span key={tirage} className="jeu-reaction" aria-hidden="true">
               {carte.reaction}
             </span>
@@ -72,10 +73,10 @@ export function TirerCarte() {
       </div>
 
       <button type="button" onClick={tirer} disabled={phase === "suspense"} className="btn btn-p mt-10 disabled:opacity-70">
-        {phase === "repos" ? "Tirer une carte" : phase === "suspense" ? "Suspense…" : "Encore une !"}
+        {phase === "suspense" ? "Suspense…" : tirage === 0 ? "Tirer une carte" : "Encore une !"}
       </button>
       <p className="sr-only" aria-live="polite">
-        {revele ? `Carte tirée : ${carte.nom}` : ""}
+        {revele && tirage > 0 ? `Carte tirée : ${carte.nom}` : ""}
       </p>
     </div>
   );

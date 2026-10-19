@@ -794,23 +794,35 @@ input:focus-visible + .chip {
   transform: rotateX(90deg) translateZ(calc(var(--h) / 2));
   color: #ffbd59;
 }
-.jeu-feuille {
+/* Marteau de juge : il se lève puis frappe son socle, un éclat jaillit à l'impact */
+.jeu-marteau {
   position: absolute;
-  top: -40px;
-  z-index: 1;
-  width: 34px;
-  height: 44px;
-  border-radius: 3px;
-  background: #fff6e6 repeating-linear-gradient(180deg, transparent 0 8px, rgba(0, 22, 54, 0.22) 8px 9px);
-  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.3);
-  opacity: 0;
-  animation: jeu-feuille 7s linear infinite;
+  left: 2%;
+  bottom: 4%;
+  z-index: 3;
+  overflow: visible;
 }
-@keyframes jeu-feuille {
-  0% { transform: translate(0, 0) rotate(0); opacity: 0; }
-  10% { opacity: 0.9; }
-  85% { opacity: 0.8; }
-  100% { transform: translate(60px, 560px) rotate(560deg); opacity: 0; }
+.jeu-marteau-bras {
+  transform-box: view-box;
+  transform-origin: 64px 100px;
+  animation: jeu-marteau 2.6s cubic-bezier(0.5, 0, 0.75, 0) infinite;
+}
+@keyframes jeu-marteau {
+  0%, 55% { rotate: 32deg; }
+  70% { rotate: 0deg; }
+  76% { rotate: 6deg; }
+  82%, 100% { rotate: 0deg; }
+}
+.jeu-marteau-eclat {
+  opacity: 0;
+  transform-box: view-box;
+  transform-origin: 44px 90px;
+  animation: jeu-eclat 2.6s ease-out infinite;
+}
+@keyframes jeu-eclat {
+  0%, 68% { opacity: 0; scale: 0.6; }
+  72% { opacity: 1; scale: 1.15; }
+  90%, 100% { opacity: 0; scale: 1.3; }
 }
 .jeu-bulle {
   position: absolute;
@@ -1070,10 +1082,6 @@ input:focus-visible + .chip {
   0%, 100% { transform: translate(var(--x), var(--y)) rotate(var(--r)); }
   50% { transform: translate(var(--x), calc(var(--y) - 26px)) rotate(calc(var(--r) * -0.6)); }
 }
-.jeu-banque-carte {
-  rotate: -9deg;
-  filter: drop-shadow(0 20px 26px rgba(0, 0, 0, 0.45));
-}
 /* Plateau des points en roue (RoueJeu) : rotation continue, grand tour au clic */
 .roue {
   width: 400px;
@@ -1118,6 +1126,10 @@ input:focus-visible + .chip {
     font-size: 15px;
     padding: 5px 10px;
   }
+  .jeu-marteau {
+    width: 110px;
+    height: auto;
+  }
   .jeu-paquet,
   .jeu-tirage {
     width: 140px;
@@ -1145,7 +1157,7 @@ input:focus-visible + .chip {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .jeu-feuille { display: none; }
+  .jeu-marteau-bras, .jeu-marteau-eclat { animation: none; }
   .jeu-bulle { animation: none; opacity: 1; }
   .banque-billet, .roue--continue, .jeu-flotte, .jeu-entree, .jeu-reflet, .jeu-tremble, .jeu-suspense { animation: none !important; }
   .roue--lancee, .jeu-boite { transition: none; }

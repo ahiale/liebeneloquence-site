@@ -28,6 +28,7 @@ export const NAV = [
   { label: "Autres services", href: "/autres-services" },
   { label: "Communauté", href: "/communaute" },
   { label: "Événements", href: "/evenements" },
+  { label: "Blog", href: "/blog" },
   { label: "À propos", href: "/a-propos" },
 ] as const;
 

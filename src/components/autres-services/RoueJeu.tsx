@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { useRef, useState } from "react";
 
-/* Le plateau des points en roue : il tourne en continu ; d'un clic, il part en grand tour et freine. */
+/* Le tableau d'audience en roue : il tourne en continu ; d'un clic, il part en grand tour et freine. */
 export function RoueJeu() {
   const roue = useRef<HTMLDivElement>(null);
   const [angle, setAngle] = useState(0);
@@ -31,11 +31,11 @@ export function RoueJeu() {
           className={`roue ${lancee ? "roue--lancee" : "roue--continue"}`}
           style={lancee ? { transform: `rotate(${angle}deg)` } : undefined}
         >
-          <Image src="/jeu/plateau.webp" alt="Plateau des points du jeu Avocat du diable : fond +2, forme +2, sabotages" width={900} height={900} sizes="400px" className="block h-auto w-full" />
+          <Image src="/jeu/tableau-audience.webp" alt="Tableau d'audience du jeu Avocat du diable : fond +2, forme +2, sabotages" width={900} height={900} sizes="400px" className="block h-auto w-full" />
         </div>
       </div>
       <button type="button" onClick={lancer} disabled={lancee} className="btn btn-p mt-10 disabled:opacity-70">
-        {lancee ? "Ça tourne…" : "Faire tourner le plateau"}
+        {lancee ? "Ça tourne…" : "Faire tourner le tableau"}
       </button>
     </div>
   );

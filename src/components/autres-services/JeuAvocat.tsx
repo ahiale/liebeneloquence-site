@@ -7,18 +7,18 @@ import { PrenomEmailForm } from "@/components/ui/PrenomEmailForm";
 import { etrePrevenu } from "@/app/actions";
 
 /* Jeu de cartes Avocat du diable (bientôt), ambiance salle d'audience sous projecteur :
-   1. grande boîte en 3D (BoiteJeu), feuilles qui volent, bulles de réaction, formulaire « Être prévenu » ;
+   1. grande boîte en 3D (BoiteJeu), marteau de juge qui frappe, bulles de réaction, formulaire « Être prévenu » ;
    2. les 4 étapes du jeu ;
    3. « Tire une carte ! » (composant TirerCarte) ;
-   4. la Banque du diable : boîte ouverte d'où sortent les billets ;
-   5. le plateau des points en roue (RoueJeu).
+   4. la Banque LEQ : boîte ouverte d'où sortent les billets ;
+   5. le tableau d'audience en roue (RoueJeu).
    Visuels dans public/jeu, préparés par communication/jeu/preparer-images.py. */
 
 const ETAPES = [
   { titre: "Une affaire tombe", texte: "On tire une carte Affaire : un joueur est accusé d'un délit absurde, pièces à conviction à l'appui." },
-  { titre: "Plaide !", texte: "Accuse ou défends comme un avocat. Le fond et la forme rapportent des points sur le plateau." },
+  { titre: "Plaide !", texte: "Accuse ou défends comme un avocat. Le fond et la forme rapportent des points sur le tableau d'audience." },
   { titre: "Encaisse les sabotages", texte: "Objection, personnage à jouer, volte-face : tiens bon et tu gagnes des points, craque et tu en perds." },
-  { titre: "Le Public parie", texte: "Le Public parie en secret avec les billets de la Banque du diable et choisit à qui donner les Sabotages." },
+  { titre: "Le Public parie", texte: "Le Public parie en secret avec les billets de la Banque LEQ et choisit à qui donner les Sabotages." },
 ];
 
 const BULLES = [
@@ -42,11 +42,7 @@ export function JeuAvocat() {
         {/* 1. La boîte */}
         <div className="flex flex-wrap items-center gap-12">
           <div className="relative flex min-w-0 justify-center" style={{ flex: "1.2 1 440px" }}>
-            <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
-              {[...Array(7)].map((_, i) => (
-                <span key={i} className="jeu-feuille" style={{ left: `${8 + i * 13}%`, animationDelay: `${i * 1.1}s`, animationDuration: `${6 + (i % 3)}s` }} />
-              ))}
-            </div>
+            <Marteau />
             {BULLES.map((b) => (
               <span key={b.texte} className="jeu-bulle" aria-hidden="true" style={b.style}>
                 {b.texte}
@@ -66,7 +62,7 @@ export function JeuAvocat() {
               Le jeu de cartes qui transforme vos soirées en procès hilarants : des affaires absurdes, des rôles, des sabotages et une banque pour parier. Fous rires garantis, et on progresse à l&apos;oral sans s&apos;en rendre compte.
             </p>
             <div className="mt-6 flex flex-wrap gap-2">
-              {["Affaires", "Rôles", "Sabotages", "Banque du diable"].map((t) => (
+              {["Affaires", "Rôles", "Sabotages", "Banque LEQ"].map((t) => (
                 <span key={t} className="rounded-full border border-white/25 bg-white/8 px-3.5 py-1.5 text-[13px] font-semibold">
                   {t}
                 </span>
@@ -112,10 +108,10 @@ export function JeuAvocat() {
           <TirerCarte />
         </div>
 
-        {/* 4. La Banque du diable */}
+        {/* 4. La Banque LEQ */}
         <div className="mt-28 flex flex-wrap-reverse items-center gap-14">
           <div className="reveal min-w-0" style={{ flex: "1 1 360px" }}>
-            <p className="eyebrow">La Banque du diable</p>
+            <p className="eyebrow">La Banque LEQ</p>
             <h3 className="h2 text-white">
               Mise, parie, <span className="serif text-gold">fais sauter la banque.</span>
             </h3>
@@ -130,7 +126,6 @@ export function JeuAvocat() {
               ))}
               <span>les billets LEQ</span>
             </div>
-            <Image src="/jeu/banque-carte.webp" alt="Carte Banque du diable : chaque joueur commence avec 15 billets" width={420} height={688} sizes="140px" className="jeu-banque-carte mt-8 w-[120px] sm:w-[140px]" style={{ height: "auto" }} />
           </div>
           <div className="relative flex min-w-0 justify-center" style={{ flex: "1.1 1 380px", minHeight: 420 }}>
             <div className="banque-scene" aria-hidden="true">
@@ -147,7 +142,7 @@ export function JeuAvocat() {
                 ))}
                 <div className="banque-face banque-devant">
                   <span className="banque-etiquette">
-                    BANQUE <span className="text-orange">DU DIABLE</span>
+                    BANQUE <span className="text-orange">LEQ</span>
                   </span>
                 </div>
               </div>
@@ -156,9 +151,9 @@ export function JeuAvocat() {
           </div>
         </div>
 
-        {/* Le plateau, en roue */}
+        {/* Le tableau d'audience, en roue */}
         <div className="reveal mt-24 flex flex-col items-center text-center">
-          <p className="eyebrow">Le plateau des points</p>
+          <p className="eyebrow">Le tableau d&apos;audience</p>
           <div className="mt-8">
             <RoueJeu />
           </div>
@@ -167,3 +162,24 @@ export function JeuAvocat() {
     </section>
   );
 }
+
+/** Marteau de juge qui frappe son socle, avec un éclat au moment de l'impact. */
+function Marteau() {
+  return (
+    <svg className="jeu-marteau" viewBox="0 0 140 120" width="180" height="154" aria-hidden="true">
+      <ellipse cx="44" cy="104" rx="38" ry="9" fill="#5a3416" stroke="#001636" strokeWidth="3" />
+      <g className="jeu-marteau-eclat" stroke="#ffbd59" strokeWidth="4" strokeLinecap="round">
+        <path d="M6 82l-6-8M20 76l-2-11M74 78l6-9M86 88l10-3" />
+      </g>
+      <g className="jeu-marteau-bras">
+        <rect x="58" y="20" width="12" height="80" rx="5" fill="#a0692f" stroke="#001636" strokeWidth="3" transform="rotate(-50 64 60)" />
+        <g transform="rotate(-50 64 60)">
+          <rect x="34" y="6" width="60" height="30" rx="7" fill="#8b5a2b" stroke="#001636" strokeWidth="3" />
+          <rect x="42" y="6" width="7" height="30" fill="#ffbd59" stroke="#001636" strokeWidth="2" />
+          <rect x="79" y="6" width="7" height="30" fill="#ffbd59" stroke="#001636" strokeWidth="2" />
+        </g>
+      </g>
+    </svg>
+  );
+}
+

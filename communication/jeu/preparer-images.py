@@ -2,9 +2,9 @@
 Prépare les visuels du jeu Avocat du diable pour le site (public/jeu/), à partir de communication/jeu/sources/ :
 - couverture.png : allégée (sert de dessus de boîte en 3D et d'image de partage) ;
 - cartes.png : fond beige retiré, puis une image par carte (carte-role, carte-sabotage) ;
-- plateau.png : recadré en rond, fond transparent.
+- tableau-audience.png : recadré en rond, fond transparent.
 Règle du site : 1600 px de large au plus, 150 Ko au plus par image.
-Aussi : cartes Affaire et Sabotage Personnage, billets et carte de la Banque du diable (banque.png découpée).
+Aussi : cartes Affaire et Sabotage Personnage, billets de la Banque LEQ (banque.png découpée).
 Utilisation (depuis le dossier du projet) :  python communication/jeu/preparer-images.py
 """
 import os
@@ -47,15 +47,15 @@ for y in range(cartes.height):
 cartes.putalpha(masque)
 cartes = cartes.crop(cartes.getbbox())
 
-# Plateau : recadré en rond
-plateau = Image.open(os.path.join(SRC, "plateau.png")).convert("RGBA")
+# Tableau d'audience : recadré en rond
+plateau = Image.open(os.path.join(SRC, "tableau-audience.png")).convert("RGBA")
 c = min(plateau.size)
 plateau = plateau.crop(((plateau.width - c) // 2, (plateau.height - c) // 2, (plateau.width + c) // 2, (plateau.height + c) // 2))
 grand = Image.new("L", (c * 4, c * 4), 0)
 m = round(c * 4 * 0.012)  # marge : on garde le liseré doré
 ImageDraw.Draw(grand).ellipse((m, m, c * 4 - m, c * 4 - m), fill=255)
 plateau.putalpha(grand.resize((c, c), Image.LANCZOS))
-enregistrer(plateau, "plateau.webp", 900)
+enregistrer(plateau, "tableau-audience.webp", 900)
 
 # Les deux cartes séparément (coupure au milieu de l'espace transparent entre elles)
 alpha = cartes.getchannel("A")
@@ -107,12 +107,13 @@ enregistrer(detourer(Image.open(os.path.join(SRC, "carte-sabotage-personnage.png
 affaire = Image.open(os.path.join(SRC, "carte-affaire.png")).convert("RGBA")
 enregistrer(affaire.crop(affaire.getbbox()), "carte-affaire.webp", 600, 90)
 
-# Banque du diable : 4 billets (1, 10, 5, 20 dans l'ordre colonnes puis lignes) et la carte Banque
+# Banque LEQ : 4 billets (1, 10, 5, 20 dans l'ordre colonnes puis lignes) ; la carte Banque n'est pas utilisée
 banque = detourer(Image.open(os.path.join(SRC, "banque.png")))
-noms = iter(["billet-1", "billet-10", "billet-5", "billet-20", "banque-carte"])
+noms = iter(["billet-1", "billet-10", "billet-5", "billet-20", None])
 for x0, x1 in bandes(banque.getchannel("A"), 0):
     colonne = banque.crop((x0, 0, x1, banque.height))
     for y0, y1 in bandes(colonne.getchannel("A"), 1):
         morceau = colonne.crop((0, y0, colonne.width, y1))
         nom = next(noms)
-        enregistrer(morceau.crop(morceau.getbbox()), f"{nom}.webp", 520 if nom.startswith("billet") else 420, 60)
+        if nom:
+            enregistrer(morceau.crop(morceau.getbbox()), f"{nom}.webp", 520, 60)

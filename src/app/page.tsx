@@ -1,4 +1,4 @@
-import { getPricing, getReviews } from "@/content";
+import { getArticles, getPricing, getReviews } from "@/content";
 import { Hero } from "@/components/home/Hero";
 import { Constat } from "@/components/home/Constat";
 import { Apports } from "@/components/home/Apports";
@@ -9,11 +9,12 @@ import { Ecoles } from "@/components/home/Ecoles";
 import { Transparence } from "@/components/home/Transparence";
 import { Temoignages } from "@/components/home/Temoignages";
 import { QuiSuisJe } from "@/components/home/QuiSuisJe";
+import { DerniersArticles } from "@/components/home/DerniersArticles";
 
 export const metadata = { alternates: { canonical: "/" } };
 
 export default async function HomePage() {
-  const [pricing, reviews] = await Promise.all([getPricing(), getReviews()]);
+  const [pricing, reviews, articles] = await Promise.all([getPricing(), getReviews(), getArticles()]);
 
   return (
     <>
@@ -28,6 +29,7 @@ export default async function HomePage() {
         <Transparence />
         <Temoignages reviews={reviews} />
         <QuiSuisJe />
+        <DerniersArticles articles={articles} />
       </main>
     </>
   );
