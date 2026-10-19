@@ -1,0 +1,66 @@
+"""
+Prépare les visuels du jeu Avocat du diable pour le site (public/jeu/), à partir de communication/jeu/sources/ :
+- couverture.png : allégée (sert de dessus de boîte en 3D et d'image de partage) ;
+- cartes.png : fond beige retiré, puis une image par carte (carte-role, carte-sabotage) ;
+- plateau.png : recadré en rond, fond transparent.
+Règle du site : 1600 px de large au plus, 150 Ko au plus par image.
+Utilisation (depuis le dossier du projet) :  python communication/jeu/preparer-images.py
+"""
+import os
+
+from PIL import Image, ImageDraw
+
+ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+SRC = os.path.join(ROOT, "communication", "jeu", "sources")
+OUT = os.path.join(ROOT, "public", "jeu")
+os.makedirs(OUT, exist_ok=True)
+
+
+def enregistrer(im, nom, largeur, max_ko=150):
+    """Redimensionne puis baisse la qualité jusqu'à passer sous max_ko."""
+    if im.width > largeur:
+        im = im.resize((largeur, round(im.height * largeur / im.width)), Image.LANCZOS)
+    chemin = os.path.join(OUT, nom)
+    for q in range(86, 40, -4):
+        im.save(chemin, "WEBP", quality=q, method=6)
+        if os.path.getsize(chemin) <= max_ko * 1024:
+            break
+    print(f"{nom} : {im.width}x{im.height}, {os.path.getsize(chemin) // 1024} Ko (qualité {q})")
+
+
+# Couverture
+enregistrer(Image.open(os.path.join(SRC, "couverture.png")).convert("RGB"), "couverture.webp", 1200)
+
+# Cartes : on rend transparent le fond beige relié aux bords (remplissage depuis les coins)
+cartes = Image.open(os.path.join(SRC, "cartes.png")).convert("RGBA")
+fond = cartes.getpixel((5, 5))
+masque = Image.new("L", cartes.size, 0)
+rgb = cartes.convert("RGB")
+for coin in [(0, 0), (cartes.width - 1, 0), (0, cartes.height - 1), (cartes.width - 1, cartes.height - 1), (cartes.width // 2, 2), (cartes.width // 2, cartes.height - 3)]:
+    ImageDraw.floodfill(rgb, coin, (255, 0, 255), thresh=28)
+px, mp = rgb.load(), masque.load()
+for y in range(cartes.height):
+    for x in range(cartes.width):
+        if px[x, y] != (255, 0, 255):
+            mp[x, y] = 255
+cartes.putalpha(masque)
+cartes = cartes.crop(cartes.getbbox())
+
+# Plateau : recadré en rond
+plateau = Image.open(os.path.join(SRC, "plateau.png")).convert("RGBA")
+c = min(plateau.size)
+plateau = plateau.crop(((plateau.width - c) // 2, (plateau.height - c) // 2, (plateau.width + c) // 2, (plateau.height + c) // 2))
+grand = Image.new("L", (c * 4, c * 4), 0)
+m = round(c * 4 * 0.012)  # marge : on garde le liseré doré
+ImageDraw.Draw(grand).ellipse((m, m, c * 4 - m, c * 4 - m), fill=255)
+plateau.putalpha(grand.resize((c, c), Image.LANCZOS))
+enregistrer(plateau, "plateau.webp", 900)
+
+# Les deux cartes séparément (coupure au milieu de l'espace transparent entre elles)
+alpha = cartes.getchannel("A")
+milieu = cartes.width // 2
+vides = [x for x in range(cartes.width // 3, 2 * cartes.width // 3) if not alpha.crop((x, 0, x + 1, cartes.height)).getbbox()]
+coupe = vides[len(vides) // 2] if vides else milieu
+for nom, boite in [("carte-role.webp", (0, 0, coupe, cartes.height)), ("carte-sabotage.webp", (coupe, 0, cartes.width, cartes.height))]:
+    carte = cartes.crop(boite)
+    enregistrer(carte.crop(carte.getbbox()), nom, 600, 90)
