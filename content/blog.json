@@ -1,0 +1,52 @@
+[
+  {
+    "slug": "gamification-eloquence-apprendre-a-parler-en-jouant",
+    "status": "published",
+    "title": "Gamification de l'éloquence : apprendre à parler en public en jouant",
+    "description": "Pourquoi le jeu est l'un des meilleurs moyens de progresser à l'oral, et 5 exercices ludiques pour travailler votre éloquence dès aujourd'hui.",
+    "date": "2026-10-19",
+    "readingMinutes": 3,
+    "image": "/jeu/couverture.webp",
+    "keywords": ["gamification éloquence", "apprendre l'éloquence", "prise de parole en public", "exercices d'éloquence", "jeu d'éloquence", "gestion du trac", "improvisation"],
+    "blocks": [
+      { "type": "p", "text": "Parler en public fait peur à beaucoup de monde. On imagine le regard des autres, le trou de mémoire, la voix qui tremble. Et si, pour progresser, il suffisait d'arrêter de prendre l'exercice trop au sérieux ? C'est tout le principe de la gamification de l'éloquence : transformer l'entraînement à l'oral en jeu." },
+      { "type": "h2", "text": "Qu'est-ce que la gamification de l'éloquence ?" },
+      { "type": "p", "text": "La gamification consiste à reprendre les mécaniques du jeu (des règles, des défis, des points, une part de hasard) pour apprendre autre chose. Appliquée à l'éloquence, elle transforme la prise de parole en partie : on tire un sujet, on relève un défi, on marque des points, on rit et on recommence." },
+      { "type": "p", "text": "L'objectif reste sérieux : mieux structurer sa pensée, convaincre, improviser, apprivoiser son trac. Seule la manière change." },
+      { "type": "h2", "text": "Pourquoi jouer aide à mieux parler" },
+      {
+        "type": "list",
+        "items": [
+          { "title": "Le jeu fait baisser la pression.", "text": "Quand c'est « pour de faux », on ose davantage, et le trac laisse place à l'envie de relever le défi." },
+          { "title": "On répète sans s'en rendre compte.", "text": "Une partie, ce sont des dizaines de prises de parole, là où un exposé n'en offre qu'une." },
+          { "title": "Le retour est immédiat.", "text": "Les points, les réactions du groupe et les rires montrent tout de suite ce qui a fonctionné." },
+          { "title": "On apprend à improviser.", "text": "Un sujet tiré au hasard oblige à organiser ses idées en quelques secondes, comme face à une question imprévue en entretien ou à l'oral d'un examen." }
+        ]
+      },
+      { "type": "h2", "text": "5 exercices ludiques pour travailler votre éloquence" },
+      {
+        "type": "list",
+        "numbered": true,
+        "items": [
+          { "title": "Les virelangues chronométrés.", "text": "Répétez « Un chasseur sachant chasser sans son chien » trois fois de suite, de plus en plus vite. Idéal pour l'articulation." },
+          { "title": "L'avocat du diable.", "text": "Défendez pendant une minute une position que vous ne partagez pas. Rien de tel pour apprendre à argumenter." },
+          { "title": "Le personnage imposé.", "text": "Racontez votre journée dans la peau d'un présentateur météo, d'un commentateur sportif ou d'une star de télénovela. Votre voix et votre gestuelle vont se réveiller." },
+          { "title": "Le mot interdit.", "text": "Parlez une minute d'un sujet simple sans dire « euh » ni le mot le plus évident. Un excellent exercice contre les tics de langage." },
+          { "title": "Le procès absurde.", "text": "Un joueur est accusé d'avoir mangé la dernière frite, un autre le défend, le groupe tranche. Fous rires garantis, et la structure du discours se travaille sans y penser." }
+        ]
+      },
+      { "type": "h2", "text": "Le jeu, au cœur de la méthode LEQ" },
+      { "type": "p", "text": "Chez Lieben Éloquence, le jeu fait partie de la méthode : icebreakers, jeux de rôle et mises en situation rythment les ateliers et les accompagnements. On apprend en pratiquant, et en sortant de sa zone de confort." },
+      { "type": "p", "text": "Et ce n'est qu'un début : le jeu de cartes Avocat du diable et l'application mobile LEQ arrivent bientôt, pour s'entraîner entre amis ou seul, un peu chaque jour." },
+      { "type": "h2", "text": "À vous de jouer" },
+      { "type": "p", "text": "Choisissez un exercice, lancez-vous ce soir avec vos proches et observez la différence. Pour aller plus loin, découvrez votre profil d'orateur avec le quiz gratuit, ou jetez un œil au jeu Avocat du diable." },
+      {
+        "type": "links",
+        "links": [
+          { "label": "Faire le quiz d'orateur", "href": "/quiz" },
+          { "label": "Découvrir le jeu Avocat du diable", "href": "/autres-services#jeu" }
+        ]
+      }
+    ]
+  }
+]

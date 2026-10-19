@@ -294,6 +294,23 @@ export function listeAttenteClient(d: { prenom: string }): Email {
   };
 }
 
+/** Confirmation « Être prévenu » d'un lancement (jeu de cartes, application mobile). */
+export function prevenirClient(d: { prenom: string; produit: string }): Email {
+  return {
+    subject: `C'est noté : vous serez prévenu·e du lancement`,
+    html: layout({
+      title: "C'est noté,",
+      accent: "à très vite !",
+      preheader: `Vous serez parmi les premiers prévenus du lancement de ${d.produit}.`,
+      reason: "Vous recevez ce mail car vous avez demandé à être prévenu·e d'un lancement sur liebeneloquence.com. Pour ne plus rien recevoir, répondez simplement « STOP » à ce mail.",
+      body:
+        hello(d.prenom) +
+        p(`Votre demande est bien enregistrée : vous serez parmi les premières personnes prévenues du lancement de <strong>${esc(d.produit)}</strong>.`) +
+        signature,
+    }),
+  };
+}
+
 /* ---------------------------------------------------------------------------
    Inscription à un événement gratuit (rendez-vous mensuel…)
    ------------------------------------------------------------------------- */

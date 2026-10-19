@@ -1,13 +1,17 @@
 import Image from "next/image";
-import Link from "next/link";
 import { Heart, Sparkle, Star } from "@/components/ui/Doodles";
+import { BoiteJeu } from "@/components/autres-services/BoiteJeu";
+import { RoueJeu } from "@/components/autres-services/RoueJeu";
 import { TirerCarte } from "@/components/autres-services/TirerCarte";
+import { PrenomEmailForm } from "@/components/ui/PrenomEmailForm";
+import { etrePrevenu } from "@/app/actions";
 
 /* Jeu de cartes Avocat du diable (bientôt), ambiance salle d'audience sous projecteur :
-   1. grande boîte en 3D (CSS, à partir de la couverture), feuilles qui volent, bulles de réaction ;
-   2. les règles en 4 étapes ;
+   1. grande boîte en 3D (BoiteJeu), feuilles qui volent, bulles de réaction, formulaire « Être prévenu » ;
+   2. les 4 étapes du jeu ;
    3. « Tire une carte ! » (composant TirerCarte) ;
-   4. la Banque du diable : boîte ouverte d'où sortent les billets.
+   4. la Banque du diable : boîte ouverte d'où sortent les billets ;
+   5. le plateau des points en roue (RoueJeu).
    Visuels dans public/jeu, préparés par communication/jeu/preparer-images.py. */
 
 const ETAPES = [
@@ -48,21 +52,7 @@ export function JeuAvocat() {
                 {b.texte}
               </span>
             ))}
-            <div className="jeu-scene jeu-scene--grande" aria-hidden="true">
-              <div className="jeu-boite">
-                <div className="jeu-face jeu-dessus">
-                  <Image src="/jeu/couverture.webp" alt="" fill sizes="(max-width: 640px) 300px, 520px" style={{ objectFit: "cover" }} />
-                </div>
-                <div className="jeu-face jeu-cote">
-                  <span>
-                    AVOCAT DU DIABLE <span className="text-orange">·</span> LEQ<span className="text-orange">.</span>
-                  </span>
-                </div>
-                <div className="jeu-face jeu-tranche">
-                  <span>PLAIDE · BLUFFE · CONVAINCS</span>
-                </div>
-              </div>
-            </div>
+            <BoiteJeu />
           </div>
 
           <div className="min-w-0" style={{ flex: "1 1 380px" }}>
@@ -82,17 +72,20 @@ export function JeuAvocat() {
                 </span>
               ))}
             </div>
-            <Link className="btn btn-p mt-8" href="/evenements#newsletter">
-              Être prévenu du lancement
-            </Link>
+            <PrenomEmailForm
+              action={etrePrevenu}
+              champs={{ sujet: "jeu-avocat" }}
+              bouton="Être prévenu du lancement"
+              succes={{ titre: "C'est noté !", texte: "Un mail de confirmation vient de vous être envoyé. Vous serez prévenu·e dès le lancement du jeu." }}
+              className="mt-8 max-w-[520px]"
+            />
           </div>
         </div>
 
         {/* 2. Comment on joue */}
         <div className="reveal relative mt-24 text-center">
-          <p className="eyebrow">Comment on joue</p>
           <h3 className="h2 text-white">
-            Quatre temps, <span className="serif text-gold">zéro temps mort.</span>
+            Les 4 étapes <span className="serif text-gold">du jeu</span>
           </h3>
           <Sparkle className="wiggle hide-sm absolute" size={40} style={{ right: "16%", top: 0 }} />
         </div>
@@ -163,13 +156,12 @@ export function JeuAvocat() {
           </div>
         </div>
 
-        {/* Le plateau */}
+        {/* Le plateau, en roue */}
         <div className="reveal mt-24 flex flex-col items-center text-center">
           <p className="eyebrow">Le plateau des points</p>
-          <Image src="/jeu/plateau.webp" alt="Plateau des points du jeu Avocat du diable : fond +2, forme +2, sabotages" width={900} height={900} sizes="360px" className="jeu-plateau mt-8 w-[300px] sm:w-[380px]" style={{ height: "auto" }} />
-          <Link className="btn btn-p mt-12" href="/evenements#newsletter">
-            Je veux y jouer en premier
-          </Link>
+          <div className="mt-8">
+            <RoueJeu />
+          </div>
         </div>
       </div>
     </section>

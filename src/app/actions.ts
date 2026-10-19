@@ -13,6 +13,7 @@ import * as T from "@/emails/templates";
 import { renderFicheOrateur } from "@/emails/fiche-orateur";
 import { addToNewsletterList } from "@/lib/brevo";
 import { DEMANDES, ORAUX, PROFILS_GRAND_ORAL, SOURCES } from "@/lib/options";
+import { LANCEMENTS, type Lancement } from "@/lib/lancements";
 
 /* Actions serveur des formulaires du site. Chaque action :
    1. ignore silencieusement les robots (champ invisible rempli),
@@ -403,4 +404,33 @@ export async function candidaterAmbassadeur(_: FormState, data: FormData): Promi
     console.error(e);
   }
   return { status: "success" };
+}
+
+/* ---------------------------------------------------------------------------
+   Être prévenu d'un lancement (jeu de cartes, application mobile)
+   ------------------------------------------------------------------------- */
+
+const PrevenirSchema = z.object({
+  prenom: required("Prénom"),
+  email,
+  sujet: z.enum(Object.keys(LANCEMENTS) as [Lancement, ...Lancement[]]),
+});
+
+export async function etrePrevenu(_: FormState, data: FormData): Promise<FormState> {
+  if (isBot(data)) return { status: "success" };
+  if (await tooManyRequests("prevenir")) return TOO_MANY;
+  const parsed = PrevenirSchema.safeParse(Object.fromEntries(data));
+  if (!parsed.success) return invalid(parsed.error);
+  const d = parsed.data;
+  if ((await readAll("a-prevenir")).some((l) => l.sujet === d.sujet && sameEmail(l.email, d.email))) {
+    return already("Cette adresse est déjà inscrite : vous serez prévenu·e dès le lancement.");
+  }
+  await record("a-prevenir", { ...d, consent: `formulaire « Être prévenu » : ${d.sujet}` });
+  try {
+    await confirm(T.prevenirClient({ prenom: d.prenom, produit: LANCEMENTS[d.sujet] }), d.email);
+    return { status: "success" };
+  } catch (e) {
+    console.error(e);
+    return FAILURE;
+  }
 }

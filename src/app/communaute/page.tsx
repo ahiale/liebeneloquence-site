@@ -7,7 +7,8 @@ import { formatPrice } from "@/lib/format";
 import { Header } from "@/components/layout/Header";
 import { BubbleTail, DrawUnderline, Heart, Sparkle } from "@/components/ui/Doodles";
 import { Icon, type IconName } from "@/components/ui/Icons";
-import { WaitlistForm } from "@/components/communaute/WaitlistForm";
+import { PrenomEmailForm } from "@/components/ui/PrenomEmailForm";
+import { rejoindreListeAttente } from "@/app/actions";
 
 export const metadata: Metadata = pageMeta({
   title: "LEQ'FAM, la communauté de la prise de parole",
@@ -251,7 +252,13 @@ export default async function CommunautePage() {
             </h2>
             <p className="mx-auto mt-4 mb-0 max-w-[520px] text-[16.5px] leading-[1.7] text-white/85">{price} par mois pour s&apos;entraîner, progresser et se cultiver ensemble.</p>
             {waitlist ? (
-              <WaitlistForm />
+              <PrenomEmailForm
+                action={rejoindreListeAttente}
+                bouton="Rejoindre la liste d'attente"
+                succes={{ titre: "Vous êtes sur la liste !", texte: "Un mail de confirmation vient de vous être envoyé. Vous serez prévenu·e dès l'ouverture." }}
+                note="Aucun paiement maintenant. Vous serez prévenu·e en premier à l'ouverture."
+                className="mx-auto mt-[30px] max-w-[560px]"
+              />
             ) : (
               <>
                 <a className="btn btn-p mt-[30px]" href={join} {...joinProps} style={{ fontSize: 17, padding: "18px 34px" }}>

@@ -100,6 +100,10 @@ const BUILDERS: Record<Sheet, (lines: Row[]) => Table> = {
     }
     return { columns: ["Date", "Membre (Discord)", "Email", "Formule", "Offre 1 €", "Code", "Ambassadeur ou association", "Type", "Association ou groupe", "Statut", "Fin d'engagement", "Mode"], rows };
   },
+  "a-prevenir": (lines) => ({
+    columns: ["Date", "Lancement", "Prénom", "Email"],
+    rows: lines.map((l) => [paris(l.createdAt), str(l.sujet), str(l.prenom), str(l.email)]),
+  }),
   "candidatures-ambassadeur": (lines) => ({
     columns: ["Date", "Prénom", "Nom", "Email", "Réseaux sociaux", "Association ou groupe", "Concours d'éloquence", "Parcours", "Motivation"],
     rows: lines.map((l) => [paris(l.createdAt), str(l.prenom), str(l.nom), str(l.email), str(l.reseaux), str(l.association), l.concours === "oui" ? "Oui" : "Non", str(l.parcours), str(l.motivation)]),

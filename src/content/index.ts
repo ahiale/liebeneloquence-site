@@ -5,12 +5,15 @@ import reviewsJson from "../../content/avis.json";
 import pricingJson from "../../content/tarifs.json";
 import partenairesJson from "../../content/partenaires.json";
 import associationsJson from "../../content/associations.json";
+import blogJson from "../../content/blog.json";
 import {
+  ArticleSchema,
   AssociationsSchema,
   EventSchema,
   PartenaireSchema,
   PricingSchema,
   ReviewSchema,
+  type Article,
   type LeqEvent,
   type Partenaire,
   type Pricing,
@@ -43,6 +46,7 @@ const REVIEWS = parse(z.array(ReviewSchema), reviewsJson, "avis.json");
 const PRICING = parse(PricingSchema, pricingJson, "tarifs.json");
 const PARTENAIRES = parse(z.array(PartenaireSchema), partenairesJson, "partenaires.json");
 const ASSOCIATIONS = parse(AssociationsSchema, associationsJson, "associations.json");
+const ARTICLES = parse(z.array(ArticleSchema), blogJson, "blog.json");
 
 /** Événements publiés, du plus proche au plus lointain (dates inconnues en dernier). */
 export async function getEvents(): Promise<LeqEvent[]> {
@@ -68,6 +72,15 @@ export async function getReviews(): Promise<Review[]> {
 
 export async function getPricing(): Promise<Pricing> {
   return PRICING;
+}
+
+/** Articles publiés, du plus récent au plus ancien. */
+export async function getArticles(): Promise<Article[]> {
+  return ARTICLES.filter((a) => a.status === "published").sort((a, b) => b.date.localeCompare(a.date));
+}
+
+export async function getArticle(slug: string): Promise<Article | undefined> {
+  return (await getArticles()).find((a) => a.slug === slug);
 }
 
 /** Associations et groupes à choisir au paiement avec un code. */

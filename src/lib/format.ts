@@ -10,3 +10,8 @@ export function formatAmount(value: number): string {
 export function formatPrice(value: number): string {
   return `${formatAmount(value)} €`;
 }
+
+/** « 19 octobre 2026 » à partir d'une date AAAA-MM-JJ. */
+export function formatDate(iso: string): string {
+  return new Intl.DateTimeFormat("fr-FR", { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" }).format(new Date(`${iso}T12:00:00Z`));
+}

@@ -466,94 +466,6 @@ input:focus-visible + .chip {
   animation: floaty 7s ease-in-out infinite;
 }
 
-/* Jeu Avocat du diable : boîte en 3D (couverture devant, côté droit, tranche du dessus) */
-.jeu-scene {
-  --w: 380px;
-  --h: 253px;
-  --d: 66px;
-  perspective: 1400px;
-  padding: 40px 30px 30px;
-}
-.jeu-boite {
-  position: relative;
-  width: var(--w);
-  height: var(--h);
-  transform-style: preserve-3d;
-  transform: rotateX(-16deg) rotateY(-28deg);
-  animation: jeu-flotte 7s ease-in-out infinite;
-}
-@keyframes jeu-flotte {
-  0%, 100% { transform: rotateX(-16deg) rotateY(-28deg) translateY(0); }
-  50% { transform: rotateX(-16deg) rotateY(-22deg) translateY(-10px); }
-}
-.jeu-face {
-  position: absolute;
-  overflow: hidden;
-  background: #0b1f4d;
-  border: 2px solid #001636;
-}
-.jeu-dessus {
-  inset: 0;
-  transform: translateZ(calc(var(--d) / 2));
-  border-radius: 6px;
-  box-shadow: inset 0 0 0 3px rgba(255, 189, 89, 0.55);
-}
-.jeu-cote,
-.jeu-tranche {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #fff;
-  font-weight: 800;
-  letter-spacing: 0.14em;
-  font-size: 11px;
-  white-space: nowrap;
-  background: linear-gradient(180deg, #114da8, #0b3070);
-}
-.jeu-cote {
-  width: var(--d);
-  height: var(--h);
-  left: calc((var(--w) - var(--d)) / 2);
-  transform: rotateY(90deg) translateZ(calc(var(--w) / 2));
-  filter: brightness(0.82);
-}
-.jeu-cote > span {
-  writing-mode: vertical-rl;
-}
-.jeu-tranche {
-  width: var(--w);
-  height: var(--d);
-  top: calc((var(--h) - var(--d)) / 2);
-  transform: rotateX(90deg) translateZ(calc(var(--h) / 2));
-  color: #ffbd59;
-}
-.jeu-boite::after {
-  /* ombre au sol */
-  content: "";
-  position: absolute;
-  left: 8%;
-  right: 8%;
-  bottom: -46px;
-  height: 30px;
-  background: radial-gradient(ellipse at center, rgba(0, 22, 54, 0.35), transparent 70%);
-  transform: translateZ(-40px);
-}
-.jeu-carte,
-.jeu-plateau {
-  filter: drop-shadow(0 24px 30px rgba(0, 22, 54, 0.35));
-}
-@media (max-width: 640px) {
-  .jeu-scene {
-    --w: 260px;
-    --h: 173px;
-    --d: 46px;
-    padding: 30px 20px 20px;
-  }
-  .jeu-cote,
-  .jeu-tranche {
-    font-size: 8px;
-  }
-}
 @keyframes floaty {
   0%, 100% { transform: translateY(0) rotate(0); }
   50% { transform: translateY(-12px) rotate(-2deg); }
@@ -734,7 +646,7 @@ input:focus-visible + .chip {
 @media (prefers-reduced-motion: reduce) {
   .header-stuck,
   .bubble, .sticker, .postit, .card-light, .yearcard, .badge, .reveal,
-  .floaty, .wiggle, .bob, .pulse2, .halo, .marquee, .road-dash, .pop, .grow, .community-pill, .jeu-boite, .hero-line, .circle-draw path,
+  .floaty, .wiggle, .bob, .pulse2, .halo, .marquee, .road-dash, .pop, .grow, .community-pill, .hero-line, .circle-draw path,
   .pack-ill, .pack:hover .pack-ill {
     animation: none !important;
   }
@@ -774,13 +686,113 @@ input:focus-visible + .chip {
   filter: blur(6px);
   pointer-events: none;
 }
-.jeu-scene--grande {
+/* Boîte en 3D (BoiteJeu) : couverture devant, côté droit, tranche du dessus.
+   Entrée en pivotant au défilement (.jeu-entree), flottement (.jeu-flotte), suit la souris (--tx, --ty). */
+.jeu-scene {
   --w: 500px;
   --h: 333px;
   --d: 84px;
+  --tx: 0deg;
+  --ty: 0deg;
   position: relative;
   z-index: 2;
   padding: 60px 30px 60px;
+  perspective: 1400px;
+}
+.jeu-entree,
+.jeu-flotte {
+  transform-style: preserve-3d;
+}
+.jeu-flotte {
+  animation: jeu-flotte 6s ease-in-out infinite;
+}
+@keyframes jeu-flotte {
+  0%, 100% { translate: 0 0; }
+  50% { translate: 0 -14px; }
+}
+@supports (animation-timeline: view()) {
+  .jeu-entree {
+    animation: jeu-entree linear both;
+    animation-timeline: view();
+    animation-range: entry 0% cover 40%;
+  }
+}
+@keyframes jeu-entree {
+  from { transform: rotateY(-200deg) scale(0.55); opacity: 0; }
+  to { transform: none; opacity: 1; }
+}
+.jeu-boite {
+  position: relative;
+  width: var(--w);
+  height: var(--h);
+  transform-style: preserve-3d;
+  transform: rotateX(calc(-16deg + var(--ty))) rotateY(calc(-28deg + var(--tx)));
+  transition: transform 0.35s ease-out;
+}
+.jeu-boite::after {
+  /* ombre au sol */
+  content: "";
+  position: absolute;
+  left: 8%;
+  right: 8%;
+  bottom: -46px;
+  height: 30px;
+  background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.45), transparent 70%);
+  transform: translateZ(-40px);
+}
+.jeu-face {
+  position: absolute;
+  overflow: hidden;
+  background: #0b1f4d;
+  border: 2px solid #001636;
+}
+.jeu-dessus {
+  inset: 0;
+  transform: translateZ(calc(var(--d) / 2));
+  border-radius: 6px;
+  box-shadow: inset 0 0 0 3px rgba(255, 189, 89, 0.55);
+}
+.jeu-reflet {
+  /* reflet lumineux qui balaie la couverture */
+  position: absolute;
+  inset: -20% auto -20% -60%;
+  width: 40%;
+  background: linear-gradient(100deg, transparent, rgba(255, 255, 255, 0.45), transparent);
+  rotate: 12deg;
+  animation: jeu-reflet 4.5s ease-in-out infinite;
+}
+@keyframes jeu-reflet {
+  0%, 55% { left: -60%; }
+  85%, 100% { left: 130%; }
+}
+.jeu-cote,
+.jeu-tranche {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  white-space: nowrap;
+  background: linear-gradient(180deg, #114da8, #0b3070);
+}
+.jeu-cote {
+  width: var(--d);
+  height: var(--h);
+  left: calc((var(--w) - var(--d)) / 2);
+  transform: rotateY(90deg) translateZ(calc(var(--w) / 2));
+  filter: brightness(0.82);
+}
+.jeu-cote > span {
+  writing-mode: vertical-rl;
+}
+.jeu-tranche {
+  width: var(--w);
+  height: var(--d);
+  top: calc((var(--h) - var(--d)) / 2);
+  transform: rotateX(90deg) translateZ(calc(var(--h) / 2));
+  color: #ffbd59;
 }
 .jeu-feuille {
   position: absolute;
@@ -1062,21 +1074,45 @@ input:focus-visible + .chip {
   rotate: -9deg;
   filter: drop-shadow(0 20px 26px rgba(0, 0, 0, 0.45));
 }
-.jeu-plateau {
+/* Plateau des points en roue (RoueJeu) : rotation continue, grand tour au clic */
+.roue {
+  width: 400px;
+  max-width: 82vw;
   filter: drop-shadow(0 30px 40px rgba(0, 0, 0, 0.5));
-  animation: jeu-plateau 9s ease-in-out infinite;
 }
-@keyframes jeu-plateau {
-  0%, 100% { rotate: -6deg; }
-  50% { rotate: 6deg; }
+.roue--continue {
+  animation: roue 40s linear infinite;
+}
+.roue--lancee {
+  transition: transform 4s cubic-bezier(0.12, 0.75, 0.1, 1);
+}
+@keyframes roue {
+  to { transform: rotate(360deg); }
+}
+.roue-repere {
+  /* flèche orange au-dessus de la roue */
+  position: absolute;
+  top: -18px;
+  left: 50%;
+  z-index: 2;
+  width: 34px;
+  height: 38px;
+  translate: -50% 0;
+  background: #ff5e01;
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+  filter: drop-shadow(0 4px 0 #001636);
 }
 
 @media (max-width: 640px) {
-  .jeu-scene--grande {
+  .jeu-scene {
     --w: 290px;
     --h: 193px;
     --d: 50px;
     padding: 40px 16px 40px;
+  }
+  .jeu-cote,
+  .jeu-tranche {
+    font-size: 8px;
   }
   .jeu-bulle {
     font-size: 15px;
@@ -1111,7 +1147,8 @@ input:focus-visible + .chip {
 @media (prefers-reduced-motion: reduce) {
   .jeu-feuille { display: none; }
   .jeu-bulle { animation: none; opacity: 1; }
-  .banque-billet, .jeu-plateau, .jeu-tremble, .jeu-suspense { animation: none !important; }
+  .banque-billet, .roue--continue, .jeu-flotte, .jeu-entree, .jeu-reflet, .jeu-tremble, .jeu-suspense { animation: none !important; }
+  .roue--lancee, .jeu-boite { transition: none; }
   .jeu-reaction { animation: none; }
   .jeu-retourne { transition: none; }
 }

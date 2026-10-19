@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { SITE } from "@/config/site";
-import type { LeqEvent, Pricing } from "@/content/schema";
+import type { Article, LeqEvent, Pricing } from "@/content/schema";
 
 /**
  * Données structurées schema.org (JSON-LD) lues par Google.
@@ -135,6 +135,24 @@ export function eventLd(e: LeqEvent) {
             url: e.registrationUrl ? abs(e.registrationUrl) : url,
           }
         : undefined,
+  };
+}
+
+/** Article du blog (BlogPosting) : auteur, date, mots-clés. */
+export function articleLd(a: Article) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: a.title,
+    description: a.description,
+    datePublished: a.date,
+    keywords: a.keywords.join(", "),
+    image: a.image ? [abs(a.image)] : undefined,
+    url: abs(`/blog/${a.slug}`),
+    mainEntityOfPage: abs(`/blog/${a.slug}`),
+    inLanguage: "fr-FR",
+    author: { "@id": PERSON_ID, "@type": "Person", name: SITE.founder },
+    publisher: { "@id": ORG_ID, "@type": "Organization", name: SITE.name },
   };
 }
 

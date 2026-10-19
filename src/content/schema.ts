@@ -167,3 +167,33 @@ export type Partenaire = z.infer<typeof PartenaireSchema>;
 
 /** Associations et groupes proposés au paiement quand un code est saisi (content/associations.json). */
 export const AssociationsSchema = z.array(z.string().min(1));
+
+/* ---------------------------------------------------------------------------
+   Blog (content/blog.json)
+   ------------------------------------------------------------------------- */
+
+/** Bloc d'un article : intertitre, paragraphe, liste (à puces ou numérotée) ou boutons de liens. */
+const BlocSchema = z.discriminatedUnion("type", [
+  z.object({ type: z.literal("h2"), text: z.string() }),
+  z.object({ type: z.literal("p"), text: z.string() }),
+  z.object({ type: z.literal("list"), numbered: z.boolean().optional().default(false), items: z.array(z.object({ title: z.string(), text: z.string() })) }),
+  z.object({ type: z.literal("links"), links: z.array(z.object({ label: z.string(), href: z.string().regex(/^\/[^\s]*$/, "lien interne commençant par /") })) }),
+]);
+
+export const ArticleSchema = z.object({
+  /** Identifiant, utilisé dans l'adresse : /blog/<slug> (mots-clés séparés par des tirets). */
+  slug: z.string().regex(/^[a-z0-9-]+$/, "minuscules, chiffres et tirets"),
+  status: PublicationStatus,
+  title: z.string(),
+  /** Résumé : carte du blog et description pour Google (150 caractères environ). */
+  description: z.string(),
+  /** Date de publication, AAAA-MM-JJ. */
+  date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+  readingMinutes: z.number().int().positive(),
+  /** Image de l'article et de partage (dans /public). */
+  image: z.string().nullable(),
+  keywords: z.array(z.string()),
+  blocks: z.array(BlocSchema),
+});
+export type Article = z.infer<typeof ArticleSchema>;
+

@@ -10,6 +10,8 @@ import { Check, DrawUnderline, Heart, Sparkle, SpeechBubble, Star } from "@/comp
 import { Icon, type IconName } from "@/components/ui/Icons";
 import { ContactForm } from "@/components/autres-services/ContactForm";
 import { JeuAvocat } from "@/components/autres-services/JeuAvocat";
+import { PrenomEmailForm } from "@/components/ui/PrenomEmailForm";
+import { etrePrevenu } from "@/app/actions";
 import { DEMANDES } from "@/lib/options";
 
 export const metadata: Metadata = pageMeta({
@@ -171,7 +173,13 @@ export default async function AutresServicesPage() {
                 ))}
               </ul>
               <p className="mt-[22px] mb-0 text-[14px] text-white/70">Trois formules : gratuite, standard et accès complet avec coaching.</p>
-              <Link className="btn btn-p mt-7" href="/evenements#newsletter">Être prévenu du lancement</Link>
+              <PrenomEmailForm
+                action={etrePrevenu}
+                champs={{ sujet: "application-mobile" }}
+                bouton="Être prévenu du lancement"
+                succes={{ titre: "C'est noté !", texte: "Un mail de confirmation vient de vous être envoyé. Vous serez prévenu·e dès le lancement de l'application." }}
+                className="mt-7 max-w-[520px]"
+              />
             </div>
             <div className="relative flex min-w-0 justify-center" style={{ flex: ".9 1 300px" }} aria-hidden="true">
               <Sparkle className="wiggle absolute" size={44} style={{ left: "4%", top: "4%" }} />
