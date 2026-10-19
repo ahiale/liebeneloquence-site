@@ -206,12 +206,22 @@ export const OpportuniteSchema = z.object({
   /** Identifiant unique (ex. « 2026-10-concours-eloquence-lyon ») : une fiche n'est publiée qu'une fois. */
   id: z.string().regex(/^[a-z0-9-]+$/, "minuscules, chiffres et tirets"),
   titre: z.string().max(100),
-  /** Texte de la fiche : de quoi il s'agit, pour qui, date limite, lien. */
-  texte: z.string().max(1900),
-  /** Noms des étiquettes du forum (ex. « Concours », « Podcast »). */
+  /** Ce que c'est et ce qu'on y gagne, en 2 à 4 phrases. */
+  resume: z.string().max(1200),
+  /** Public visé : « Étudiants francophones du monde entier », « 21 à 30 ans »… */
+  pourQui: z.string().max(200),
+  /** « 2 novembre 2026 » ; null pour une ressource sans échéance. */
+  dateLimite: z.string().max(60).nullable(),
+  /** Lieu et dates de l'événement : « En ligne, 10 au 14 décembre 2026 » (facultatif). */
+  lieu: z.string().max(120).nullable().optional(),
+  /** Page officielle (bouton « En savoir plus »). */
+  lien: z.string().url(),
+  /** Étiquettes du forum : « Concours », « Opportunité internationale », « Ressource ». */
   etiquettes: z.array(z.string()).default([]),
   /** Date d'ajout, AAAA-MM-JJ. */
   ajout: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+  /** Brouillon : jamais publié dans le forum, seulement envoyé en aperçu dans #staffchat. */
+  brouillon: z.boolean().optional().default(false),
 });
 export type Opportunite = z.infer<typeof OpportuniteSchema>;
 

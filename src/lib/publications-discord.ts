@@ -1,7 +1,8 @@
 import "server-only";
 import { createHash } from "node:crypto";
 import { getOpportunites } from "@/content";
-import { publierFiche, publierMessage, trouverSalon } from "@/lib/discord";
+import type { Opportunite } from "@/content/schema";
+import { publierFiche, publierMessage, trouverSalon, type MessageDiscord } from "@/lib/discord";
 import { readAll, record } from "@/lib/store";
 
 /**
@@ -10,13 +11,36 @@ import { readAll, record } from "@/lib/store";
  * 1. le planning de Rebecca, un tableau Google Sheets publié en CSV (adresse dans DISCORD_PLANNING_CSV),
  *    colonnes : Salon | Date (JJ/MM/AAAA) | Heure (HH:MM, heure de Paris) | Message | Image (lien, facultatif) ;
  * 2. les opportunités et ressources ajoutées par l'agent Claude dans content/opportunites.json,
- *    publiées en fiches dans le forum #ressources-et-opportunités.
+ *    publiées en fiches dans le forum #ressources-et-opportunités (les brouillons ne sont jamais publiés :
+ *    ils s'envoient seulement en aperçu dans #staffchat, voir apercuOpportunites).
  * Chaque publication est notée dans data/discord-publies.jsonl : rien n'est jamais publié deux fois.
  */
 
 /** Au-delà de ce délai, une ligne du planning en retard n'est plus publiée (ex. serveur arrêté). */
 const RETARD_MAX_MS = 6 * 3600_000;
 const FORUM_OPPORTUNITES = "ressources-et-opportunites";
+const SALON_APERCU = "staffchat";
+
+/** Couleur et emoji de la carte selon l'étiquette principale. */
+const STYLES: Record<string, { couleur: number; emoji: string }> = {
+  Concours: { couleur: 0xff5e01, emoji: "🏆" },
+  "Opportunité internationale": { couleur: 0x114da8, emoji: "🌍" },
+  Ressource: { couleur: 0xffbd59, emoji: "📚" },
+};
+
+/** Carte Discord d'une opportunité : résumé, pour qui, date limite, lieu, bouton vers la source. */
+export function ficheOpportunite(o: Opportunite): MessageDiscord {
+  const style = STYLES[o.etiquettes[0] ?? ""] ?? STYLES.Ressource;
+  const champs = [
+    { name: "👥 Pour qui", value: o.pourQui, inline: true },
+    ...(o.dateLimite ? [{ name: "⏳ Date limite", value: `**${o.dateLimite}**`, inline: true }] : []),
+    ...(o.lieu ? [{ name: "📍 Où et quand", value: o.lieu, inline: true }] : []),
+  ];
+  return {
+    embeds: [{ color: style.couleur, title: `${style.emoji} ${o.titre}`, url: o.lien, description: o.resume, fields: champs, footer: { text: "LEQ'FAM · Opportunités de la semaine" } }],
+    components: [{ type: 1, components: [{ type: 2, style: 5, label: "En savoir plus", url: o.lien }] }],
+  };
+}
 
 type Ligne = { salon: string; date: string; heure: string; message: string; image: string };
 export type Bilan = { publies: string[]; erreurs: string[] };
@@ -93,7 +117,7 @@ export async function publierPlanifies(): Promise<Bilan> {
         bilan.erreurs.push(`Salon introuvable : « ${l.salon} »`);
         continue;
       }
-      await publierMessage(salon, l.message, l.image || undefined);
+      await publierMessage(salon, { content: l.message, ...(l.image ? { embeds: [{ image: { url: l.image } }] } : {}) });
       await record("discord-publies", { cle, origine: "planning", salon: salon.name, apercu: l.message.slice(0, 120) });
       bilan.publies.push(`#${salon.name} : ${l.message.slice(0, 60)}`);
     }
@@ -103,11 +127,11 @@ export async function publierPlanifies(): Promise<Bilan> {
 
   // 2. Opportunités et ressources (agent Claude)
   try {
-    const nouvelles = (await getOpportunites()).filter((o) => !deja.has(`opportunite-${o.id}`));
+    const nouvelles = (await getOpportunites()).filter((o) => !o.brouillon && !deja.has(`opportunite-${o.id}`));
     const forum = nouvelles.length ? await trouverSalon(FORUM_OPPORTUNITES) : undefined;
     if (nouvelles.length && !forum) bilan.erreurs.push("Forum #ressources-et-opportunités introuvable");
     for (const o of forum ? nouvelles : []) {
-      await publierFiche(forum!, o);
+      await publierFiche(forum!, { titre: o.titre, etiquettes: o.etiquettes, message: ficheOpportunite(o) });
       await record("discord-publies", { cle: `opportunite-${o.id}`, origine: "opportunités", salon: forum!.name, apercu: o.titre });
       bilan.publies.push(`Fiche : ${o.titre}`);
     }
@@ -115,4 +139,14 @@ export async function publierPlanifies(): Promise<Bilan> {
     bilan.erreurs.push(e instanceof Error ? e.message : String(e));
   }
   return bilan;
+}
+
+/** Aperçu des brouillons dans #staffchat (visible par l'équipe seulement), avant validation. */
+export async function apercuOpportunites(): Promise<Bilan> {
+  const brouillons = (await getOpportunites()).filter((o) => o.brouillon);
+  const salon = await trouverSalon(SALON_APERCU);
+  if (!salon) return { publies: [], erreurs: [`Salon #${SALON_APERCU} introuvable`] };
+  await publierMessage(salon, { content: `👀 **Aperçu des opportunités de la semaine** (${brouillons.length}) : rien n'est encore publié dans le forum.` });
+  for (const o of brouillons) await publierMessage(salon, ficheOpportunite(o));
+  return { publies: brouillons.map((o) => `Aperçu : ${o.titre}`), erreurs: [] };
 }

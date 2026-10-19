@@ -108,17 +108,20 @@ async function salons(): Promise<Record<string, string>> {
   return { reglements: await id("reglements"), fonctionnement: await id("fonctionnement"), presente: await id("presente-toi"), entraide: await id("entraide"), ressources: await id("ressources"), grandprix: await id("grand-prix") };
 }
 
-/** Publie un message dans un salon texte (texte et, si fourni, une image). */
-export async function publierMessage(salon: Salon, texte: string, image?: string): Promise<void> {
-  const r = await robot("POST", `/channels/${salon.id}/messages`, { content: texte.slice(0, 2000), ...(image ? { embeds: [{ image: { url: image } }] } : {}) });
+/** Contenu d'un message Discord : texte, cartes (embeds) et boutons. */
+export type MessageDiscord = { content?: string; embeds?: object[]; components?: object[] };
+
+/** Publie un message dans un salon texte. */
+export async function publierMessage(salon: Salon, message: MessageDiscord): Promise<void> {
+  const r = await robot("POST", `/channels/${salon.id}/messages`, { ...message, content: message.content?.slice(0, 2000) });
   if (!r.ok) throw new Error(`Publication dans #${salon.name} : ${r.status} ${await r.text()}`);
 }
 
 /** Crée une fiche dans un salon forum, avec les étiquettes du forum qui portent ces noms. */
-export async function publierFiche(forum: Salon, fiche: { titre: string; texte: string; etiquettes: string[] }): Promise<void> {
+export async function publierFiche(forum: Salon, fiche: { titre: string; etiquettes: string[]; message: MessageDiscord }): Promise<void> {
   const voulues = fiche.etiquettes.map(simplifier);
   const tags = (forum.available_tags ?? []).filter((t) => voulues.includes(simplifier(t.name))).map((t) => t.id).slice(0, 5);
-  const r = await robot("POST", `/channels/${forum.id}/threads`, { name: fiche.titre.slice(0, 100), applied_tags: tags, message: { content: fiche.texte.slice(0, 2000) } });
+  const r = await robot("POST", `/channels/${forum.id}/threads`, { name: fiche.titre.slice(0, 100), applied_tags: tags, message: fiche.message });
   if (!r.ok) throw new Error(`Fiche dans #${forum.name} : ${r.status} ${await r.text()}`);
 }
 /** Vidéo d'accueil (communication/discord/video-accueil.mp4), lue directement dans Discord. */
