@@ -197,3 +197,21 @@ export const ArticleSchema = z.object({
 });
 export type Article = z.infer<typeof ArticleSchema>;
 
+/* ---------------------------------------------------------------------------
+   Opportunités et ressources pour Discord (content/opportunites.json)
+   Ajoutées chaque semaine par l'agent Claude, publiées par le robot LEQ en fiches dans #ressources-et-opportunités.
+   ------------------------------------------------------------------------- */
+
+export const OpportuniteSchema = z.object({
+  /** Identifiant unique (ex. « 2026-10-concours-eloquence-lyon ») : une fiche n'est publiée qu'une fois. */
+  id: z.string().regex(/^[a-z0-9-]+$/, "minuscules, chiffres et tirets"),
+  titre: z.string().max(100),
+  /** Texte de la fiche : de quoi il s'agit, pour qui, date limite, lien. */
+  texte: z.string().max(1900),
+  /** Noms des étiquettes du forum (ex. « Concours », « Podcast »). */
+  etiquettes: z.array(z.string()).default([]),
+  /** Date d'ajout, AAAA-MM-JJ. */
+  ajout: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+});
+export type Opportunite = z.infer<typeof OpportuniteSchema>;
+

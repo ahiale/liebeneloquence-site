@@ -17,10 +17,11 @@ import path from "node:path";
  *   data/membres.jsonl        abonnements LEQ'FAM : adhésions, résiliations, fins (un événement par ligne)
  *   data/candidatures-ambassadeur.jsonl  candidatures pour devenir ambassadeur LEQ
  *   data/a-prevenir.jsonl     personnes à prévenir d'un lancement (jeu de cartes, application mobile)
+ *   data/discord-publies.jsonl  messages publiés par le robot (planning et opportunités) : jamais deux fois le même
  */
 const DATA_DIR = process.env.DATA_DIR || path.join(process.cwd(), "data");
 
-export type Collection = "newsletter" | "quiz" | "demandes" | "liste-attente" | "inscriptions" | "invitations" | "membres" | "avis-recus" | "candidatures-ambassadeur" | "a-prevenir";
+export type Collection = "newsletter" | "quiz" | "demandes" | "liste-attente" | "inscriptions" | "invitations" | "membres" | "avis-recus" | "candidatures-ambassadeur" | "a-prevenir" | "discord-publies";
 
 export async function record(collection: Collection, data: Record<string, unknown>): Promise<void> {
   try {

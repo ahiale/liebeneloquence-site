@@ -1,4 +1,4 @@
-import { timingSafeEqual } from "node:crypto";
+import { cleServeurValide } from "@/lib/cle-serveur";
 import { z } from "zod";
 import { getEvent } from "@/content";
 import { SITE } from "@/config/site";
@@ -24,19 +24,10 @@ const Body = z.object({
   test: z.boolean().optional(),
 });
 
-function authorized(req: Request): boolean {
-  const key = process.env.DATA_API_KEY;
-  const given = req.headers.get("x-leq-cle");
-  if (!key || key.length < 32 || !given) return false;
-  const a = Buffer.from(key);
-  const b = Buffer.from(given);
-  return a.length === b.length && timingSafeEqual(a, b);
-}
-
 const pause = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
 export async function POST(req: Request) {
-  if (!authorized(req)) return new Response("Not found", { status: 404 });
+  if (!cleServeurValide(req)) return new Response("Not found", { status: 404 });
   const parsed = Body.safeParse(await req.json().catch(() => null));
   if (!parsed.success) return Response.json({ erreur: parsed.error.issues.map((i) => i.message) }, { status: 400 });
   const { slug, edition, test } = parsed.data;

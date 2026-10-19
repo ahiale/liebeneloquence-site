@@ -76,14 +76,50 @@ export async function retirerRoleMembre(idDiscord: string): Promise<boolean> {
   return r.ok;
 }
 
-/** Identifiants des salons utiles à l'accueil, retrouvés par leur nom (mis en cache). */
-let salonsAccueil: Record<string, string> | null = null;
+export type Salon = { id: string; name: string; type: number; available_tags?: { id: string; name: string }[] };
+
+/** Nom de salon sans accents, emojis ni espaces superflus : « 📚ressources-et-opportunités » → « ressources-et-opportunites ». */
+const simplifier = (nom: string) =>
+  nom
+    .normalize("NFD")
+    .replace(/[̀-ͯ]/g, "")
+    .toLowerCase()
+    .replace(/[^a-z0-9-]+/g, " ")
+    .trim();
+
+/** Salons du serveur (mis en cache 10 minutes). */
+let cacheSalons: { quand: number; liste: Salon[] } | null = null;
+async function listeSalons(): Promise<Salon[]> {
+  if (cacheSalons && Date.now() - cacheSalons.quand < 600_000) return cacheSalons.liste;
+  const liste = (await (await robot("GET", `/guilds/${DISCORD.serveur}/channels`)).json()) as Salon[];
+  cacheSalons = { quand: Date.now(), liste };
+  return liste;
+}
+
+/** Salon retrouvé par une partie de son nom, sans tenir compte des accents ni des emojis (« annonces », « présente-toi »…). */
+export async function trouverSalon(nom: string): Promise<Salon | undefined> {
+  const cherche = simplifier(nom);
+  return cherche ? (await listeSalons()).find((c) => simplifier(c.name).includes(cherche)) : undefined;
+}
+
+/** Identifiants des salons utiles à l'accueil. */
 async function salons(): Promise<Record<string, string>> {
-  if (salonsAccueil) return salonsAccueil;
-  const liste = (await (await robot("GET", `/guilds/${DISCORD.serveur}/channels`)).json()) as { id: string; name: string }[];
-  const trouver = (mot: string) => liste.find((c) => c.name.normalize("NFD").replace(/[̀-ͯ]/g, "").includes(mot))?.id ?? "";
-  salonsAccueil = { reglements: trouver("reglements"), fonctionnement: trouver("fonctionnement"), presente: trouver("presente-toi"), entraide: trouver("entraide"), ressources: trouver("ressources"), grandprix: trouver("grand-prix") };
-  return salonsAccueil;
+  const id = async (mot: string) => (await trouverSalon(mot))?.id ?? "";
+  return { reglements: await id("reglements"), fonctionnement: await id("fonctionnement"), presente: await id("presente-toi"), entraide: await id("entraide"), ressources: await id("ressources"), grandprix: await id("grand-prix") };
+}
+
+/** Publie un message dans un salon texte (texte et, si fourni, une image). */
+export async function publierMessage(salon: Salon, texte: string, image?: string): Promise<void> {
+  const r = await robot("POST", `/channels/${salon.id}/messages`, { content: texte.slice(0, 2000), ...(image ? { embeds: [{ image: { url: image } }] } : {}) });
+  if (!r.ok) throw new Error(`Publication dans #${salon.name} : ${r.status} ${await r.text()}`);
+}
+
+/** Crée une fiche dans un salon forum, avec les étiquettes du forum qui portent ces noms. */
+export async function publierFiche(forum: Salon, fiche: { titre: string; texte: string; etiquettes: string[] }): Promise<void> {
+  const voulues = fiche.etiquettes.map(simplifier);
+  const tags = (forum.available_tags ?? []).filter((t) => voulues.includes(simplifier(t.name))).map((t) => t.id).slice(0, 5);
+  const r = await robot("POST", `/channels/${forum.id}/threads`, { name: fiche.titre.slice(0, 100), applied_tags: tags, message: { content: fiche.texte.slice(0, 2000) } });
+  if (!r.ok) throw new Error(`Fiche dans #${forum.name} : ${r.status} ${await r.text()}`);
 }
 /** Vidéo d'accueil (communication/discord/video-accueil.mp4), lue directement dans Discord. */
 const VIDEO_ACCUEIL = "https://liebeneloquence.com/discord/video-accueil.mp4";

@@ -1,4 +1,4 @@
-import { timingSafeEqual } from "node:crypto";
+import { cleServeurValide } from "@/lib/cle-serveur";
 import { readAll, type Collection } from "@/lib/store";
 import { computeResult, describeAnswers, PROFILES, type Answer, type ProfileId } from "@/lib/quiz";
 
@@ -100,6 +100,10 @@ const BUILDERS: Record<Sheet, (lines: Row[]) => Table> = {
     }
     return { columns: ["Date", "Membre (Discord)", "Email", "Formule", "Offre 1 €", "Code", "Ambassadeur ou association", "Type", "Association ou groupe", "Statut", "Fin d'engagement", "Mode"], rows };
   },
+  "discord-publies": (lines) => ({
+    columns: ["Date", "Origine", "Salon", "Contenu"],
+    rows: lines.map((l) => [paris(l.createdAt), str(l.origine), str(l.salon), str(l.apercu)]),
+  }),
   "a-prevenir": (lines) => ({
     columns: ["Date", "Lancement", "Prénom", "Email"],
     rows: lines.map((l) => [paris(l.createdAt), str(l.sujet), str(l.prenom), str(l.email)]),
@@ -149,17 +153,8 @@ function toCsv({ columns, rows }: Table): string {
   return [columns, ...rows].map((r) => r.map(cell).join(";")).join("\r\n") + "\r\n";
 }
 
-function authorized(req: Request): boolean {
-  const key = process.env.DATA_API_KEY;
-  const given = req.headers.get("x-leq-cle") ?? new URL(req.url).searchParams.get("cle");
-  if (!key || key.length < 32 || !given) return false;
-  const a = Buffer.from(key);
-  const b = Buffer.from(given);
-  return a.length === b.length && timingSafeEqual(a, b);
-}
-
 export async function GET(req: Request, { params }: { params: Promise<{ collection: string }> }) {
-  if (!authorized(req)) return new Response("Not found", { status: 404 });
+  if (!cleServeurValide(req, { parametre: true })) return new Response("Not found", { status: 404 });
   const { collection } = await params;
   const build = Object.hasOwn(BUILDERS, collection) ? BUILDERS[collection as Sheet] : undefined;
   if (!build) return new Response("Not found", { status: 404 });

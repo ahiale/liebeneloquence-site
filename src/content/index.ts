@@ -6,15 +6,18 @@ import pricingJson from "../../content/tarifs.json";
 import partenairesJson from "../../content/partenaires.json";
 import associationsJson from "../../content/associations.json";
 import blogJson from "../../content/blog.json";
+import opportunitesJson from "../../content/opportunites.json";
 import {
   ArticleSchema,
   AssociationsSchema,
   EventSchema,
+  OpportuniteSchema,
   PartenaireSchema,
   PricingSchema,
   ReviewSchema,
   type Article,
   type LeqEvent,
+  type Opportunite,
   type Partenaire,
   type Pricing,
   type Review,
@@ -47,6 +50,7 @@ const PRICING = parse(PricingSchema, pricingJson, "tarifs.json");
 const PARTENAIRES = parse(z.array(PartenaireSchema), partenairesJson, "partenaires.json");
 const ASSOCIATIONS = parse(AssociationsSchema, associationsJson, "associations.json");
 const ARTICLES = parse(z.array(ArticleSchema), blogJson, "blog.json");
+const OPPORTUNITES = parse(z.array(OpportuniteSchema), opportunitesJson, "opportunites.json");
 
 /** Événements publiés, du plus proche au plus lointain (dates inconnues en dernier). */
 export async function getEvents(): Promise<LeqEvent[]> {
@@ -81,6 +85,11 @@ export async function getArticles(): Promise<Article[]> {
 
 export async function getArticle(slug: string): Promise<Article | undefined> {
   return (await getArticles()).find((a) => a.slug === slug);
+}
+
+/** Opportunités et ressources à publier sur Discord. */
+export async function getOpportunites(): Promise<Opportunite[]> {
+  return OPPORTUNITES;
 }
 
 /** Associations et groupes à choisir au paiement avec un code. */
