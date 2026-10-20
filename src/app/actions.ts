@@ -13,7 +13,7 @@ import * as T from "@/emails/templates";
 import { renderFicheOrateur } from "@/emails/fiche-orateur";
 import { addToNewsletterList } from "@/lib/brevo";
 import { DEMANDES, ORAUX, PROFILS_GRAND_ORAL, SOURCES } from "@/lib/options";
-import { EBOOKS, LANCEMENTS, type Ebook, type Lancement } from "@/lib/lancements";
+import { EBOOKS, LANCEMENTS, OBJECTIF_PRECOMMANDES, type Ebook, type Lancement } from "@/lib/lancements";
 import { SITE } from "@/config/site";
 
 /* Actions serveur des formulaires du site. Chaque action :
@@ -458,7 +458,7 @@ export async function recevoirEbook(_: FormState, data: FormData): Promise<FormS
     await record("ebooks", { ...d, consent: `formulaire e-book : ${d.livre}` });
   }
   try {
-    await confirm(T.ebookClient({ prenom: d.prenom, titre: livre.titre, lien: `${SITE.url}${livre.fichier}` }), d.email);
+    await confirm(T.ebookClient({ prenom: d.prenom, titre: livre.titre, lien: `${SITE.url}${livre.fichier}`, soutien: SITE.stripeSoutien, precommande: SITE.stripeMellie, objectif: OBJECTIF_PRECOMMANDES }), d.email);
     return { status: "success" };
   } catch (e) {
     console.error(e);

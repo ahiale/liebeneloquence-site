@@ -13,10 +13,12 @@ const nextConfig: NextConfig = {
   // sur le serveur, qui pouvait rester bloqué sur une taille et laisser l'image vide sur mobile.
   // Toute nouvelle photo dans public/ doit donc être allégée avant d'être ajoutée (1600 px de large, 150 Ko maximum).
   images: { unoptimized: true },
-  // Anciennes adresses : page « Autres produits », rendez-vous mensuel passé (lien des mails d'octobre)
+  // Anciennes adresses : page « Autres produits », rendez-vous mensuel passé (lien des mails d'octobre) ;
+  // /mellie (adresse courte des visuels Instagram et de Stripe) mène à la section de la BD
   async redirects() {
     return [
       { source: "/autres-produits", destination: "/autres-services", permanent: true },
+      { source: "/mellie", destination: "/autres-services#mellie", permanent: false },
       { source: "/evenements/rendez-vous-mensuel-leq-octobre-2026", destination: "/evenements/rendez-vous-mensuel-leq-novembre-2026", permanent: false },
     ];
   },

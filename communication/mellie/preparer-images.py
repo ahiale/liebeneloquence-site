@@ -15,7 +15,8 @@ OUT = os.path.join(ROOT, "public", "mellie")
 PDF = os.path.join(OUT, "mellie-a-le-trac.pdf")
 
 # Page du PDF (1 = couverture) → nom de l'image, largeur maximale
-PAGES = {1: ("couverture", 900), 34: ("dos", 900), 4: ("planche-ruche", 900), 23: ("six-secrets", 900), 3: ("personnages", 900), 25: ("cahier-respiration", 900)}
+# (six-secrets sert aux visuels Instagram)
+PAGES = {1: ("couverture", 900), 3: ("personnages", 900), 4: ("planche-ruche", 900), 23: ("six-secrets", 900), 25: ("cahier-respiration", 900)}
 
 doc = pymupdf.open(PDF)
 for num, (nom, largeur) in PAGES.items():

@@ -1318,17 +1318,11 @@ input:focus-visible + .chip {
   .livre, .livre-couverture, .livre-reflet { animation: none; }
 }
 
-/* Page /mellie : ambiance ruche (fond miel, alvéoles) */
+/* Section de la BD Mellie : ambiance ruche (fond miel, alvéoles) */
 .bg-miel {
   background:
     url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='98' viewBox='0 0 56 98'%3E%3Cpath d='M28 66 0 50V18L28 2l28 16v32L28 66zm0 32V66m0-64V-30' fill='none' stroke='%23e9a515' stroke-opacity='.18' stroke-width='2'/%3E%3C/svg%3E"),
     linear-gradient(180deg, #fff6dc, #ffeab0);
-}
-.secret-mellie {
-  transition: transform 0.25s ease;
-}
-.secret-mellie:hover {
-  transform: translateY(-6px) rotate(-1deg);
 }
 .apercu-page {
   transition: transform 0.3s ease, z-index 0s;

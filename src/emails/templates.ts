@@ -295,7 +295,7 @@ export function listeAttenteClient(d: { prenom: string }): Email {
 }
 
 /** E-book gratuit : le lien de téléchargement, et les deux façons d'aller plus loin. */
-export function ebookClient(d: { prenom: string; titre: string; lien: string }): Email {
+export function ebookClient(d: { prenom: string; titre: string; lien: string; soutien: string; precommande: string; objectif: number }): Email {
   return {
     subject: `Votre BD « ${d.titre} » est arrivée 🐝`,
     html: layout({
@@ -307,7 +307,9 @@ export function ebookClient(d: { prenom: string; titre: string; lien: string }):
         hello(d.prenom) +
         p(`Voici votre BD <strong>« ${esc(d.titre)} »</strong>, avec son cahier d'exercices anti-trac. Elle est gratuite et à partager librement, sans modification ni usage commercial.`) +
         button(d.lien, "Télécharger la BD") +
-        p(`Le cahier se remplit mieux sur papier : la version imprimée est disponible en précommande, et si Mellie vous a aidé, vous pouvez aussi soutenir LEQ librement. Tout est sur <a href="https://liebeneloquence.com/mellie">liebeneloquence.com/mellie</a>.`) +
+        p("<strong>Mellie vous a aidé ?</strong> Elle est gratuite et le restera. Si vous le souhaitez, vous pouvez soutenir LEQ du montant de votre choix : c'est ce qui nous permet de créer de nouveaux outils pour apprendre à parler en public.") +
+        button(d.soutien, "Soutenir LEQ") +
+        p(`<strong>Envie de la version papier ?</strong> Le cahier se remplit mieux sur papier. Elle est en précommande à partir de 12 €, un prix qui couvre uniquement l'impression et l'envoi (en France seulement). L'impression sera lancée dès ${d.objectif} précommandes, pas avant ; si elle n'a pas lieu, vous êtes remboursé·e. <a href="${d.precommande}">Précommander la version papier</a>.`) +
         signature,
     }),
   };

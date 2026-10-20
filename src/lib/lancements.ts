@@ -5,6 +5,9 @@ export const LANCEMENTS = {
 } as const;
 export type Lancement = keyof typeof LANCEMENTS;
 
+/** Précommandes de la BD papier « Mellie a le trac » à atteindre avant de lancer l'impression. */
+export const OBJECTIF_PRECOMMANDES = 30;
+
 /** E-books gratuits envoyés par mail (formulaire prénom + email). */
 export const EBOOKS = {
   mellie: { titre: "Mellie a le trac", fichier: "/mellie/mellie-a-le-trac.pdf" },
