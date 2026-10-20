@@ -1,8 +1,8 @@
 import Image from "next/image";
 import { Heart, Sparkle, Star } from "@/components/ui/Doodles";
-import { BoiteJeu } from "@/components/autres-services/BoiteJeu";
-import { RoueJeu } from "@/components/autres-services/RoueJeu";
-import { TirerCarte } from "@/components/autres-services/TirerCarte";
+import { BoiteJeu } from "@/components/jeu/BoiteJeu";
+import { RoueJeu } from "@/components/jeu/RoueJeu";
+import { TirerCarte } from "@/components/jeu/TirerCarte";
 import { PrenomEmailForm } from "@/components/ui/PrenomEmailForm";
 import { etrePrevenu } from "@/app/actions";
 

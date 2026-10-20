@@ -40,7 +40,7 @@ const lienLivre = await stripe("/payment_links", {
   custom_text: {
     submit: { message: "Précommande : 12 € minimum, qui couvrent uniquement l'impression et l'envoi (livraison en France uniquement). Tout montant au-dessus soutient LEQ. L'impression est lancée dès 30 précommandes, pas avant ; vous êtes prévenu·e par mail, et remboursé·e si elle n'a pas lieu." },
   },
-  after_completion: { type: "redirect", redirect: { url: "https://liebeneloquence.com/autres-services?merci=precommande#mellie" } },
+  after_completion: { type: "redirect", redirect: { url: "https://liebeneloquence.com/mellie?merci=precommande" } },
 });
 
 // 2. Soutenir LEQ
@@ -50,7 +50,7 @@ const lienSoutien = await stripe("/payment_links", {
   line_items: { 0: { price: prixSoutien.id, quantity: 1 } },
   submit_type: "donate",
   metadata: { leq: "soutien" },
-  after_completion: { type: "redirect", redirect: { url: "https://liebeneloquence.com/autres-services?merci=soutien#mellie" } },
+  after_completion: { type: "redirect", redirect: { url: "https://liebeneloquence.com/mellie?merci=soutien" } },
 });
 
 console.log(JSON.stringify({ precommande: lienLivre.url, soutien: lienSoutien.url }));

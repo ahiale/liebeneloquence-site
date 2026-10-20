@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 
 /* Message de remerciement au retour de Stripe (?merci=precommande ou ?merci=soutien), lu côté navigateur
-   pour que la page Autres services reste statique. */
+   pour que la page reste statique. */
 const MERCI: Record<string, { titre: string; texte: string }> = {
   precommande: { titre: "Merci pour votre précommande !", texte: "Vous recevez la confirmation par mail. Je vous préviens dès que l'impression est lancée, puis à l'expédition." },
   soutien: { titre: "Merci pour votre soutien !", texte: "Votre coup de pouce aide LEQ à créer de nouveaux outils pour apprendre à parler en public." },

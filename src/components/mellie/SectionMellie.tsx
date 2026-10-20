@@ -1,4 +1,3 @@
-import Image from "next/image";
 import { SITE } from "@/config/site";
 import { EBOOKS, OBJECTIF_PRECOMMANDES } from "@/lib/lancements";
 import { recevoirEbook } from "@/app/actions";
@@ -7,19 +6,13 @@ import { PrenomEmailForm } from "@/components/ui/PrenomEmailForm";
 import { LivreMellie } from "@/components/mellie/LivreMellie";
 import { MerciMellie } from "@/components/mellie/MerciMellie";
 
-const APERCU = [
-  { src: "/mellie/personnages.webp", alt: "Les personnages : Mellie, Tom, Mamie Jo, Pollen, Lili, Hugo, la Reine, Léon et Mme Garnier" },
-  { src: "/mellie/planche-ruche.webp", alt: "Planche de la BD : la Reine annonce que Mellie dansera devant toute la ruche" },
-  { src: "/mellie/cahier-respiration.webp", alt: "Cahier d'exercices : respire comme Mellie" },
-];
-
 /**
- * BD « Mellie a le trac » (page Autres services, ancre #mellie ; l'adresse /mellie y renvoie) :
- * le livre en 3D, trois pages en aperçu, puis e-book gratuit, précommande papier et soutien libre.
+ * BD « Mellie a le trac » (page /mellie) :
+ * le livre en 3D (couverture puis livre ouvert), puis e-book gratuit, précommande papier et soutien libre.
  */
 export function SectionMellie() {
   return (
-    <section id="mellie" className="bg-miel overflow-hidden py-20 text-ink sm:py-[104px]">
+    <section id="mellie" className="bg-hero overflow-hidden py-20 text-white sm:py-[104px]">
       <div className="wrap">
         <MerciMellie />
 
@@ -28,17 +21,17 @@ export function SectionMellie() {
             <LivreMellie />
           </div>
           <div className="reveal min-w-0" style={{ flex: "1.1 1 420px" }}>
-            <span className="inline-flex items-center rounded-full bg-ink px-4 py-2 text-[11px] font-bold tracking-[.16em] text-gold uppercase">Nouveau · BD gratuite</span>
-            <h2 className="h2 mt-[22px]">
-              Mellie <span className="serif text-orange">a le trac</span>
+            <span className="inline-flex items-center rounded-full bg-gold px-4 py-2 text-[11px] font-bold tracking-[.16em] text-ink uppercase">Nouveau · BD gratuite</span>
+            <h2 className="h2 mt-[22px] text-white">
+              Mellie <span className="serif text-gold">a le trac</span>
             </h2>
             <p className="mt-3 mb-0 text-[18px] font-semibold">La gestion du trac racontée par une abeille</p>
-            <p className="mt-4 mb-0 max-w-[540px] text-[16px] leading-[1.7] text-ink/75">
+            <p className="mt-4 mb-0 max-w-[540px] text-[16px] leading-[1.7] text-white/85">
               Mellie doit danser devant 20 000 abeilles. Tom doit parler devant 28 élèves. Et tous les deux ont le trac. Heureusement, Mamie Jo, ancienne comédienne et apicultrice, connaît six secrets pour apprivoiser le trac… À condition de les essayer pour de vrai.
             </p>
             <div className="mt-6 flex flex-wrap gap-2">
               {["BD + cahier d'exercices anti-trac", "De 9 à 99 ans"].map((t) => (
-                <span key={t} className="rounded-full border border-ink/20 bg-white/60 px-3.5 py-1.5 text-[13px] font-semibold">
+                <span key={t} className="rounded-full border border-white/25 bg-white/10 px-3.5 py-1.5 text-[13px] font-semibold">
                   {t}
                 </span>
               ))}
@@ -46,25 +39,9 @@ export function SectionMellie() {
           </div>
         </div>
 
-        {/* Aperçu : trois pages seulement */}
-        <div className="mt-16 flex flex-wrap justify-center gap-6">
-          {APERCU.map((a, i) => (
-            <Image
-              key={a.src}
-              src={a.src}
-              alt={a.alt}
-              width={900}
-              height={1273}
-              sizes="220px"
-              className="apercu-page relative w-[180px] rounded-[8px] sm:w-[220px]"
-              style={{ height: "auto", rotate: `${[-3, 2, -2][i]}deg`, boxShadow: "0 24px 40px -18px rgba(43,26,10,.45)" }}
-            />
-          ))}
-        </div>
-
         {/* Les trois façons de la recevoir */}
         <div className="mt-16 grid items-start gap-7" style={{ gridTemplateColumns: "repeat(auto-fit,minmax(min(300px,100%),1fr))" }}>
-          <article id="ebook" className="reveal scroll-mt-24 rounded-[26px] p-7 text-white" style={{ background: "linear-gradient(165deg,#0e3f8b,#04193c)", boxShadow: "0 44px 80px -44px rgba(0,0,0,.6)" }}>
+          <article id="ebook" className="reveal scroll-mt-24 rounded-[26px] p-7 text-white" style={{ background: "linear-gradient(165deg,#04193c,#0b2a63)", boxShadow: "0 44px 80px -44px rgba(0,0,0,.8)" }}>
             <p className="m-0 text-[13px] font-bold tracking-[.16em] text-gold uppercase">📖 E-book</p>
             <p className="mt-2 mb-0 text-[30px] font-black">Gratuit</p>
             <p className="mt-2 mb-0 text-[15px] leading-[1.6] text-white/75">La BD et son cahier d&apos;exercices en PDF, envoyés tout de suite par mail. À partager librement, sans modification ni usage commercial.</p>
@@ -100,7 +77,7 @@ export function SectionMellie() {
             </a>
           </article>
 
-          <article className="reveal rounded-[26px] p-7 text-ink" style={{ background: "linear-gradient(160deg,#FFF6E6,#ffffff)", boxShadow: "0 44px 80px -44px rgba(43,26,10,.5)" }}>
+          <article className="reveal rounded-[26px] p-7 text-ink" style={{ background: "linear-gradient(160deg,#FFF6E6,#ffffff)", boxShadow: "0 44px 80px -44px rgba(0,0,0,.6)" }}>
             <p className="m-0 text-[13px] font-bold tracking-[.16em] text-[#B86B00] uppercase">💛 Soutenir LEQ</p>
             <p className="mt-2 mb-0 text-[30px] font-black">Montant libre</p>
             <p className="mt-2 mb-0 text-[15px] leading-[1.6] text-ink/75">
