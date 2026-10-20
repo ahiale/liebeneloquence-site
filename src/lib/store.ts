@@ -18,10 +18,11 @@ import path from "node:path";
  *   data/candidatures-ambassadeur.jsonl  candidatures pour devenir ambassadeur LEQ
  *   data/a-prevenir.jsonl     personnes à prévenir d'un lancement (jeu de cartes, application mobile)
  *   data/discord-publies.jsonl  messages publiés par le robot (planning et opportunités) : jamais deux fois le même
+ *   data/ebooks.jsonl         e-books gratuits demandés (BD « Mellie a le trac »…)
  */
 const DATA_DIR = process.env.DATA_DIR || path.join(process.cwd(), "data");
 
-export type Collection = "newsletter" | "quiz" | "demandes" | "liste-attente" | "inscriptions" | "invitations" | "membres" | "avis-recus" | "candidatures-ambassadeur" | "a-prevenir" | "discord-publies";
+export type Collection = "newsletter" | "quiz" | "demandes" | "liste-attente" | "inscriptions" | "invitations" | "membres" | "avis-recus" | "candidatures-ambassadeur" | "a-prevenir" | "discord-publies" | "ebooks";
 
 export async function record(collection: Collection, data: Record<string, unknown>): Promise<void> {
   try {

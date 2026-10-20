@@ -104,6 +104,10 @@ const BUILDERS: Record<Sheet, (lines: Row[]) => Table> = {
     columns: ["Date", "Origine", "Salon", "Contenu"],
     rows: lines.map((l) => [paris(l.createdAt), str(l.origine), str(l.salon), str(l.apercu)]),
   }),
+  ebooks: (lines) => ({
+    columns: ["Date", "Livre", "Prénom", "Email"],
+    rows: lines.map((l) => [paris(l.createdAt), str(l.livre), str(l.prenom), str(l.email)]),
+  }),
   "a-prevenir": (lines) => ({
     columns: ["Date", "Lancement", "Prénom", "Email"],
     rows: lines.map((l) => [paris(l.createdAt), str(l.sujet), str(l.prenom), str(l.email)]),

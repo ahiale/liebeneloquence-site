@@ -294,6 +294,25 @@ export function listeAttenteClient(d: { prenom: string }): Email {
   };
 }
 
+/** E-book gratuit : le lien de téléchargement, et les deux façons d'aller plus loin. */
+export function ebookClient(d: { prenom: string; titre: string; lien: string }): Email {
+  return {
+    subject: `Votre BD « ${d.titre} » est arrivée 🐝`,
+    html: layout({
+      title: "Votre BD est",
+      accent: "arrivée !",
+      preheader: `Le lien pour télécharger « ${d.titre} », gratuitement.`,
+      reason: "Vous recevez ce mail car vous avez demandé un e-book gratuit sur liebeneloquence.com. Pour ne plus rien recevoir, répondez simplement « STOP » à ce mail.",
+      body:
+        hello(d.prenom) +
+        p(`Voici votre BD <strong>« ${esc(d.titre)} »</strong>, avec son cahier d'exercices anti-trac. Elle est gratuite et à partager librement, sans modification ni usage commercial.`) +
+        button(d.lien, "Télécharger la BD") +
+        p(`Le cahier se remplit mieux sur papier : la version imprimée est disponible en précommande, et si Mellie vous a aidé, vous pouvez aussi soutenir LEQ librement. Tout est sur <a href="https://liebeneloquence.com/mellie">liebeneloquence.com/mellie</a>.`) +
+        signature,
+    }),
+  };
+}
+
 /** Confirmation « Être prévenu » d'un lancement (jeu de cartes, application mobile). */
 export function prevenirClient(d: { prenom: string; produit: string }): Email {
   return {

@@ -10,7 +10,8 @@ type Props = {
   /** Champs cachés envoyés avec le formulaire, ex. { sujet: "jeu-avocat" }. */
   champs?: Record<string, string>;
   bouton: string;
-  succes: { titre: string; texte: string };
+  /** Message après l'envoi, avec un bouton facultatif (ex. « Télécharger la BD »). */
+  succes: { titre: string; texte: string; lien?: { label: string; href: string } };
   /** Petite phrase sous le bouton (facultatif). */
   note?: string;
   className?: string;
@@ -23,7 +24,14 @@ export function PrenomEmailForm({ action, champs = {}, bouton, succes, note, cla
   return (
     <div className={`${className} rounded-[26px] p-5 text-left sm:p-6`} style={{ background: "rgba(0,22,54,.35)", border: "1px solid rgba(255,255,255,.25)" }}>
       {state.status === "success" ? (
-        <FormSuccess title={succes.titre}>{succes.texte}</FormSuccess>
+        <>
+          <FormSuccess title={succes.titre}>{succes.texte}</FormSuccess>
+          {succes.lien && (
+            <a href={succes.lien.href} target="_blank" rel="noopener" className="btn btn-p mt-5 w-full">
+              {succes.lien.label}
+            </a>
+          )}
+        </>
       ) : (
         <form action={envoyer} className="relative grid gap-3" noValidate>
           <Honeypot />

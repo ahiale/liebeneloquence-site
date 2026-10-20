@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<!-- Visuels Instagram de la BD « Mellie a le trac ». Rendus en PNG par generer-mellie.cjs (un .visuel = une image). -->
+<style>
+  :root { --navy: #001636; --royal: #114da8; --gold: #ffbd59; --orange: #ff5e01; --miel: #ffeab0; --brun: #2b1a0a; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #333; font-family: "SF Pro Display", "Inter", sans-serif; }
+  .visuel { position: relative; overflow: hidden; width: 1080px; color: #fff; }
+  .p { height: 1350px; }
+  .s { height: 1920px; }
+  .bleu { background: radial-gradient(ellipse at 70% 10%, #2a64c4 0%, #114da8 40%, #0b3070 100%); }
+  .miel { color: var(--brun); background:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='84' height='147' viewBox='0 0 56 98'%3E%3Cpath d='M28 66 0 50V18L28 2l28 16v32L28 66zm0 32V66m0-64V-30' fill='none' stroke='%23e9a515' stroke-opacity='.22' stroke-width='2'/%3E%3C/svg%3E"),
+    linear-gradient(180deg, #fff6dc, #ffe39a); }
+  .logo { position: absolute; top: 60px; left: 70px; font-size: 44px; font-weight: 900; letter-spacing: -0.04em; }
+  .logo b { color: var(--orange); }
+  .serif { font-family: "Relationship of Mélodrame", Georgia, serif; font-weight: 400; font-style: italic; }
+  .pastille { display: inline-block; padding: 14px 28px; border-radius: 999px; background: var(--gold); color: var(--navy); font-size: 26px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; }
+  .cta { position: absolute; left: 70px; right: 70px; border-radius: 34px; background: #fff; color: var(--navy); padding: 34px 40px; box-shadow: 10px 10px 0 var(--gold); }
+  .cta p { font-size: 36px; font-weight: 800; line-height: 1.3; }
+  .cta .mot { display: inline-block; background: var(--orange); color: #fff; border-radius: 14px; padding: 2px 18px; }
+  .cta small { display: block; margin-top: 10px; font-size: 26px; font-weight: 600; color: rgba(0,22,54,.65); }
+  /* Livre en 3D (même construction que sur le site) */
+  .livre-scene { position: absolute; perspective: 2200px; }
+  .livre { position: relative; width: var(--lw); height: calc(var(--lw) * 1.414); transform-style: preserve-3d; transform: rotateX(8deg) rotateY(-26deg); }
+  .livre::after { content: ""; position: absolute; left: 4%; right: -6%; bottom: -60px; height: 44px; background: radial-gradient(ellipse at center, rgba(0,10,30,.45), transparent 70%); transform: translateZ(-30px); }
+  .livre img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; border-radius: 3px 12px 12px 3px; }
+  .face { position: absolute; inset: 0; transform: translateZ(18px); box-shadow: inset 8px 0 12px -6px rgba(0,0,0,.4); border-radius: 3px 12px 12px 3px; }
+  .dos { position: absolute; top: 0; bottom: 0; left: -18px; width: 36px; transform: rotateY(-90deg); background: linear-gradient(90deg, #c96f05, #f2a51a 55%, #d98408); }
+  .tranche { position: absolute; top: 5px; bottom: 5px; right: -16px; width: 32px; transform: rotateY(90deg); background: repeating-linear-gradient(90deg, #fffdf6 0 3px, #e9e1cc 3px 4px); }
+  .page-volante { position: absolute; width: 300px; border-radius: 10px; box-shadow: 0 30px 50px -20px rgba(0,10,30,.6); }
+  .titre { font-weight: 900; letter-spacing: -0.04em; line-height: .95; }
+  .abeille { position: absolute; font-size: 70px; }
+  .secret { border: 4px solid var(--brun); border-radius: 30px; padding: 30px 34px; box-shadow: 7px 7px 0 var(--brun); }
+  .secret .n { display: inline-grid; place-items: center; width: 62px; height: 62px; border-radius: 50%; background: var(--brun); color: var(--gold); font-size: 32px; font-weight: 900; }
+  .secret h3 { margin-top: 16px; font-size: 38px; font-weight: 900; text-transform: uppercase; letter-spacing: -0.02em; }
+  .secret p { margin-top: 8px; font-size: 27px; line-height: 1.35; opacity: .85; }
+  .offre { border-radius: 34px; padding: 38px 44px; }
+  .offre .k { font-size: 26px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; }
+  .offre .v { margin-top: 8px; font-size: 64px; font-weight: 900; letter-spacing: -0.03em; }
+  .offre p { margin-top: 10px; font-size: 29px; line-height: 1.4; }
+</style>
+</head>
+<body>
+
+<!-- 1. Publication : Des nouveautés chez LEQ -->
+<section class="visuel p bleu" id="publication">
+  <div class="logo">LEQ<b>.</b></div>
+  <div style="position:absolute;top:160px;left:70px;right:70px">
+    <span class="pastille">BD gratuite</span>
+    <h1 class="titre" style="margin-top:34px;font-size:104px">Des nouveautés<br><span class="serif" style="color:var(--gold);font-size:120px">chez LEQ</span></h1>
+  </div>
+  <img class="page-volante" src="../../../public/mellie/planche-ruche.webp" style="left:96px;top:600px;rotate:-9deg">
+  <img class="page-volante" src="../../../public/mellie/six-secrets.webp" style="left:250px;top:640px;rotate:-2deg">
+  <div class="livre-scene" style="--lw:400px;left:560px;top:520px">
+    <div class="livre"><div class="tranche"></div><div class="dos"></div><div class="face"><img src="../../../public/mellie/couverture.webp"></div></div>
+  </div>
+  <div class="cta" style="bottom:70px">
+    <p>Commente <span class="mot">MELLIE</span> et abonne-toi : tu reçois la BD gratuite en message privé 🐝</p>
+  </div>
+</section>
+
+<!-- 2. Carrousel : la BD -->
+<section class="visuel p miel" id="carrousel-2">
+  <div class="logo" style="color:var(--brun)">LEQ<b>.</b></div>
+  <div style="position:absolute;top:170px;left:70px;right:70px">
+    <h2 class="titre" style="font-size:92px">Mellie<br><span class="serif" style="color:var(--orange);font-size:108px">a le trac</span></h2>
+    <p style="margin-top:34px;font-size:36px;line-height:1.4;font-weight:600;max-width:880px">Mellie doit danser devant 20 000 abeilles. Tom doit parler devant 28 élèves. Et tous les deux ont le trac.</p>
+    <p style="margin-top:22px;font-size:32px;line-height:1.45;max-width:880px;opacity:.85">Mamie Jo, ancienne comédienne et apicultrice, connaît six secrets pour apprivoiser le trac…</p>
+  </div>
+  <img class="page-volante" src="../../../public/mellie/planche-ruche.webp" style="width:380px;left:110px;top:780px;rotate:-6deg">
+  <img class="page-volante" src="../../../public/mellie/personnages.webp" style="width:380px;left:560px;top:760px;rotate:5deg">
+</section>
+
+<!-- 3. Carrousel : les 6 secrets -->
+<section class="visuel p miel" id="carrousel-3">
+  <div class="logo" style="color:var(--brun)">LEQ<b>.</b></div>
+  <h2 class="titre" style="position:absolute;top:160px;left:70px;right:70px;font-size:80px">Les 6 secrets <span class="serif" style="color:var(--orange);font-size:90px">anti-trac</span></h2>
+  <div style="position:absolute;top:330px;left:70px;right:70px;display:grid;grid-template-columns:1fr 1fr;gap:30px">
+    <div class="secret" style="background:#FFF0B3"><span class="n">1</span><h3>Le trac est normal</h3><p>C'est de l'énergie : on l'utilise.</p></div>
+    <div class="secret" style="background:#DDF0FB"><span class="n">2</span><h3>Respire</h3><p>4 s par le ventre, 6 s pour souffler.</p></div>
+    <div class="secret" style="background:#E3F3DA"><span class="n">3</span><h3>Ancre-toi</h3><p>Deux pieds bien à plat (ou six pattes).</p></div>
+    <div class="secret" style="background:#FDE3D6"><span class="n">4</span><h3>Prépare ton décollage</h3><p>Tes 3 premières phrases par cœur.</p></div>
+    <div class="secret" style="background:#FBDDE8"><span class="n">5</span><h3>Cherche les fleurs</h3><p>Les visages qui sourient, pas les frelons.</p></div>
+    <div class="secret" style="background:#EAE2FA"><span class="n">6</span><h3>Ose la pause</h3><p>Le silence n'est pas un trou.</p></div>
+  </div>
+</section>
+
+<!-- 4. Carrousel : comment la recevoir -->
+<section class="visuel p bleu" id="carrousel-4">
+  <div class="logo">LEQ<b>.</b></div>
+  <h2 class="titre" style="position:absolute;top:160px;left:70px;right:70px;font-size:84px">Gratuite, <span class="serif" style="color:var(--gold);font-size:96px">ou en vrai papier</span></h2>
+  <div style="position:absolute;top:400px;left:70px;right:70px;display:grid;gap:28px">
+    <div class="offre" style="background:rgba(255,255,255,.12);border:2px solid rgba(255,255,255,.3)"><div class="k" style="color:var(--gold)">📖 E-book</div><div class="v">Gratuit</div><p>La BD et son cahier d'exercices, en PDF.</p></div>
+    <div class="offre" style="background:#fff;color:var(--navy);box-shadow:10px 10px 0 var(--gold)"><div class="k" style="color:var(--royal)">📦 Version papier · précommande</div><div class="v">12 € <span style="font-size:32px;font-weight:600;opacity:.6">min., livraison comprise</span></div><p>Le cahier se remplit mieux sur papier !</p></div>
+    <div class="offre" style="background:rgba(255,255,255,.12);border:2px solid rgba(255,255,255,.3)"><div class="k" style="color:var(--gold)">💛 Soutenir LEQ</div><div class="v">Montant libre</div><p>Si Mellie vous a aidé.</p></div>
+  </div>
+  <p style="position:absolute;bottom:80px;left:70px;right:70px;font-size:34px;font-weight:800">liebeneloquence.com/mellie</p>
+</section>
+
+<!-- 5. Story -->
+<section class="visuel s bleu" id="story">
+  <div class="logo" style="top:110px">LEQ<b>.</b></div>
+  <div style="position:absolute;top:230px;left:70px;right:70px">
+    <span class="pastille">Nouveau</span>
+    <h1 class="titre" style="margin-top:34px;font-size:110px">Des nouveautés<br><span class="serif" style="color:var(--gold);font-size:126px">chez LEQ</span></h1>
+    <p style="margin-top:30px;font-size:40px;font-weight:600;line-height:1.35">Mellie a le trac : la BD gratuite pour apprivoiser son trac, de 9 à 99 ans.</p>
+  </div>
+  <img class="page-volante" src="../../../public/mellie/six-secrets.webp" style="width:340px;left:110px;top:900px;rotate:-8deg">
+  <div class="livre-scene" style="--lw:470px;left:470px;top:860px">
+    <div class="livre"><div class="tranche"></div><div class="dos"></div><div class="face"><img src="../../../public/mellie/couverture.webp"></div></div>
+  </div>
+  <div class="cta" style="bottom:230px">
+    <p>Commente <span class="mot">MELLIE</span> sous la dernière publication et abonne-toi : la BD arrive en message privé 🐝</p>
+  </div>
+</section>
+
+</body>
+</html>

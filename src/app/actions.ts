@@ -13,7 +13,8 @@ import * as T from "@/emails/templates";
 import { renderFicheOrateur } from "@/emails/fiche-orateur";
 import { addToNewsletterList } from "@/lib/brevo";
 import { DEMANDES, ORAUX, PROFILS_GRAND_ORAL, SOURCES } from "@/lib/options";
-import { LANCEMENTS, type Lancement } from "@/lib/lancements";
+import { EBOOKS, LANCEMENTS, type Ebook, type Lancement } from "@/lib/lancements";
+import { SITE } from "@/config/site";
 
 /* Actions serveur des formulaires du site. Chaque action :
    1. ignore silencieusement les robots (champ invisible rempli),
@@ -428,6 +429,36 @@ export async function etrePrevenu(_: FormState, data: FormData): Promise<FormSta
   await record("a-prevenir", { ...d, consent: `formulaire « Être prévenu » : ${d.sujet}` });
   try {
     await confirm(T.prevenirClient({ prenom: d.prenom, produit: LANCEMENTS[d.sujet] }), d.email);
+    return { status: "success" };
+  } catch (e) {
+    console.error(e);
+    return FAILURE;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   E-book gratuit (BD « Mellie a le trac ») : lien de téléchargement par mail
+   ------------------------------------------------------------------------- */
+
+const EbookSchema = z.object({
+  prenom: required("Prénom"),
+  email,
+  livre: z.enum(Object.keys(EBOOKS) as [Ebook, ...Ebook[]]),
+});
+
+export async function recevoirEbook(_: FormState, data: FormData): Promise<FormState> {
+  if (isBot(data)) return { status: "success" };
+  if (await tooManyRequests("ebook")) return TOO_MANY;
+  const parsed = EbookSchema.safeParse(Object.fromEntries(data));
+  if (!parsed.success) return invalid(parsed.error);
+  const d = parsed.data;
+  const livre = EBOOKS[d.livre];
+  // Une seule ligne par personne et par livre ; le mail est renvoyé si on le redemande
+  if (!(await readAll("ebooks")).some((l) => l.livre === d.livre && sameEmail(l.email, d.email))) {
+    await record("ebooks", { ...d, consent: `formulaire e-book : ${d.livre}` });
+  }
+  try {
+    await confirm(T.ebookClient({ prenom: d.prenom, titre: livre.titre, lien: `${SITE.url}${livre.fichier}` }), d.email);
     return { status: "success" };
   } catch (e) {
     console.error(e);

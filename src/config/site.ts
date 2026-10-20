@@ -16,6 +16,10 @@ export const SITE = {
   /** Séance à l'unité : lien Stripe avec quantité réglable (le client choisit 1 à 3 séances sur la page de paiement). */
   stripeSeance: "https://buy.stripe.com/dRmbJ03I4fZ26PubHJ2B204",
   stripeLeqfam: "[LIEN STRIPE LEQ'FAM]",
+  /** BD « Mellie a le trac » : précommande papier (12 € minimum, prix libre, livraison en France) et soutien libre (« Faire un don »).
+   *  Créés par outils/serveur/creer-paiements-mellie.mjs. */
+  stripeMellie: "https://buy.stripe.com/4gM14mceA3cg3DieTV2B205",
+  stripeSoutien: "https://donate.stripe.com/5kQ7sKa6s8wA5LqeTV2B206",
 
   instagram: "https://www.instagram.com/becca_lieben/",
   linkedin: "https://www.linkedin.com/in/rebecca-lieben-ahiale/",

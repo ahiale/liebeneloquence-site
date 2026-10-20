@@ -10,6 +10,7 @@ import { Check, DrawUnderline, Heart, Sparkle, SpeechBubble, Star } from "@/comp
 import { Icon, type IconName } from "@/components/ui/Icons";
 import { ContactForm } from "@/components/autres-services/ContactForm";
 import { JeuAvocat } from "@/components/autres-services/JeuAvocat";
+import { SectionMellie } from "@/components/mellie/SectionMellie";
 import { PrenomEmailForm } from "@/components/ui/PrenomEmailForm";
 import { etrePrevenu } from "@/app/actions";
 import { DEMANDES } from "@/lib/options";
@@ -59,7 +60,7 @@ export default async function AutresServicesPage() {
             </h1>
             <DrawUnderline className="hide-sm" style={{ margin: "4px auto 0", transform: "translateX(70px)" }} />
             <p className="mx-auto mt-[22px] mb-0 max-w-[620px] text-[17px] leading-[1.7] text-white/85">
-              Une communauté, des discours sur mesure, l&apos;animation de vos événements et bientôt une application mobile et un jeu de cartes : d&apos;autres façons de prendre la parole avec LEQ.
+              Une communauté, des discours sur mesure, l&apos;animation de vos événements et une BD, bientôt une application mobile et un jeu de cartes : d&apos;autres façons de prendre la parole avec LEQ.
             </p>
             <div className="mt-7 flex flex-wrap justify-center gap-2.5">
               {[
@@ -67,6 +68,7 @@ export default async function AutresServicesPage() {
                 ["#services", "Discours & animation"],
                 ["#app", "Application mobile"],
                 ["#jeu", "Jeu de cartes"],
+                ["#mellie", "BD Mellie"],
               ].map(([href, label]) => (
                 <a key={href} href={href} className="rounded-full bg-white px-[18px] py-[9px] text-[14px] font-semibold text-ink no-underline">
                   {label}
@@ -215,6 +217,8 @@ export default async function AutresServicesPage() {
         </section>
 
         <JeuAvocat />
+
+        <SectionMellie />
 
         {/* CONTACT */}
         <section id="contact" className="bg-night relative overflow-hidden py-20 sm:py-[104px]">
