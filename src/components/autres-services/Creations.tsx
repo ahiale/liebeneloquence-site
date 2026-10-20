@@ -7,7 +7,7 @@ const CREATIONS = [
     href: "/mellie",
     image: "/mellie/couverture.webp",
     alt: "Couverture de la BD Mellie a le trac",
-    cadrage: "50% 4%",
+    ajuste: true, // couverture verticale : affichée en entier
     badge: "Nouveau · gratuit",
     titre: "Mellie",
     accent: "a le trac",
@@ -18,7 +18,7 @@ const CREATIONS = [
     href: "/avocat-du-diable",
     image: "/jeu/couverture.webp",
     alt: "Couverture du jeu de cartes Avocat du diable",
-    cadrage: "50% 25%",
+    ajuste: false,
     badge: "Bientôt",
     titre: "Avocat",
     accent: "du diable",
@@ -40,8 +40,8 @@ export function Creations() {
         <div className="mt-12 grid gap-7" style={{ gridTemplateColumns: "repeat(auto-fit,minmax(min(320px,100%),1fr))" }}>
           {CREATIONS.map((c) => (
             <article key={c.href} className="reveal lift relative flex flex-col overflow-hidden rounded-[26px] bg-white text-ink" style={{ boxShadow: "0 44px 80px -44px rgba(0,0,0,.85)" }}>
-              <div className="relative bg-cloud" style={{ aspectRatio: "16 / 10" }}>
-                <Image src={c.image} alt={c.alt} fill sizes="(max-width: 760px) 95vw, 560px" style={{ objectFit: "cover", objectPosition: c.cadrage }} />
+              <div className="relative" style={{ aspectRatio: "16 / 10", background: c.ajuste ? "linear-gradient(160deg,#f6b73c,#d98408)" : "#E8EFFA" }}>
+                <Image src={c.image} alt={c.alt} fill sizes="(max-width: 760px) 95vw, 560px" style={{ objectFit: c.ajuste ? "contain" : "cover", objectPosition: "50% 25%", padding: c.ajuste ? "14px 0" : 0 }} />
                 <span className="absolute top-3.5 left-3.5 rounded-full bg-orange px-3 py-1 text-[11px] font-bold tracking-[.12em] text-white uppercase">{c.badge}</span>
               </div>
               <div className="flex flex-1 flex-col p-7">

@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { pageMeta } from "@/lib/seo";
+import Link from "next/link";
 import { Header } from "@/components/layout/Header";
+import { ArrowLeft } from "@/components/ui/Doodles";
 import { JeuAvocat } from "@/components/jeu/JeuAvocat";
 
 export const metadata: Metadata = pageMeta({
@@ -15,6 +17,11 @@ export default function AvocatDuDiablePage() {
     <>
       <div className="bg-night">
         <Header />
+        <div className="wrap pt-6">
+          <Link href="/" className="inline-flex items-center gap-2 text-[14px] text-white/80 no-underline hover:text-white">
+            <ArrowLeft /> Retour à l&apos;accueil
+          </Link>
+        </div>
       </div>
       <main>
         <JeuAvocat />
