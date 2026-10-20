@@ -58,11 +58,11 @@ export function SectionMellie() {
             <span className="absolute -top-3.5 right-6 rounded-full bg-orange px-3 py-[5px] text-[11px] font-bold tracking-[.12em] text-white uppercase">Précommande</span>
             <p className="m-0 text-[13px] font-bold tracking-[.16em] text-royal uppercase">📦 Version papier</p>
             <p className="mt-2 mb-0 flex items-baseline gap-2">
-              <span className="text-[30px] font-black">12 €</span>
+              <span className="text-[30px] font-black">8 €</span>
               <span className="text-[14px] text-ink/60">minimum</span>
             </p>
             <p className="mt-2 mb-0 text-[15px] leading-[1.6] text-ink/75">
-              Le cahier se remplit mieux sur papier ! Les 12 € couvrent uniquement l&apos;impression et l&apos;envoi. Vous pouvez ajouter ce que vous voulez au-dessus pour soutenir LEQ.
+              Le cahier se remplit mieux sur papier ! Les 8 € couvrent uniquement l&apos;impression et l&apos;envoi. Vous pouvez ajouter ce que vous voulez au-dessus pour soutenir LEQ.
             </p>
             <ul className="mt-4 mb-0 grid list-none gap-2.5 p-0">
               {[`L'impression est lancée dès ${OBJECTIF_PRECOMMANDES} précommandes, pas avant`, "Livraison en France uniquement", "Remboursement intégral si l'impression n'a pas lieu"].map((t) => (

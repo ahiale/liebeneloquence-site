@@ -1,5 +1,5 @@
 // Crée dans Stripe (compte réel) les deux liens de paiement de la BD « Mellie a le trac » :
-// 1. précommande de la version papier : 12 € minimum, prix libre au-dessus, livraison en France ;
+// 1. précommande de la version papier : 8 € minimum, prix libre au-dessus, livraison en France ;
 // 2. « Soutenir LEQ » (love money) : montant libre à partir de 1 €.
 // Exécuté une seule fois sur le serveur (la clé reste dans /opt/leq/.env, jamais affichée) :
 //   ssh root@169.58.187.153 "cd /opt/leq && docker compose exec -T site node --input-type=module -" < outils/serveur/creer-paiements-mellie.mjs
@@ -31,14 +31,14 @@ const livre = await stripe("/products", {
   description: "La BD et son cahier d'exercices anti-trac, version imprimée, livraison comprise en France.",
   metadata: { leq: "mellie-papier" },
 });
-const prixLivre = await stripe("/prices", { product: livre.id, currency: "eur", custom_unit_amount: { enabled: true, minimum: 1200, preset: 1200 } });
+const prixLivre = await stripe("/prices", { product: livre.id, currency: "eur", custom_unit_amount: { enabled: true, minimum: 800, preset: 800 } });
 const lienLivre = await stripe("/payment_links", {
   line_items: { 0: { price: prixLivre.id, quantity: 1 } },
   shipping_address_collection: { allowed_countries: { 0: "FR" } },
   phone_number_collection: { enabled: true },
   metadata: { leq: "mellie-papier" },
   custom_text: {
-    submit: { message: "Précommande : 12 € minimum, qui couvrent uniquement l'impression et l'envoi (livraison en France uniquement). Tout montant au-dessus soutient LEQ. L'impression est lancée dès 30 précommandes, pas avant ; vous êtes prévenu·e par mail, et remboursé·e si elle n'a pas lieu." },
+    submit: { message: "Précommande : 8 € minimum, qui couvrent uniquement l'impression et l'envoi (livraison en France uniquement). Tout montant au-dessus soutient LEQ. L'impression est lancée dès 30 précommandes, pas avant ; vous êtes prévenu·e par mail, et remboursé·e si elle n'a pas lieu." },
   },
   after_completion: { type: "redirect", redirect: { url: "https://liebeneloquence.com/mellie?merci=precommande" } },
 });

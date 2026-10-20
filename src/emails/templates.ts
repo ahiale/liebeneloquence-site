@@ -309,7 +309,7 @@ export function ebookClient(d: { prenom: string; titre: string; lien: string; so
         button(d.lien, "Télécharger la BD") +
         p("<strong>Mellie vous a aidé ?</strong> Elle est gratuite et le restera. Si vous le souhaitez, vous pouvez soutenir LEQ du montant de votre choix : c'est ce qui nous permet de créer de nouveaux outils pour apprendre à parler en public.") +
         button(d.soutien, "Soutenir LEQ") +
-        p(`<strong>Envie de la version papier ?</strong> Le cahier se remplit mieux sur papier. Elle est en précommande à partir de 12 €, un prix qui couvre uniquement l'impression et l'envoi (en France seulement). L'impression sera lancée dès ${d.objectif} précommandes, pas avant ; si elle n'a pas lieu, vous êtes remboursé·e. <a href="${d.precommande}">Précommander la version papier</a>.`) +
+        p(`<strong>Envie de la version papier ?</strong> Le cahier se remplit mieux sur papier. Elle est en précommande à partir de 8 €, un prix qui couvre uniquement l'impression et l'envoi (en France seulement). L'impression sera lancée dès ${d.objectif} précommandes, pas avant ; si elle n'a pas lieu, vous êtes remboursé·e. <a href="${d.precommande}">Précommander la version papier</a>.`) +
         signature,
     }),
   };
