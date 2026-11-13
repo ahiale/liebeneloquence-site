@@ -50,8 +50,7 @@ function firstPerEmail(lines: Row[]): Row[] {
 
 const TYPES: Record<string, string> = { devis: "Devis", "grand-oral": "Grand Oral", seance: "Séance", contact: "Contact" };
 
-// Le planning Discord se gère dans l'admin, pas dans Excel.
-type Sheet = Exclude<Collection, "planning" | "opportunites-validees"> | "fiches";
+type Sheet = Collection | "fiches";
 
 const BUILDERS: Record<Sheet, (lines: Row[]) => Table> = {
   "liste-attente": (lines) => ({

@@ -219,6 +219,61 @@ export function seanceClient(d: Seance & { unit: string; total: string }): Email
 }
 
 /* ---------------------------------------------------------------------------
+   Élèves (admin) : diagnostic après la séance découverte, compte-rendu de séance
+   ------------------------------------------------------------------------- */
+
+/** Texte de la fiche (une idée par ligne) → liste à puces ; vide → rien. */
+const puces = (texte: string) => {
+  const lignes = texte.split("\n").map((l) => l.replace(/^[-•*\d.)\s]+/, "").trim()).filter(Boolean);
+  return lignes.length ? `<ul style="margin:0 0 16px;padding-left:20px;font-family:${FONT};font-size:16px;line-height:1.65;color:${C.text}">${lignes.map((l) => `<li>${esc(l)}</li>`).join("")}</ul>` : "";
+};
+const bloc = (titre: string, texte: string) => (texte.trim() ? p(`<strong>${esc(titre)}</strong>`) + puces(texte) : "");
+
+export function diagnosticEleve(d: { prenom: string; objectif: string; qualites: string; pointsForts: string; pointsFaibles: string; blocages: string; pack: string; message: string }): Email {
+  return {
+    subject: "Votre diagnostic de prise de parole · Lieben Éloquence",
+    html: layout({
+      title: "Votre",
+      accent: "diagnostic.",
+      preheader: "Ce qui ressort de notre séance découverte, et la suite que je vous propose.",
+      reason: REASON,
+      body:
+        hello(d.prenom) +
+        p("Merci pour notre séance découverte ! Voici ce que j'en retiens, pour que vous partiez sur de bonnes bases.") +
+        (d.objectif.trim() ? box(rows([["Votre objectif", esc(d.objectif)]])) : "") +
+        bloc("Vos points forts", d.pointsForts) +
+        bloc("Vos qualités d'orateur", d.qualites) +
+        bloc("Ce que nous allons travailler", d.pointsFaibles) +
+        bloc("Ce qui vous freine aujourd'hui", d.blocages) +
+        (d.message.trim() ? p(esc(d.message).replace(/\n/g, "<br>")) : "") +
+        (d.pack ? p(`Pour atteindre votre objectif, je vous recommande le <strong>pack ${esc(d.pack)}</strong>.`) + button(`${SITE.url}/#offres`, "Découvrir le pack") : "") +
+        p("Une question ? Répondez simplement à ce mail.") +
+        signature,
+    }),
+  };
+}
+
+export function compteRenduSeance(d: { prenom: string; numero: number; theme: string; bienFonctionne: string; aTravailler: string; exercice: string }): Email {
+  return {
+    subject: `Compte-rendu de votre séance ${d.numero}${d.theme ? ` : ${d.theme}` : ""}`,
+    html: layout({
+      title: `Séance ${d.numero},`,
+      accent: "c'est fait !",
+      preheader: "Ce qui a bien fonctionné, ce qu'on continue à travailler, et votre exercice.",
+      reason: REASON,
+      body:
+        hello(d.prenom) +
+        p(`Voici le compte-rendu de notre séance${d.theme ? ` sur <strong>${esc(d.theme)}</strong>` : ""}.`) +
+        bloc("Ce qui a bien fonctionné", d.bienFonctionne) +
+        bloc("Ce qu'on continue à travailler", d.aTravailler) +
+        (d.exercice.trim() ? box(rows([["Votre exercice d'ici la prochaine séance", esc(d.exercice).replace(/\n/g, "<br>")]])) : "") +
+        p("Une question en faisant l'exercice ? Répondez à ce mail.") +
+        signature,
+    }),
+  };
+}
+
+/* ---------------------------------------------------------------------------
    Contact (discours, animation, coaching, partenariat…)
    ------------------------------------------------------------------------- */
 

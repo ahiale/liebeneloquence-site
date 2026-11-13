@@ -107,6 +107,11 @@ export async function getAssociations(): Promise<string[]> {
 }
 
 /** Ambassadeur ou association correspondant à un code (insensible à la casse), s'il est actif. */
+/** Tous les codes ambassadeurs et associations, actifs ou non (admin). */
+export async function getPartenaires(): Promise<Partenaire[]> {
+  return PARTENAIRES;
+}
+
 export async function getPartenaire(code: string): Promise<Partenaire | undefined> {
   const c = code.trim().toUpperCase();
   return PARTENAIRES.find((p) => p.actif && p.code === c);

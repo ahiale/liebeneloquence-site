@@ -1,6 +1,6 @@
 # Agent hebdomadaire : opportunités et ressources LEQ'FAM
 
-Consignes de l'agent Claude programmé chaque lundi matin. Il remplit `content/opportunites.json` ; le robot LEQ publie ensuite chaque nouvelle entrée en fiche dans le forum **#ressources-et-opportunités** (toutes les 5 minutes, voir `src/lib/publications-discord.ts`).
+Consignes de l'agent Claude programmé chaque lundi matin. Il remplit `content/opportunites.json` ; chaque nouvelle entrée arrive « à valider » dans l'admin, et le robot LEQ publie dans le forum **#ressources-et-opportunités** celles que Rebecca valide (voir `src/lib/publications-discord.ts`).
 
 ## Ce que l'agent cherche (5 à 8 fiches par semaine)
 Des informations peu connues, vérifiées, en français ou en anglais, avec un lien fort à la France ou à la francophonie quand c'est possible :
@@ -31,7 +31,7 @@ Des informations peu connues, vérifiées, en français ou en anglais, avec un l
 ```
 - `etiquettes` : « Concours », « Opportunité internationale » ou « Ressource » (la première donne la couleur de la carte).
 - `dateLimite` et `lieu` : `null` si sans objet (ressources).
-- Ajouter `"brouillon": true` pour qu'une fiche ne soit pas publiée : elle peut alors être envoyée en aperçu dans #staffchat.
+- Rien n'est publié tout de suite : chaque fiche arrive « à valider » dans l'admin (/admin/discord), où Rebecca la modifie et la valide.
 
 ## Fin de tâche
 Ajouter les entrées à la fin du tableau, vérifier le JSON (`node -e "require('./content/opportunites.json')"`), puis commit et push sur `main` avec le message « Opportunités de la semaine ». La mise en ligne et la publication sur Discord se font toutes seules.

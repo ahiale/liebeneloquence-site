@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { SITE } from "@/config/site";
 import { lire, signer } from "@/lib/jetons";
 import { ADMIN_EMAIL } from "@/lib/mail";
+import type { IconName } from "@/components/ui/Icons";
 
 /**
  * Accès à l'admin (/admin) : pas de mot de passe. On saisit son adresse, on reçoit un lien de connexion
@@ -33,10 +34,13 @@ export async function exigerAdmin(): Promise<string> {
   return d.email;
 }
 
-/** Modules de l'admin : ceux qui ne sont pas encore construits sont affichés « bientôt ». */
-export const MODULES = [
-  { href: "/admin/discord", label: "Discord", pret: true },
-  { href: "/admin/eleves", label: "Élèves et parcours", pret: false },
-  { href: "/admin/communaute", label: "Communauté", pret: false },
-  { href: "/admin/contenu", label: "Contenu du site", pret: false },
+/** Modules de l'admin, dans l'ordre du menu. */
+export const MODULES: { href: string; label: string; icone: IconName }[] = [
+  { href: "/admin", label: "Tableau de bord", icone: "dashboard" },
+  { href: "/admin/eleves", label: "LEQ'ORA (élèves)", icone: "graduationCap" },
+  { href: "/admin/bibliotheque", label: "Bibliothèque", icone: "library" },
+  { href: "/admin/discord", label: "Discord", icone: "discord" },
+  { href: "/admin/communaute", label: "Communauté", icone: "users" },
+  { href: "/admin/contenu", label: "Contenu du site", icone: "globe" },
+  { href: "/admin/mails", label: "Mails automatiques", icone: "mail" },
 ];

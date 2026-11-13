@@ -19,7 +19,18 @@ type IconName =
   | "ticket"
   | "lightbulb"
   | "book"
-  | "briefcase";
+  | "briefcase"
+  | "dashboard"
+  | "graduationCap"
+  | "library"
+  | "users"
+  | "globe"
+  | "mail"
+  | "send"
+  | "alert"
+  | "externalLink"
+  | "arrowLeft"
+  | "discord";
 
 const PATHS: Record<IconName, React.ReactNode> = {
   target: (
@@ -113,6 +124,39 @@ const PATHS: Record<IconName, React.ReactNode> = {
       <path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z" />
       <path d="M13 5v2M13 17v2M13 11v2" />
     </>
+  ),
+  dashboard: (
+    <><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></>
+  ),
+  graduationCap: (
+    <><path d="M22 10 12 5 2 10l10 5 10-5Z"/><path d="M6 12v5c3 2 9 2 12 0v-5"/><path d="M22 10v6"/></>
+  ),
+  library: (
+    <><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/><path d="M8 7h8M8 11h6"/></>
+  ),
+  users: (
+    <><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.9M16 3.1a4 4 0 0 1 0 7.8"/></>
+  ),
+  globe: (
+    <><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15 15 0 0 1 0 20 15 15 0 0 1 0-20Z"/></>
+  ),
+  mail: (
+    <><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></>
+  ),
+  send: (
+    <><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></>
+  ),
+  alert: (
+    <><path d="m21.7 18-8-14a2 2 0 0 0-3.4 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.7-3Z"/><path d="M12 9v4M12 17h.01"/></>
+  ),
+  externalLink: (
+    <><path d="M15 3h6v6M10 14 21 3M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></>
+  ),
+  arrowLeft: (
+    <><path d="M19 12H5M12 19l-7-7 7-7"/></>
+  ),
+  discord: (
+    <><path d="M8 12h.01M16 12h.01"/><path d="M7.5 7.5c3-1 6-1 9 0M7 16.5c3 1 7 1 10 0"/><path d="M15.5 17c0 1 1.5 3 2 3 1.5 0 2.8-1.7 3.5-3 .7-1.7.5-6-1.5-11.5-1.5-1.1-3-1.5-4.5-1.5l-1 2M8.5 17c0 1-1.4 3-1.9 3-1.5 0-2.8-1.7-3.5-3-.7-1.7-.5-6 1.5-11.5C6.1 4.4 7.5 4 9 4l1 2"/></>
   ),
 };
 
