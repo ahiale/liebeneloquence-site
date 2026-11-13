@@ -1,6 +1,6 @@
 import { getDefis, getOpportunites } from "@/content";
 import { salonsTexte } from "@/lib/discord";
-import { lirePlanning } from "@/lib/publications-discord";
+import { DEFIS_ACTIFS, lirePlanning } from "@/lib/publications-discord";
 import { readAll } from "@/lib/store";
 import { annulerMessage, validerOpportunite } from "@/app/admin/actions";
 import { ProgrammerForm } from "@/components/admin/ProgrammerForm";
@@ -69,9 +69,15 @@ export default async function AdminDiscord() {
           </Carte>
 
           <Carte titre="Défi de la semaine">
-            <p className="m-0 text-[14.5px] text-ink/70">
-              Prochain défi, <strong>{prochainLundi()} à 9 h</strong> dans #discussion-générale :
-            </p>
+            {DEFIS_ACTIFS ? (
+              <p className="m-0 text-[14.5px] text-ink/70">
+                Prochain défi, <strong>{prochainLundi()} à 9 h</strong> dans #discussion-générale :
+              </p>
+            ) : (
+              <p className="m-0 rounded-[12px] bg-[#FFF2D6] px-4 py-3 text-[14px] text-[#7A5000]">
+                <strong>En pause</strong> : aucun défi ne part tant que vous ne l&apos;avez pas validé. Premier défi prévu :
+              </p>
+            )}
             <p className="mt-2 mb-0 text-[16px] font-semibold">🎯 {prochainDefi.titre}</p>
             <p className="mt-1 mb-0 text-[14px] text-ink/70">{prochainDefi.consigne}</p>
             <p className="mt-3 mb-0 text-[13px] text-ink/50">

@@ -24,6 +24,8 @@ const SALON_APERCU = "staffchat";
 const SALON_DEFIS = "discussion-generale";
 /** Heure de publication du défi, le lundi (heure de Paris). */
 const HEURE_DEFI = 9;
+/** Défi du lundi : désactivé tant que Rebecca ne l'a pas validé (DISCORD_DEFIS=1 dans /opt/leq/.env pour l'activer). */
+export const DEFIS_ACTIFS = process.env.DISCORD_DEFIS === "1";
 
 /** Couleur et emoji de la carte selon l'étiquette principale. */
 const STYLES: Record<string, { couleur: number; emoji: string }> = {
@@ -134,7 +136,7 @@ export async function publierPlanifies(): Promise<Bilan> {
   try {
     const paris = aParis(maintenant);
     const cle = `defi-${paris.jour}`;
-    if (paris.lundi && paris.heure >= HEURE_DEFI && !deja.has(cle)) {
+    if (DEFIS_ACTIFS && paris.lundi && paris.heure >= HEURE_DEFI && !deja.has(cle)) {
       const defis = await getDefis();
       const dejaTires = [...deja].filter((c) => c.startsWith("defi-")).length;
       const defi = defis[dejaTires % defis.length];
