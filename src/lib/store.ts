@@ -19,10 +19,12 @@ import path from "node:path";
  *   data/a-prevenir.jsonl     personnes à prévenir d'un lancement (jeu de cartes, application mobile)
  *   data/discord-publies.jsonl  messages publiés par le robot (planning et opportunités) : jamais deux fois le même
  *   data/ebooks.jsonl         e-books gratuits demandés (BD « Mellie a le trac »…)
+ *   data/planning.jsonl       messages Discord programmés depuis l'admin (ajouts et suppressions)
+ *   data/opportunites-validees.jsonl  opportunités en brouillon validées depuis l'admin (publiées ensuite par le robot)
  */
 const DATA_DIR = process.env.DATA_DIR || path.join(process.cwd(), "data");
 
-export type Collection = "newsletter" | "quiz" | "demandes" | "liste-attente" | "inscriptions" | "invitations" | "membres" | "avis-recus" | "candidatures-ambassadeur" | "a-prevenir" | "discord-publies" | "ebooks";
+export type Collection = "newsletter" | "quiz" | "demandes" | "liste-attente" | "inscriptions" | "invitations" | "membres" | "avis-recus" | "candidatures-ambassadeur" | "a-prevenir" | "discord-publies" | "ebooks" | "planning" | "opportunites-validees";
 
 export async function record(collection: Collection, data: Record<string, unknown>): Promise<void> {
   try {

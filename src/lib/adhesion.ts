@@ -1,7 +1,8 @@
 import "server-only";
 import { sendMail, ADMIN_EMAIL } from "@/lib/mail";
 import { donnerRoleMembre, lienServeur, retirerRoleMembre, souhaiterBienvenue } from "@/lib/discord";
-import { dejaMembre, noterMembre, signer, type Formule } from "@/lib/leqfam";
+import { dejaMembre, noterMembre, type Formule } from "@/lib/leqfam";
+import { signer } from "@/lib/jetons";
 import { stripe, type StripeMode } from "@/lib/stripe";
 import { getPricing } from "@/content";
 import * as T from "@/emails/templates";

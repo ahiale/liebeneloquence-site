@@ -1,5 +1,4 @@
 import "server-only";
-import { createHmac, timingSafeEqual } from "node:crypto";
 import { getPartenaire, getPricing } from "@/content";
 import type { Partenaire, Pricing } from "@/content/schema";
 import { readAll, record } from "@/lib/store";
@@ -17,24 +16,6 @@ import { stripe, stripeMode, type StripeMode } from "@/lib/stripe";
  */
 export type Formule = "engagement" | "libre";
 const centimes = (euros: number) => Math.round(euros * 100);
-
-// ---------------------------------------------------------------- jetons signés (liens entre le site, Discord et Stripe)
-const SECRET = () => createHmac("sha256", process.env.DATA_API_KEY ?? "").update("leqfam").digest();
-
-export function signer(donnees: Record<string, unknown>, minutes: number): string {
-  const corps = Buffer.from(JSON.stringify({ ...donnees, exp: Date.now() + minutes * 60_000 })).toString("base64url");
-  return `${corps}.${createHmac("sha256", SECRET()).update(corps).digest("base64url")}`;
-}
-
-export function lire<T>(jeton: string | null | undefined): T | null {
-  if (!jeton) return null;
-  const [corps, sig] = jeton.split(".");
-  if (!corps || !sig) return null;
-  const attendu = Buffer.from(createHmac("sha256", SECRET()).update(corps).digest("base64url"));
-  if (sig.length !== attendu.length || !timingSafeEqual(Buffer.from(sig), attendu)) return null;
-  const d = JSON.parse(Buffer.from(corps, "base64url").toString()) as T & { exp: number };
-  return d.exp > Date.now() ? d : null;
-}
 
 // ---------------------------------------------------------------- offre
 export async function placesLancementPrises(mode: StripeMode): Promise<number> {

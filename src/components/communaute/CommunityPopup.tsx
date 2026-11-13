@@ -16,7 +16,7 @@ const DELAY_MS = 15000;
 /** Défilement (en part de la hauteur d'écran) qui fait apparaître la pastille. */
 const SCROLL_RATIO = 0.6;
 /** Pages où l'invitation gênerait (parcours d'achat, page communauté elle-même, pages légales). */
-const EXCLUDED = ["/communaute", "/quiz", "/grand-oral", "/mentions-legales", "/confidentialite", "/cookies", "/apercus-mails"];
+const EXCLUDED = ["/communaute", "/quiz", "/grand-oral", "/mentions-legales", "/confidentialite", "/cookies", "/apercus-mails", "/admin"];
 
 /** "mini" = pastille déjà apparue pendant la visite ; "done" = masquée pour la visite. */
 type Saved = "mini" | "done" | null;

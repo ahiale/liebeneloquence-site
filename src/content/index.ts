@@ -7,15 +7,18 @@ import partenairesJson from "../../content/partenaires.json";
 import associationsJson from "../../content/associations.json";
 import blogJson from "../../content/blog.json";
 import opportunitesJson from "../../content/opportunites.json";
+import defisJson from "../../content/defis.json";
 import {
   ArticleSchema,
   AssociationsSchema,
+  DefiSchema,
   EventSchema,
   OpportuniteSchema,
   PartenaireSchema,
   PricingSchema,
   ReviewSchema,
   type Article,
+  type Defi,
   type LeqEvent,
   type Opportunite,
   type Partenaire,
@@ -51,6 +54,7 @@ const PARTENAIRES = parse(z.array(PartenaireSchema), partenairesJson, "partenair
 const ASSOCIATIONS = parse(AssociationsSchema, associationsJson, "associations.json");
 const ARTICLES = parse(z.array(ArticleSchema), blogJson, "blog.json");
 const OPPORTUNITES = parse(z.array(OpportuniteSchema), opportunitesJson, "opportunites.json");
+const DEFIS = parse(z.array(DefiSchema).min(1), defisJson, "defis.json");
 
 /** Événements publiés, du plus proche au plus lointain (dates inconnues en dernier). */
 export async function getEvents(): Promise<LeqEvent[]> {
@@ -85,6 +89,11 @@ export async function getArticles(): Promise<Article[]> {
 
 export async function getArticle(slug: string): Promise<Article | undefined> {
   return (await getArticles()).find((a) => a.slug === slug);
+}
+
+/** Défis de la semaine, dans l'ordre de publication. */
+export async function getDefis(): Promise<Defi[]> {
+  return DEFIS;
 }
 
 /** Opportunités et ressources à publier sur Discord. */

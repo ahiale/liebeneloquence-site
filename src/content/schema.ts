@@ -225,3 +225,9 @@ export const OpportuniteSchema = z.object({
 });
 export type Opportunite = z.infer<typeof OpportuniteSchema>;
 
+/* ---------------------------------------------------------------------------
+   Défis de la semaine (content/defis.json) : un par lundi, dans l'ordre, puis on recommence
+   ------------------------------------------------------------------------- */
+
+export const DefiSchema = z.object({ titre: z.string(), consigne: z.string(), astuce: z.string() });
+export type Defi = z.infer<typeof DefiSchema>;

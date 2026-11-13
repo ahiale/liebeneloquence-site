@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { connecterEtRejoindre } from "@/lib/discord";
-import { creerPaiement, lire, type Formule } from "@/lib/leqfam";
+import { creerPaiement, type Formule } from "@/lib/leqfam";
+import { lire } from "@/lib/jetons";
 
 /**
  * Retour de Discord après « Continuer avec Discord » : la personne est identifiée et ajoutée au serveur,

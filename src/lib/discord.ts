@@ -96,6 +96,11 @@ async function listeSalons(): Promise<Salon[]> {
   return liste;
 }
 
+/** Salons où le robot peut écrire (texte et annonces). */
+export async function salonsTexte(): Promise<Salon[]> {
+  return (await listeSalons()).filter((c) => c.type === 0 || c.type === 5);
+}
+
 /** Salon retrouvé par une partie de son nom, sans tenir compte des accents ni des emojis (« annonces », « présente-toi »…). */
 export async function trouverSalon(nom: string): Promise<Salon | undefined> {
   const cherche = simplifier(nom);

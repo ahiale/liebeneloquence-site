@@ -1,41 +1,5 @@
 [
   {
-    "id": "2026-10-grande-finale-eloquence-etudiants-2027",
-    "titre": "Grande finale d'éloquence des étudiants 2027",
-    "resume": "L'Atelier de la Langue Française ouvre sa Grande finale d'éloquence aux étudiants francophones du monde entier. Pour candidater, tu choisis un sujet parmi sept propositions et tu envoies une vidéo d'audition de 5 minutes. Les candidats retenus passent des sélections en présentiel en janvier 2027, avant la grande finale à Aix-en-Provence.",
-    "pourQui": "Étudiants francophones, partout dans le monde",
-    "dateLimite": "2 novembre 2026",
-    "lieu": "Sélections en janvier 2027, finale le 8 mai 2027 à Aix-en-Provence",
-    "lien": "https://www.atelier-languefrancaise.fr/content/87-inscriptions-grande-finale-eloquence-etudiants-2027",
-    "etiquettes": ["Concours"],
-    "ajout": "2026-10-19",
-    "brouillon": true
-  },
-  {
-    "id": "2026-10-concours-eloquence-paris-saclay-2027",
-    "titre": "Concours d'éloquence de Paris-Saclay 2026-2027",
-    "resume": "6e édition du concours d'éloquence de l'agglomération Paris-Saclay, sur le thème « Entreprendre, créez votre voie ». Les inscrits profitent d'ateliers de préparation gratuits de novembre à janvier, puis de demi-finales fin janvier avant la grande finale.",
-    "pourQui": "14 à 18 ans qui habitent, étudient, travaillent ou ont une association dans l'agglomération Paris-Saclay",
-    "dateLimite": "9 novembre 2026",
-    "lieu": "Ateliers dès le 20 novembre, finale le 13 mars 2027",
-    "lien": "https://www.ville-massy.fr/jeunesse/concours-deloquence-de-lagglo/",
-    "etiquettes": ["Concours"],
-    "ajout": "2026-10-19",
-    "brouillon": true
-  },
-  {
-    "id": "2026-10-global-leadership-challenge-2026",
-    "titre": "Global Leadership Challenge 2026 (St. Gallen Symposium)",
-    "resume": "Un programme de leadership entièrement gratuit proposé par le St. Gallen Symposium (Suisse), avec formation et mentorat de l'Oxford Character Project. Tu candidates avec une vidéo de 40 secondes en anglais. Les trois meilleures équipes sont invitées, tous frais payés, au 56e St. Gallen Symposium en avril 2027.",
-    "pourQui": "21 à 30 ans, en master, en doctorat ou jeunes professionnels, de toutes disciplines",
-    "dateLimite": "5 novembre 2026",
-    "lieu": "En ligne, du 10 au 14 décembre 2026",
-    "lien": "https://www.leadership-challenge.org/applynow",
-    "etiquettes": ["Opportunité internationale"],
-    "ajout": "2026-10-19",
-    "brouillon": true
-  },
-  {
     "id": "2026-10-ofaj-inclusion-participation-jeunes",
     "titre": "OFAJ : « Inclusion et participation de tous les jeunes »",
     "resume": "L'Office franco-allemand pour la Jeunesse finance des rencontres de jeunes franco-allemandes inclusives, jusqu'à 18 000 € par projet. Une vraie pépite pour les associations qui veulent faire voyager, échanger et débattre leurs jeunes.",
@@ -43,7 +7,9 @@
     "dateLimite": "15 novembre 2026",
     "lieu": null,
     "lien": "https://www.ofaj.org/appel-a-projet-candidature/inclusion-et-participation-de-tous-les-jeunes",
-    "etiquettes": ["Opportunité internationale"],
+    "etiquettes": [
+      "Opportunité internationale"
+    ],
     "ajout": "2026-10-19",
     "brouillon": true
   },
@@ -55,7 +21,9 @@
     "dateLimite": "30 novembre 2026",
     "lieu": null,
     "lien": "https://careers.un.org/ypp",
-    "etiquettes": ["Opportunité internationale"],
+    "etiquettes": [
+      "Opportunité internationale"
+    ],
     "ajout": "2026-10-19",
     "brouillon": true
   },
@@ -67,7 +35,9 @@
     "dateLimite": null,
     "lieu": null,
     "lien": "https://www.sciencedirect.com/science/article/pii/S0001691826000466",
-    "etiquettes": ["Ressource"],
+    "etiquettes": [
+      "Ressource"
+    ],
     "ajout": "2026-10-19",
     "brouillon": true
   },
@@ -79,7 +49,9 @@
     "dateLimite": null,
     "lieu": null,
     "lien": "https://arxiv.org/abs/2609.31676",
-    "etiquettes": ["Ressource"],
+    "etiquettes": [
+      "Ressource"
+    ],
     "ajout": "2026-10-19",
     "brouillon": true
   }

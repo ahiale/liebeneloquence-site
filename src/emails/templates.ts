@@ -315,6 +315,24 @@ export function ebookClient(d: { prenom: string; titre: string; lien: string; so
   };
 }
 
+/** Lien de connexion à l'admin (valable quelques minutes). */
+export function adminConnexion(d: { lien: string; minutes: number }): Email {
+  return {
+    subject: "Votre lien de connexion à l'admin LEQ",
+    html: layout({
+      title: "Connexion",
+      accent: "à l'admin",
+      preheader: `Votre lien de connexion, valable ${d.minutes} minutes.`,
+      reason: "Vous recevez ce mail car une connexion à l'admin de liebeneloquence.com a été demandée avec votre adresse. Si ce n'est pas vous, ignorez simplement ce mail.",
+      body:
+        hello() +
+        p(`Cliquez sur le bouton pour ouvrir l'admin. Le lien est valable <strong>${d.minutes} minutes</strong> et ne sert qu'une fois par appareil.`) +
+        button(d.lien, "Ouvrir l'admin") +
+        p("Si vous n'avez rien demandé, ignorez ce mail : personne ne peut se connecter sans ce lien."),
+    }),
+  };
+}
+
 /** Confirmation « Être prévenu » d'un lancement (jeu de cartes, application mobile). */
 export function prevenirClient(d: { prenom: string; produit: string }): Email {
   return {

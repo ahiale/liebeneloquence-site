@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { lire } from "@/lib/leqfam";
+import { lire } from "@/lib/jetons";
 import { stripe, type StripeMode } from "@/lib/stripe";
 import { Header } from "@/components/layout/Header";
 import { ConfirmationResiliation, DemandeResiliation } from "@/components/communaute/ResiliationForms";

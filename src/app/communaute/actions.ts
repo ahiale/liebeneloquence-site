@@ -7,7 +7,8 @@ import { ADMIN_EMAIL, sendMail } from "@/lib/mail";
 import { HONEYPOT, type FormState } from "@/lib/forms";
 import { tooManyRequests } from "@/lib/rate-limit";
 import { lienAutorisation } from "@/lib/discord";
-import { lire, noterMembre, partenaireValide, signer } from "@/lib/leqfam";
+import { noterMembre, partenaireValide } from "@/lib/leqfam";
+import { lire, signer } from "@/lib/jetons";
 import { stripe, stripeMode, type StripeMode } from "@/lib/stripe";
 import * as T from "@/emails/templates";
 
