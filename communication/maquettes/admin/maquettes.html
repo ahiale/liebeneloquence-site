@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<!-- Maquettes de l'admin LEQ (données d'exemple). Rendues en PNG par generer-maquettes.cjs : une .ecran = une image. -->
+<style>
+  :root { --ink: #001636; --royal: #114da8; --gold: #ffbd59; --orange: #ff5e01; --fond: #f4f7fc; --gris: #5b6b85; --vert: #1c8a4a; --vertc: #e6f6ec; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: "SF Pro Display", "Inter", sans-serif; background: #555; color: var(--ink); }
+  .ecran { width: 1440px; height: 900px; display: grid; grid-template-columns: 232px 1fr; background: var(--fond); overflow: hidden; }
+  aside { background: var(--ink); color: #fff; padding: 26px 18px; }
+  .logo { font-size: 26px; font-weight: 900; letter-spacing: -.04em; padding: 0 10px 26px; }
+  .logo b { color: var(--orange); }
+  .nav a { display: flex; gap: 10px; align-items: center; padding: 11px 12px; border-radius: 12px; color: rgba(255,255,255,.75); font-size: 15px; text-decoration: none; margin-bottom: 4px; }
+  .nav a.on { background: rgba(255,255,255,.12); color: #fff; font-weight: 600; }
+  .compte { position: absolute; bottom: 24px; font-size: 12.5px; color: rgba(255,255,255,.45); }
+  main { padding: 32px 40px; overflow: hidden; position: relative; }
+  h1 { font-size: 30px; letter-spacing: -.03em; }
+  h1 i { font-family: "Relationship of Mélodrame", Georgia, serif; font-weight: 400; color: var(--royal); }
+  .sous { color: var(--gris); font-size: 15px; margin-top: 6px; }
+  .carte { background: #fff; border-radius: 20px; padding: 22px; box-shadow: 0 20px 40px -32px rgba(0,22,54,.55); }
+  .carte h2 { font-size: 17px; margin-bottom: 14px; }
+  .grille { display: grid; gap: 18px; }
+  .chiffre { font-size: 32px; font-weight: 800; }
+  .lib { font-size: 13.5px; color: var(--gris); margin-top: 2px; }
+  .pill { display: inline-block; padding: 4px 11px; border-radius: 999px; font-size: 12.5px; font-weight: 700; }
+  .p-vert { background: var(--vertc); color: var(--vert); } .p-bleu { background: #e3edfb; color: var(--royal); } .p-or { background: #fff2d6; color: #9a6400; } .p-orange { background: #ffe6d8; color: #c24600; } .p-gris { background: #eceff4; color: var(--gris); }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  th { text-align: left; font-size: 12px; text-transform: uppercase; letter-spacing: .08em; color: var(--gris); padding: 0 10px 10px; }
+  td { padding: 12px 10px; border-top: 1px solid #edf0f5; }
+  .barre { height: 8px; border-radius: 8px; background: #e5ebf5; overflow: hidden; width: 120px; }
+  .barre i { display: block; height: 100%; background: linear-gradient(90deg, var(--gold), var(--orange)); }
+  .ligne { display: flex; align-items: center; gap: 12px; padding: 11px 0; border-top: 1px solid #edf0f5; font-size: 14.5px; }
+  .ligne:first-of-type { border-top: 0; }
+  .ok { width: 22px; height: 22px; border-radius: 50%; display: grid; place-items: center; font-size: 13px; font-weight: 800; flex-shrink: 0; }
+  .btn { display: inline-block; padding: 9px 16px; border-radius: 999px; background: var(--royal); color: #fff; font-size: 13.5px; font-weight: 700; }
+  .btn.o { background: linear-gradient(90deg, var(--gold), var(--orange)); color: var(--ink); }
+  .toggle { width: 40px; height: 22px; border-radius: 22px; background: var(--vert); position: relative; flex-shrink: 0; }
+  .toggle::after { content: ""; position: absolute; right: 3px; top: 3px; width: 16px; height: 16px; border-radius: 50%; background: #fff; }
+  .toggle.off { background: #cfd6e2; } .toggle.off::after { right: auto; left: 3px; }
+  .etape { display: flex; gap: 14px; padding-bottom: 16px; position: relative; }
+  .etape .rond { width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; font-weight: 800; font-size: 13px; flex-shrink: 0; z-index: 1; }
+  .etape:not(:last-child)::before { content: ""; position: absolute; left: 14px; top: 30px; bottom: 0; width: 2px; background: #e1e7f0; }
+  .exemple { position: absolute; top: 34px; right: 40px; font-size: 12px; color: var(--gris); background: #fff; border: 1px dashed #c9d2e0; border-radius: 999px; padding: 5px 12px; }
+  .avatar { width: 34px; height: 34px; border-radius: 50%; display: inline-grid; place-items: center; font-weight: 800; font-size: 13px; color: #fff; vertical-align: middle; margin-right: 10px; }
+</style>
+</head>
+<body>
+<script>
+const NAV = [["accueil","🏠","Tableau de bord"],["eleves","🎓","Élèves et parcours"],["mails","✉️","Mails et rappels"],["communaute","👥","Communauté"],["discord","💬","Discord"],["contenu","🌐","Contenu du site"]];
+const cadre = (id, contenu) => `<section class="ecran" id="${id}"><aside style="position:relative"><div class="logo">LEQ<b>.</b></div><nav class="nav">${NAV.map(([k,e,l]) => `<a class="${k===id?"on":""}">${e} ${l}</a>`).join("")}</nav><div class="compte">formationn@liebeneloquence.com</div></aside><main><span class="exemple">Maquette · données d'exemple</span>${contenu}</main></section>`;
+const ecrans = [];
+
+ecrans.push(cadre("accueil", `
+<h1>Bonjour <i>Rebecca</i></h1><p class="sous">Jeudi 19 novembre · voici ce qui vous attend aujourd'hui.</p>
+<div class="grille" style="grid-template-columns:repeat(5,1fr);margin-top:24px">
+ ${[["14","Élèves en parcours"],["3","Séances aujourd'hui"],["62","Membres LEQ'FAM"],["412 €","Encaissé ce mois-ci"],["18","Précommandes Mellie / 30"]].map(([c,l])=>`<div class="carte"><div class="chiffre">${c}</div><div class="lib">${l}</div></div>`).join("")}
+</div>
+<div class="grille" style="grid-template-columns:1.2fr 1fr;margin-top:18px">
+ <div class="carte"><h2>À faire aujourd'hui</h2>
+  ${[["p-orange","Séance","14 h · Inès M. · Séance 3/5 Grand Oral"],["p-orange","Séance","17 h 30 · Yanis B. · Diagnostic"],["p-or","Compte-rendu","Écrire le compte-rendu de la séance d'hier avec Léa D."],["p-bleu","À valider","2 candidatures ambassadeur"],["p-bleu","À valider","4 opportunités pour le forum Discord"],["p-gris","Fiche","Sarah K. n'a pas encore rempli sa fiche élève (relance automatique demain)"]].map(([p,t,l])=>`<div class="ligne"><span class="pill ${p}">${t}</span>${l}</div>`).join("")}
+ </div>
+ <div class="grid" style="display:grid;gap:18px">
+  <div class="carte"><h2>Envoyé automatiquement aujourd'hui</h2>
+   ${["Rappel J-1 · séance de demain (2 élèves)","Compte-rendu et exercices · Léa D.","Bienvenue + fiche élève · Sarah K.","Défi de la semaine · Discord"].map(l=>`<div class="ligne"><span class="ok" style="background:var(--vertc);color:var(--vert)">✓</span>${l}</div>`).join("")}
+  </div>
+  <div class="carte"><h2>Prochains événements</h2>
+   <div class="ligne"><span class="pill p-bleu">Mar. 24</span>Rendez-vous mensuel · 23 inscrits</div>
+   <div class="ligne"><span class="pill p-bleu">Mer. 25</span>Séance d'accueil LEQ'FAM · 6 nouveaux</div>
+  </div>
+ </div>
+</div>`));
+
+ecrans.push(cadre("eleves", `
+<h1>Élèves <i>et parcours</i></h1><p class="sous">Chaque élève qui paie a son profil, sa fiche et son parcours, créés automatiquement.</p>
+<div class="carte" style="margin-top:22px">
+<div style="display:flex;gap:10px;margin-bottom:16px"><span class="pill p-bleu">Tous (14)</span><span class="pill p-gris">Diagnostic (2)</span><span class="pill p-gris">En parcours (9)</span><span class="pill p-gris">Terminés (3)</span><span style="margin-left:auto" class="btn">+ Ajouter un élève</span></div>
+<table><tr><th>Élève</th><th>Formule</th><th>Objectif</th><th>Progression</th><th>Prochaine séance</th><th>Fiche</th></tr>
+${[["IM","#114da8","Inès M.","Pack Socrate","Grand Oral, juin 2027",60,"Aujourd'hui, 14 h","p-vert","Remplie"],["YB","#ff5e01","Yanis B.","Séance à l'unité","Entretien d'embauche",10,"Aujourd'hui, 17 h 30","p-vert","Remplie"],["LD","#1c8a4a","Léa D.","Pack Cicéron","Soutenance de master",80,"Lun. 23, 18 h","p-vert","Remplie"],["SK","#9a6400","Sarah K.","Pack Socrate","Trac en réunion",0,"À planifier","p-orange","En attente"],["TR","#5b6b85","Tom R.","Grand Oral","Grand Oral, juin 2027",40,"Mar. 24, 17 h","p-vert","Remplie"],["AL","#c24600","Amina L.","Pack Cicéron","Concours d'éloquence",100,"Parcours terminé","p-vert","Remplie"]].map(([i,c,n,f,o,p,s,pf,lf])=>`<tr><td><span class="avatar" style="background:${c}">${i}</span><b>${n}</b></td><td>${f}</td><td>${o}</td><td><div style="display:flex;align-items:center;gap:8px"><div class="barre"><i style="width:${p}%"></i></div>${p} %</div></td><td>${s}</td><td><span class="pill ${pf}">${lf}</span></td></tr>`).join("")}
+</table></div>`));
+
+ecrans.push(cadre("fiche", `
+<h1><span class="avatar" style="background:#114da8;width:44px;height:44px">IM</span>Inès <i>M.</i></h1><p class="sous">Pack Socrate · 5 séances · objectif : Grand Oral de juin 2027 · inscrite le 2 novembre</p>
+<div class="grille" style="grid-template-columns:1fr 1.15fr 1fr;margin-top:22px">
+ <div class="carte"><h2>Fiche élève (questionnaire)</h2>
+  ${[["Niveau d'aisance à l'oral","4 / 10"],["Ce qui la bloque","Le trou de mémoire, la voix qui tremble"],["Profil d'orateur (quiz)","Le Stratège"],["Disponibilités","Mardi et jeudi soir"],["Ce qu'elle veut réussir","Tenir 10 minutes sans notes"]].map(([q,r])=>`<div style="padding:9px 0;border-top:1px solid #edf0f5"><div class="lib">${q}</div><div style="font-size:14.5px;font-weight:600;margin-top:2px">${r}</div></div>`).join("")}
+ </div>
+ <div class="carte"><h2>Parcours</h2>
+  ${[["✓","p-vert","Diagnostic","2 nov. · compte-rendu envoyé"],["✓","p-vert","Séance 1 · Structurer son propos","6 nov. · exercices envoyés"],["✓","p-vert","Séance 2 · La voix et le souffle","12 nov. · exercices envoyés"],["3","p-orange","Séance 3 · Gérer le trac","Aujourd'hui, 14 h · rappel envoyé hier"],["4","p-gris","Séance 4 · Répondre au jury","À planifier"],["5","p-gris","Séance 5 · Oral blanc","À planifier"]].map(([n,p,t,d])=>`<div class="etape"><span class="rond pill ${p}" style="padding:0">${n}</span><div><div style="font-weight:700;font-size:14.5px">${t}</div><div class="lib">${d}</div></div></div>`).join("")}
+ </div>
+ <div class="grid" style="display:grid;gap:18px;align-content:start">
+  <div class="carte"><h2>Notes de la dernière séance</h2><p style="font-size:14px;line-height:1.55;color:var(--gris)">Très bon progrès sur le souffle. Travailler les 3 premières phrases par cœur. Exercice : respiration 4-6 chaque matin.</p><div style="margin-top:12px"><span class="btn o">Écrire le compte-rendu de la séance 3</span></div></div>
+  <div class="carte"><h2>Mails</h2>
+   ${[["✓","Bienvenue et fiche élève","2 nov."],["✓","Rappel J-1 séance 3","hier"],["…","Compte-rendu séance 3","après la séance"]].map(([o,l,d])=>`<div class="ligne"><span class="ok" style="background:${o==="✓"?"var(--vertc)":"#eceff4"};color:${o==="✓"?"var(--vert)":"var(--gris)"}">${o}</span>${l}<span class="lib" style="margin:0 0 0 auto">${d}</span></div>`).join("")}
+  </div>
+ </div>
+</div>`));
+
+ecrans.push(cadre("mails", `
+<h1>Mails <i>et rappels</i></h1><p class="sous">Les envois automatiques du parcours élève. Chaque modèle se modifie ici, sans toucher au code.</p>
+<div class="carte" style="margin-top:22px">
+${[["Après le paiement","Bienvenue + lien de la fiche élève à remplir",1],["2 jours sans fiche","Relance douce : « Il ne manque plus que votre fiche »",1],["La veille de chaque séance","Rappel avec le lien de la visio et l'heure",1],["Après chaque séance","Compte-rendu, exercices et ressources de la séance",1],["7 jours sans nouvelle séance","Proposition de créneaux pour la suite",1],["Fin du parcours","Merci, attestation et demande d'avis (QR code)",1],["1 mois après la fin","Nouvelles et offre LEQ'FAM",0]].map(([q,c,on])=>`<div class="ligne" style="padding:15px 0"><span class="toggle ${on?"":"off"}"></span><div style="flex:1"><div style="font-weight:700">${q}</div><div class="lib">${c}</div></div><span class="btn" style="background:#eef3fb;color:var(--royal)">Modifier le modèle</span></div>`).join("")}
+</div>`));
+
+ecrans.push(cadre("communaute", `
+<h1>Communauté <i>LEQ'FAM</i></h1><p class="sous">Tout ce qui se passe en dehors de Discord : membres, codes, ambassadeurs et lancement.</p>
+<div class="grille" style="grid-template-columns:1.25fr 1fr;margin-top:22px">
+ <div class="carte"><h2>Membres (62)</h2>
+ <table><tr><th>Membre</th><th>Formule</th><th>Code</th><th>Statut</th></tr>
+ ${[["sey_maw","Avec engagement","BECCA-LEQ","p-vert","Actif"],["leo.parle","Sans engagement","—","p-vert","Actif"],["amina.l","Avec engagement","ASSO-SCPO","p-vert","Actif"],["julien_b","Sans engagement","—","p-or","Fin le 12/12"],["nora.m","Avec engagement","—","p-orange","Paiement échoué"]].map(([n,f,c,p,s])=>`<tr><td><b>${n}</b></td><td>${f}</td><td>${c}</td><td><span class="pill ${p}">${s}</span></td></tr>`).join("")}
+ </table></div>
+ <div style="display:grid;gap:18px;align-content:start">
+  <div class="carte"><h2>Codes promo</h2>
+   ${[["BECCA-LEQ","Ambassadeur",12,20],["ASSO-SCPO","Association",18,20],["SAM-LEQ","Ambassadeur",3,20]].map(([c,t,u,l])=>`<div class="ligne"><b style="min-width:110px">${c}</b><span class="lib" style="margin:0">${t}</span><div style="margin-left:auto;display:flex;align-items:center;gap:8px"><div class="barre" style="width:90px"><i style="width:${u/l*100}%"></i></div>${u}/${l}</div></div>`).join("")}
+   <div style="margin-top:10px"><span class="btn">+ Créer un code</span></div>
+  </div>
+  <div class="carte"><h2>Avant le lancement</h2>
+   ${[["✓","Paiements Stripe réels activés"],["✓","Robot Discord et rôle LeqOra"],["✓","Médiateur de la consommation dans les CGV"],["","Date d'ouverture et offre de lancement"],["","Comptes et messages de test nettoyés"]].map(([o,l])=>`<div class="ligne"><span class="ok" style="background:${o?"var(--vertc)":"#eceff4"};color:${o?"var(--vert)":"var(--gris)"}">${o||"○"}</span>${l}</div>`).join("")}
+  </div>
+ </div>
+</div>`));
+
+ecrans.push(cadre("contenu", `
+<h1>Contenu <i>du site</i></h1><p class="sous">Modifier le site sans passer par le code : événements, blog, avis, prix.</p>
+<div class="grille" style="grid-template-columns:repeat(4,1fr);margin-top:22px">
+ ${[["📅","Événements","3 publiés · 1 brouillon"],["📝","Blog","1 article · 1 brouillon"],["⭐","Avis","12 publiés · 2 à valider"],["💶","Tarifs","Packs, séance, LEQ'FAM"]].map(([e,t,d])=>`<div class="carte"><div style="font-size:26px">${e}</div><div style="font-weight:800;font-size:17px;margin-top:8px">${t}</div><div class="lib">${d}</div></div>`).join("")}
+</div>
+<div class="carte" style="margin-top:18px"><h2>Modifier l'événement · Le rendez-vous mensuel LEQ</h2>
+ <div class="grille" style="grid-template-columns:1fr 1fr 1fr">
+  ${[["Titre","Le rendez-vous mensuel LEQ"],["Date","Mardi 24 novembre 2026"],["Horaires","19h30 à 20h30 (heure de Paris)"],["Lieu","En ligne, sur Google Meet"],["Tarif","Gratuit"],["Statut","Publié"]].map(([l,v])=>`<div><div class="lib">${l}</div><div style="margin-top:6px;padding:10px 12px;border:2px solid #e5ebf5;border-radius:12px;font-size:14.5px">${v}</div></div>`).join("")}
+ </div>
+ <div style="margin-top:14px"><div class="lib">Résumé</div><div style="margin-top:6px;padding:12px;border:2px solid #e5ebf5;border-radius:12px;font-size:14.5px;line-height:1.5">Une heure de discussion ouverte et gratuite pour poser toutes vos questions sur l'art oratoire, l'éloquence et vos blocages à l'oral.</div></div>
+ <div style="margin-top:16px;display:flex;gap:10px"><span class="btn o">Enregistrer et publier</span><span class="btn" style="background:#eef3fb;color:var(--royal)">Envoyer l'invitation aux contacts</span></div>
+</div>`));
+
+document.body.innerHTML = ecrans.join("");
+</script>
+</body>
+</html>
